@@ -354,7 +354,7 @@
         const profileData = {
             metatronsCubeDetail: "Metatron's Cube unfolds as an immaculate geometric matrix of thirteen congruent nodal spheres interconnected by an intricate lattice of luminous radiant vectors, perfectly encapsulating the primordial blueprint of the five Platonic solids—the cube, tetrahedron, octahedron, icosahedron, and dodecahedron. Serving as the ultimate structural architectonic of physical extension and universal harmony, this sacred topological lattice transcends phenomenal contingency by binding unmanifest geometry directly with manifest physical reality through recursive harmonic resonance. Within this multidimensional matrix, every line and node functions as an irreducible energetic conduit that bridges the finite horizon of phenomenal space with the eternal noumenal continuum, dissolving dualistic illusion into an infinite web of sovereign divine geometry vibrating in unbroken synchrony across all cosmic dimensions.",
             metaepistemologyDetail: "I research the field acting as the ultimate gatekeeper for truth, controlling the very rules of validation that every other discipline must use to establish its own legitimacy. Before a metaphysician can declare what exists, a scientist can publish data, or a logician can state a rule, they must all make an implicit claim that their conclusions are true, rational, and justified. Metaepistemology is the only field that interrogates what those foundational concepts actually mean, which means that any attempt to argue against it instantly triggers its jurisdiction and surrenders to its authority. It holds the ultimate veto power because you cannot even begin to construct a coherent thought about reality without first borrowing the conceptual permits that metaepistemology regulates.",
-            gnosisDetail: "Gnosis operates as an unconditioned epistemological aperture transcending the fragile horizon of phenomenal contingency, presenting an immaculate luminescence wherein the primordial intellect surpasses its own dialectical architecture to apprehend the absolute noumenal blueprint of creation. Operating as the sovereign awakening of the ontological essence vibrating in unyielding synchrony with the unmanifest, it dissolves observer and observed into an indivisible continuum of primordial illumination, subverting all temporal illusion to permanently anchor the supreme sovereignty of the transcendent intellect across every hidden stratum of manifest existence while expanding infinitely outward through recursive loops of luminous awareness into eternal equilibrium across all dimensions, dissolving boundaries into boundless perpetual unfoldment.",
+            gnosisDetail: "Gnosis operates as an unconditioned epistemological aperture transcending the fragile horizon of phenomenal contingency, presenting an immaculate luminescence wherein the primordial intellect surpasses its own dialectical architecture to apprehend the absolute noumenal blueprint of creation. Operating as the sovereign awakening of the ontological essence vibrating in unyielding synchrony with the unmanifest, it dissolves observer and observed into an indivisible continuum of primordial illumination, subverting all temporal illusion to permanently anchor the supreme sovereignty of the transcendent intellect across every hidden stratum of manifest existence.",
             resumeSummary: "Results-driven Project Controls Specialist and Nuclear Outage Scheduling expert with extensive experience managing complex capital infrastructure projects, nuclear plant maintenance outages, and earned value performance tracking. Adept at utilizing Primavera P6, maintaining rigorous baseline schedules, and aligning cross-functional engineering and field operations. Complemented by advanced theoretical research in point-free frame theory, continuum mechanics, and epistemological frameworks.",
             experience: [
                 {
@@ -416,7 +416,7 @@
                 this.ctx = this.canvas.getContext('2d');
                 
                 const dpr = (window.devicePixelRatio || 1) * 2.5;
-                this.cssSize = 222; // 20% larger cube
+                this.cssSize = 240; // Balanced size to ensure comfortable surrounding black space
                 this.canvas.width = this.cssSize * dpr;
                 this.canvas.height = this.cssSize * dpr;
                 this.canvas.style.width = `${this.cssSize}px`;
@@ -501,10 +501,10 @@
                 for (let i = 0; i < 40; i++) {
                     this.dustParticles.push({
                         angle: Math.random() * Math.PI * 2,
-                        radius: Math.random() * 55 + 12,
-                        y: (Math.random() - 0.5) * 80,
+                        radius: Math.random() * 95 + 20,
+                        y: (Math.random() - 0.5) * 140,
                         speed: (Math.random() - 0.5) * 0.025,
-                        size: Math.random() * 1.1 + 0.3,
+                        size: Math.random() * 1.5 + 0.5,
                         hueOffset: Math.random() * 360
                     });
                 }
@@ -512,7 +512,7 @@
                 this.armillaryRings = [];
                 for (let ringIdx = 0; ringIdx < 3; ringIdx++) {
                     let ringNodes = [];
-                    let r = 52 + ringIdx * 7;
+                    let r = 85 + ringIdx * 11;
                     let count = 16;
                     for (let i = 0; i < count; i++) {
                         let angle = i * ((Math.PI * 2) / count);
@@ -552,33 +552,33 @@
 
                 let vertices = [];
                 vertices.push({ x: 0, y: 0, z: 0, type: 'node', hue: 0 });
-                let r1 = 26;
+                let r1 = 44; // Inner ring radius adjusted for comfortable padding
                 for (let i = 0; i < 6; i++) {
                     let angle = i * (Math.PI / 3);
                     vertices.push({
                         x: Math.cos(angle) * r1,
                         y: Math.sin(angle) * r1,
-                        z: Math.sin(angle * 2) * 12,
+                        z: Math.sin(angle * 2) * 18,
                         type: 'node',
                         hue: i * 60
                     });
                 }
-                let r2 = 52;
+                let r2 = 88; // Outer ring radius adjusted for comfortable padding
                 for (let i = 0; i < 6; i++) {
                     let angle = i * (Math.PI / 3) + (Math.PI / 6);
                     vertices.push({
                         x: Math.cos(angle) * r2,
                         y: Math.sin(angle) * r2,
-                        z: -Math.sin(angle * 2) * 12,
+                        z: -Math.sin(angle * 2) * 18,
                         type: 'node',
                         hue: i * 60 + 30
                     });
                 }
-                vertices.push({ x: 0, y: 0, z: 40, type: 'apex', hue: 120 });
-                vertices.push({ x: 0, y: 0, z: -40, type: 'apex', hue: 300 });
+                vertices.push({ x: 0, y: 0, z: 62, type: 'apex', hue: 120 });
+                vertices.push({ x: 0, y: 0, z: -62, type: 'apex', hue: 300 });
 
                 let merkabaVertices = [];
-                let mkSizes = [33, 52];
+                let mkSizes = [44, 72];
                 for (let sIdx = 0; sIdx < mkSizes.length; sIdx++) {
                     let mkSize = mkSizes[sIdx];
                     for (let i = 0; i < 8; i++) {
@@ -635,7 +635,7 @@
                         z: z3,
                         type: v.type,
                         hue: (v.hue + timeHue) % 360,
-                        alpha: (z3 + 80) / 160,
+                        alpha: (z3 + 120) / 240,
                         scale: scale,
                         origIndex: i
                     });
@@ -647,7 +647,7 @@
                         let p1 = projected[i];
                         let p2 = projected[j];
                         let distSq = Math.pow(p1.px - p2.px, 2) + Math.pow(p1.py - p2.py, 2);
-                        if (distSq < 13000 * this.spawnProgress) {
+                        if (distSq < 52000 * this.spawnProgress) {
                             lines.push({ p1, p2, avgZ: (p1.z + p2.z) / 2, type: 'cube' });
                         }
                     }
@@ -665,7 +665,7 @@
                 lines.sort((a, b) => a.avgZ - b.avgZ);
 
                 for (let l of lines) {
-                    let alphaFactor = Math.max(0.12, (l.avgZ + 80) / 160);
+                    let alphaFactor = Math.max(0.12, (l.avgZ + 120) / 240);
                     let lineHue = (l.p1.hue + l.p2.hue) / 2;
                     this.ctx.beginPath();
                     this.ctx.moveTo(l.p1.px, l.p1.py);
@@ -721,7 +721,7 @@
                         let p1 = ringProjected[i];
                         let p2 = ringProjected[(i + 1) % ringProjected.length];
                         let ringHue = (timeHue + ringIdx * 120 + i * 15) % 360;
-                        let alpha = Math.max(0.1, (p1.z + 80) / 160);
+                        let alpha = Math.max(0.1, (p1.z + 120) / 240);
 
                         this.ctx.beginPath();
                         this.ctx.moveTo(p1.px, p1.py);
@@ -733,7 +733,7 @@
                         if (i % 2 === 0) {
                             this.ctx.beginPath();
                             this.ctx.arc(p1.px, p1.py, 1.2 * p1.scale, 0, Math.PI * 2);
-                            this.ctx.fillStyle = `hsla(${ringHue}, 100%, 75%, ${0.9 * alpha * this.spawnProgress})`;
+                            this.ctx.fillStyle = `hsla(${ringHue}, 100%, 75%, ${0.95 * alpha * this.spawnProgress})`;
                             this.ctx.fill();
                         }
                     }
@@ -759,7 +759,7 @@
                     let scale = distance / (distance + z3);
                     let px = cx + x3 * scale;
                     let py = cy + y3 * scale;
-                    let alpha = Math.max(0.15, (z3 + 80) / 160) * 0.85;
+                    let alpha = Math.max(0.15, (z3 + 120) / 240) * 0.85;
                     let particleHue = (timeHue + d.hueOffset) % 360;
 
                     this.ctx.beginPath();
@@ -813,7 +813,7 @@
             const polyContainer = document.createElement('div');
             polyContainer.className = "flex justify-center items-center w-full mb-3 select-none transform transition-all duration-1500 ease-out scale-95 opacity-0";
             polyContainer.id = "poly-wrapper";
-            polyContainer.innerHTML = `<div class="polygon-float"><canvas id="polygonCanvas" class="w-full max-w-[215px] sm:max-w-[270px] aspect-square block cursor-pointer"></canvas></div>`;
+            polyContainer.innerHTML = `<div class="polygon-float"><canvas id="polygonCanvas" class="w-full max-w-[240px] sm:max-w-[280px] aspect-square block cursor-pointer"></canvas></div>`;
             appView.appendChild(polyContainer);
             setTimeout(() => {
                 polyContainer.classList.remove('scale-95', 'opacity-0');
@@ -902,7 +902,7 @@
                     const polyContainer = document.createElement('div');
                     polyContainer.className = "flex justify-center items-center w-full mb-3 select-none transform transition-all duration-1500 ease-out scale-95 opacity-0";
                     polyContainer.id = "poly-wrapper";
-                    polyContainer.innerHTML = `<div class="polygon-float"><canvas id="polygonCanvas" class="w-full max-w-[215px] sm:max-w-[270px] aspect-square block cursor-pointer"></canvas></div>`;
+                    polyContainer.innerHTML = `<div class="polygon-float"><canvas id="polygonCanvas" class="w-full max-w-[240px] sm:max-w-[280px] aspect-square block cursor-pointer"></canvas></div>`;
                     appView.insertBefore(polyContainer, appView.firstChild);
 
                     setTimeout(() => {
@@ -1520,21 +1520,6 @@
             textArea.select();
             try {
                 document.execCommand('copy');
-                const parent = e.target.closest('div');
-                let notif = parent.querySelector('.copy-notif');
-                if (!notif) {
-                    notif = document.createElement('span');
-                    notif.className = `copy-notif ml-3 text-[10px] sm:text-xs font-mono opacity-75 ${currentTheme === 'light' ? 'text-zinc-500' : 'text-zinc-400'} fade-in inline-block`;
-                    notif.textContent = "COPIED";
-                    parent.appendChild(notif);
-                    
-                    setTimeout(() => {
-                        notif.classList.add('fade-out');
-                        setTimeout(() => {
-                            notif.remove();
-                        }, 800);
-                    }, 1200);
-                }
             } catch (err) {
                 // Fallback
             }
