@@ -100,18 +100,6 @@
             -webkit-text-fill-color: transparent;
             animation: rainbowWave 8s ease infinite;
         }
-        @keyframes silverWave {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
-        }
-        .silver-wave-text {
-            background: linear-gradient(270deg, #ffffff, #a1a1aa, #e4e4e7, #71717a, #ffffff);
-            background-size: 300% 300%;
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            animation: silverWave 8s ease infinite;
-        }
         @keyframes floatQuestion {
             0%, 100% { transform: translateY(0); }
             50% { transform: translateY(-4px); }
@@ -126,12 +114,12 @@
     <canvas id="starfield" class="fixed inset-0 pointer-events-none z-0"></canvas>
     <div class="fixed inset-0 vignette-overlay z-1 pointer-events-none"></div>
 
-    <div id="main-container" class="relative z-10 flex flex-col items-end w-[320px] sm:w-[450px] md:w-[550px] px-4 select-none">
-        <div id="intro-container" class="flex items-center justify-end text-white font-mono text-xs md:text-sm tracking-widest w-full text-right select-none">
+    <div id="main-container" class="relative z-10 flex flex-col items-center w-[320px] sm:w-[450px] md:w-[550px] px-4 select-none">
+        <div id="intro-container" class="flex items-center justify-center text-white font-mono text-xs md:text-sm tracking-widest w-full text-center select-none">
             <div><span id="typed-intro"></span><span id="intro-cursor" class="cursor text-white font-bold">_</span></div>
         </div>
 
-        <div id="app-view" class="hidden flex flex-col items-end text-xs md:text-sm text-zinc-400 tracking-widest w-full text-right select-none">
+        <div id="app-view" class="hidden flex flex-col items-center text-xs md:text-sm text-zinc-400 tracking-widest w-full text-center select-none">
             <!-- Content injected via JavaScript router -->
         </div>
     </div>
@@ -223,10 +211,10 @@
             distantStars = [];
             const count = Math.floor((((canvas.width * canvas.height) / 45000) * 2.78) * 0.2904 * 1.2 * 1.2 * 1.1 * 1.2 * 1.5 * 1.2 * 1.5 * 1.5 * 1.5 * 1.5 * 0.9 * 0.9 * 0.8 * 0.9 * 0.9 * 0.9 * 0.9 * 0.8 * 0.9 * 0.9 * 0.9 * 0.9 * 0.8 * 0.9 * 0.9 * 0.9 * 0.9 * 1.38 * 1.38 * 1.1 * 0.8 * 1.2 * 1.2 * 1.1 * 0.8);
             const paletteDark = [
-                '#ffffff', '#ffffff', '#ffffff', // High proportion of pure white
-                '#e0f2fe', '#bae6fd', // Soft blue-white
-                '#fef3c7', '#fde68a', // Warm yellow-white
-                '#ede9fe', '#ffedd5'  // Subtle lavender / warm white
+                '#ffffff', '#ffffff', '#ffffff',
+                '#e0f2fe', '#bae6fd',
+                '#fef3c7', '#fde68a',
+                '#ede9fe', '#ffedd5'
             ];
             const paletteLight = [
                 '#27272a', '#3f3f46', '#52525b', '#334155', '#475569'
@@ -426,8 +414,17 @@
                 this.canvas = document.getElementById(canvasId);
                 if (!this.canvas) return;
                 this.ctx = this.canvas.getContext('2d');
-                this.width = this.canvas.width = 350;
-                this.height = this.canvas.height = 350;
+                
+                const dpr = (window.devicePixelRatio || 1) * 2.5;
+                this.cssSize = 222; // 20% larger cube
+                this.canvas.width = this.cssSize * dpr;
+                this.canvas.height = this.cssSize * dpr;
+                this.canvas.style.width = `${this.cssSize}px`;
+                this.canvas.style.height = `${this.cssSize}px`;
+                this.ctx.scale(dpr, dpr);
+                
+                this.width = this.cssSize;
+                this.height = this.cssSize;
                 this.spawnProgress = 0;
                 
                 this.thetaX = 0.3;
@@ -501,13 +498,13 @@
                 });
 
                 this.dustParticles = [];
-                for (let i = 0; i < 75; i++) {
+                for (let i = 0; i < 40; i++) {
                     this.dustParticles.push({
                         angle: Math.random() * Math.PI * 2,
-                        radius: Math.random() * 125 + 25,
-                        y: (Math.random() - 0.5) * 160,
+                        radius: Math.random() * 55 + 12,
+                        y: (Math.random() - 0.5) * 80,
                         speed: (Math.random() - 0.5) * 0.025,
-                        size: Math.random() * 1.8 + 0.6,
+                        size: Math.random() * 1.1 + 0.3,
                         hueOffset: Math.random() * 360
                     });
                 }
@@ -515,8 +512,8 @@
                 this.armillaryRings = [];
                 for (let ringIdx = 0; ringIdx < 3; ringIdx++) {
                     let ringNodes = [];
-                    let r = 110 + ringIdx * 12;
-                    let count = 24;
+                    let r = 52 + ringIdx * 7;
+                    let count = 16;
                     for (let i = 0; i < count; i++) {
                         let angle = i * ((Math.PI * 2) / count);
                         ringNodes.push({
@@ -555,33 +552,33 @@
 
                 let vertices = [];
                 vertices.push({ x: 0, y: 0, z: 0, type: 'node', hue: 0 });
-                let r1 = 48;
+                let r1 = 26;
                 for (let i = 0; i < 6; i++) {
                     let angle = i * (Math.PI / 3);
                     vertices.push({
                         x: Math.cos(angle) * r1,
                         y: Math.sin(angle) * r1,
-                        z: Math.sin(angle * 2) * 20,
+                        z: Math.sin(angle * 2) * 12,
                         type: 'node',
                         hue: i * 60
                     });
                 }
-                let r2 = 96;
+                let r2 = 52;
                 for (let i = 0; i < 6; i++) {
                     let angle = i * (Math.PI / 3) + (Math.PI / 6);
                     vertices.push({
                         x: Math.cos(angle) * r2,
                         y: Math.sin(angle) * r2,
-                        z: -Math.sin(angle * 2) * 20,
+                        z: -Math.sin(angle * 2) * 12,
                         type: 'node',
                         hue: i * 60 + 30
                     });
                 }
-                vertices.push({ x: 0, y: 0, z: 75, type: 'apex', hue: 120 });
-                vertices.push({ x: 0, y: 0, z: -75, type: 'apex', hue: 300 });
+                vertices.push({ x: 0, y: 0, z: 40, type: 'apex', hue: 120 });
+                vertices.push({ x: 0, y: 0, z: -40, type: 'apex', hue: 300 });
 
                 let merkabaVertices = [];
-                let mkSizes = [60, 92];
+                let mkSizes = [33, 52];
                 for (let sIdx = 0; sIdx < mkSizes.length; sIdx++) {
                     let mkSize = mkSizes[sIdx];
                     for (let i = 0; i < 8; i++) {
@@ -627,7 +624,7 @@
                     let y3 = x2 * sinZ + y2 * cosZ;
                     let z3 = z2;
 
-                    let distance = 400;
+                    let distance = 250;
                     let scale = (distance / (distance + z3)) * this.spawnProgress;
                     let px = cx + x3 * scale;
                     let py = cy + y3 * scale;
@@ -638,7 +635,7 @@
                         z: z3,
                         type: v.type,
                         hue: (v.hue + timeHue) % 360,
-                        alpha: (z3 + 140) / 280,
+                        alpha: (z3 + 80) / 160,
                         scale: scale,
                         origIndex: i
                     });
@@ -650,7 +647,7 @@
                         let p1 = projected[i];
                         let p2 = projected[j];
                         let distSq = Math.pow(p1.px - p2.px, 2) + Math.pow(p1.py - p2.py, 2);
-                        if (distSq < 35000 * this.spawnProgress) {
+                        if (distSq < 13000 * this.spawnProgress) {
                             lines.push({ p1, p2, avgZ: (p1.z + p2.z) / 2, type: 'cube' });
                         }
                     }
@@ -668,17 +665,17 @@
                 lines.sort((a, b) => a.avgZ - b.avgZ);
 
                 for (let l of lines) {
-                    let alphaFactor = Math.max(0.12, (l.avgZ + 140) / 280);
+                    let alphaFactor = Math.max(0.12, (l.avgZ + 80) / 160);
                     let lineHue = (l.p1.hue + l.p2.hue) / 2;
                     this.ctx.beginPath();
                     this.ctx.moveTo(l.p1.px, l.p1.py);
                     this.ctx.lineTo(l.p2.px, l.p2.py);
                     if (l.type === 'merkaba') {
                         this.ctx.strokeStyle = `hsla(${lineHue}, 90%, 65%, ${0.5 * this.spawnProgress * alphaFactor})`;
-                        this.ctx.lineWidth = 1.3;
+                        this.ctx.lineWidth = 0.9;
                     } else {
                         this.ctx.strokeStyle = `hsla(${lineHue}, 80%, 60%, ${0.3 * this.spawnProgress * alphaFactor})`;
-                        this.ctx.lineWidth = 0.95;
+                        this.ctx.lineWidth = 0.7;
                     }
                     this.ctx.stroke();
                 }
@@ -713,7 +710,7 @@
                         let y3 = x2 * sinZ + y2 * cosZ;
                         let z3 = z2;
 
-                        let distance = 400;
+                        let distance = 250;
                         let scale = (distance / (distance + z3)) * this.spawnProgress;
                         let px = cx + x3 * scale;
                         let py = cy + y3 * scale;
@@ -724,18 +721,18 @@
                         let p1 = ringProjected[i];
                         let p2 = ringProjected[(i + 1) % ringProjected.length];
                         let ringHue = (timeHue + ringIdx * 120 + i * 15) % 360;
-                        let alpha = Math.max(0.1, (p1.z + 140) / 280);
+                        let alpha = Math.max(0.1, (p1.z + 80) / 160);
 
                         this.ctx.beginPath();
                         this.ctx.moveTo(p1.px, p1.py);
                         this.ctx.lineTo(p2.px, p2.py);
                         this.ctx.strokeStyle = `hsla(${ringHue}, 90%, 65%, ${0.4 * alpha * this.spawnProgress})`;
-                        this.ctx.lineWidth = 1.1;
+                        this.ctx.lineWidth = 0.8;
                         this.ctx.stroke();
 
                         if (i % 2 === 0) {
                             this.ctx.beginPath();
-                            this.ctx.arc(p1.px, p1.py, 2 * p1.scale, 0, Math.PI * 2);
+                            this.ctx.arc(p1.px, p1.py, 1.2 * p1.scale, 0, Math.PI * 2);
                             this.ctx.fillStyle = `hsla(${ringHue}, 100%, 75%, ${0.9 * alpha * this.spawnProgress})`;
                             this.ctx.fill();
                         }
@@ -758,11 +755,11 @@
                     let y3 = x2 * sinZ + y2 * cosZ;
                     let z3 = z2;
 
-                    let distance = 400;
+                    let distance = 250;
                     let scale = distance / (distance + z3);
                     let px = cx + x3 * scale;
                     let py = cy + y3 * scale;
-                    let alpha = Math.max(0.15, (z3 + 140) / 280) * 0.85;
+                    let alpha = Math.max(0.15, (z3 + 80) / 160) * 0.85;
                     let particleHue = (timeHue + d.hueOffset) % 360;
 
                     this.ctx.beginPath();
@@ -772,7 +769,7 @@
                 }
 
                 let sortedProjected = [...projected].sort((a, b) => a.z - b.z);
-                const baseRadius = 20;
+                const baseRadius = 12;
 
                 for (let pt of sortedProjected) {
                     let alphaFactor = Math.max(0.3, pt.alpha);
@@ -782,16 +779,16 @@
                         this.ctx.beginPath();
                         this.ctx.arc(pt.px, pt.py, radius, 0, Math.PI * 2);
                         this.ctx.strokeStyle = `hsla(${pt.hue}, 90%, 65%, ${0.6 * this.spawnProgress * alphaFactor})`;
-                        this.ctx.lineWidth = pt.type === 'apex' ? 2.0 : 1.3;
+                        this.ctx.lineWidth = pt.type === 'apex' ? 1.4 : 1.0;
                         this.ctx.stroke();
 
                         this.ctx.beginPath();
-                        this.ctx.arc(pt.px, pt.py, 3.2 * this.spawnProgress * pt.scale, 0, Math.PI * 2);
+                        this.ctx.arc(pt.px, pt.py, 2.2 * this.spawnProgress * pt.scale, 0, Math.PI * 2);
                         this.ctx.fillStyle = `hsla(${pt.hue}, 100%, 75%, ${0.95 * this.spawnProgress * alphaFactor})`;
                         this.ctx.fill();
                     } else if (pt.type === 'merkaba') {
                         this.ctx.beginPath();
-                        this.ctx.arc(pt.px, pt.py, 2.5 * this.spawnProgress * pt.scale, 0, Math.PI * 2);
+                        this.ctx.arc(pt.px, pt.py, 1.8 * this.spawnProgress * pt.scale, 0, Math.PI * 2);
                         this.ctx.fillStyle = `hsla(${pt.hue}, 100%, 70%, ${0.9 * this.spawnProgress * alphaFactor})`;
                         this.ctx.fill();
                     }
@@ -814,9 +811,9 @@
             if (activePolygonInstance) { activePolygonInstance.destroy(); activePolygonInstance = null; }
 
             const polyContainer = document.createElement('div');
-            polyContainer.className = "flex justify-end items-center w-full mb-3 select-none transform transition-all duration-1500 ease-out scale-95 opacity-0";
+            polyContainer.className = "flex justify-center items-center w-full mb-3 select-none transform transition-all duration-1500 ease-out scale-95 opacity-0";
             polyContainer.id = "poly-wrapper";
-            polyContainer.innerHTML = `<div class="polygon-float"><canvas id="polygonCanvas" width="350" height="350" class="w-full max-w-[250px] sm:max-w-[280px] aspect-square block cursor-pointer"></canvas></div>`;
+            polyContainer.innerHTML = `<div class="polygon-float"><canvas id="polygonCanvas" class="w-full max-w-[215px] sm:max-w-[270px] aspect-square block cursor-pointer"></canvas></div>`;
             appView.appendChild(polyContainer);
             setTimeout(() => {
                 polyContainer.classList.remove('scale-95', 'opacity-0');
@@ -825,7 +822,7 @@
             }, 50);
 
             const emailDiv = document.createElement('div');
-            emailDiv.className = `flex items-center justify-end w-full text-right mb-2 ${currentTheme === 'light' ? 'text-zinc-900' : 'text-white'} font-semibold select-none pr-4 sm:pr-6`;
+            emailDiv.className = `flex items-center justify-center w-full text-center mb-2 ${currentTheme === 'light' ? 'text-zinc-900' : 'text-white'} font-semibold select-none`;
 
             const emailSpan = document.createElement('span');
             emailSpan.className = `cursor-pointer inline-flex items-center relative select-none ${currentTheme === 'light' ? 'hover:text-zinc-500' : 'hover:text-zinc-300'} transition-all duration-200 hover:-translate-y-0.5`;
@@ -837,34 +834,38 @@
             appView.appendChild(emailDiv);
 
             const aboutDiv = document.createElement('div');
-            aboutDiv.className = `flex items-center justify-end w-full text-right mb-2 ${currentTheme === 'light' ? 'text-zinc-600 hover:text-zinc-900' : 'text-zinc-400 hover:text-white'} cursor-pointer leading-relaxed font-normal not-italic select-none transition-all duration-200 hover:-translate-y-0.5 pr-4 sm:pr-6`;
+            aboutDiv.className = `flex items-center justify-center w-full text-center mb-2 ${currentTheme === 'light' ? 'text-zinc-600 hover:text-zinc-900' : 'text-zinc-400 hover:text-white'} cursor-pointer leading-relaxed font-normal not-italic select-none transition-all duration-200 hover:-translate-y-0.5`;
             aboutDiv.textContent = "Downloading Gnosis";
             aboutDiv.setAttribute('onclick', "navigateTo('finding-gnosis')");
             appView.appendChild(aboutDiv);
 
             const navHeaderDiv = document.createElement('div');
-            navHeaderDiv.className = `flex items-center justify-end w-full text-right mb-2 ${currentTheme === 'light' ? 'text-zinc-900' : 'text-white'} font-semibold select-none pr-4 sm:pr-6`;
+            navHeaderDiv.className = `flex items-center justify-center w-full text-center mb-2 ${currentTheme === 'light' ? 'text-zinc-900' : 'text-white'} font-semibold select-none`;
             navHeaderDiv.innerHTML = `Directory <svg class="w-3.5 h-3.5 ml-2 inline select-none" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>`;
             appView.appendChild(navHeaderDiv);
 
             const rootItems = [
                 { content: 'Research', action: "navigateTo('research')" },
                 { content: 'Portals', action: "navigateTo('portal')" },
-                { content: 'Resume', action: "navigateTo('resume')" },
+                { content: 'Resumé', action: "navigateTo('resume')" },
                 { content: 'About', action: "navigateTo('metaepistemology')" },
                 { content: 'AUM', action: "navigateTo('aum')" }
             ];
 
             rootItems.forEach(item => {
                 const itemDiv = document.createElement('div');
-                itemDiv.className = `flex items-center justify-end w-full text-right mb-2 cursor-pointer select-none ${currentTheme === 'light' ? 'text-zinc-600 hover:text-zinc-900' : 'text-zinc-400 hover:text-white'} transition-all duration-200 hover:-translate-y-0.5 pr-4 sm:pr-6`;
-                itemDiv.textContent = item.content;
+                itemDiv.className = `flex items-center justify-center w-full text-center mb-2 cursor-pointer select-none ${currentTheme === 'light' ? 'text-zinc-600 hover:text-zinc-900' : 'text-zinc-400 hover:text-white'} transition-all duration-200 hover:-translate-y-0.5`;
+                if (item.content === 'Resumé') {
+                    itemDiv.innerHTML = `Resum&eacute;`;
+                } else {
+                    itemDiv.textContent = item.content;
+                }
                 itemDiv.setAttribute('onclick', item.action);
                 appView.appendChild(itemDiv);
 
                 if (item.content === 'AUM') {
                     const qDiv = document.createElement('div');
-                    qDiv.className = `flex items-center justify-end w-full text-right mb-2 select-none pr-4 sm:pr-6 ${currentTheme === 'light' ? 'text-zinc-600' : 'text-zinc-400'} text-sm`;
+                    qDiv.className = `flex items-center justify-center w-full text-center mb-2 select-none ${currentTheme === 'light' ? 'text-zinc-600' : 'text-zinc-400'} text-sm`;
                     qDiv.innerHTML = `<span class="floating-question cursor-pointer ${currentTheme === 'light' ? 'hover:text-zinc-900' : 'hover:text-white'} transition-colors" onclick="navigateTo('john-galt')">?</span>`;
                     appView.appendChild(qDiv);
                 }
@@ -875,7 +876,7 @@
             if (activePolygonInstance) { activePolygonInstance.destroy(); activePolygonInstance = null; }
 
             const emailDiv = document.createElement('div');
-            emailDiv.className = `flex items-center justify-end w-full text-right mb-2 ${currentTheme === 'light' ? 'text-zinc-900' : 'text-white'} font-semibold select-none pr-4 sm:pr-6`;
+            emailDiv.className = `flex items-center justify-center w-full text-center mb-2 ${currentTheme === 'light' ? 'text-zinc-900' : 'text-white'} font-semibold select-none`;
 
             const typedSpan = document.createElement('span');
             typedSpan.className = "select-none";
@@ -899,9 +900,9 @@
                     cursorSpan.remove();
                     
                     const polyContainer = document.createElement('div');
-                    polyContainer.className = "flex justify-end items-center w-full mb-3 select-none transform transition-all duration-1500 ease-out scale-95 opacity-0";
+                    polyContainer.className = "flex justify-center items-center w-full mb-3 select-none transform transition-all duration-1500 ease-out scale-95 opacity-0";
                     polyContainer.id = "poly-wrapper";
-                    polyContainer.innerHTML = `<div class="polygon-float"><canvas id="polygonCanvas" width="350" height="350" class="w-full max-w-[250px] sm:max-w-[280px] aspect-square block cursor-pointer"></canvas></div>`;
+                    polyContainer.innerHTML = `<div class="polygon-float"><canvas id="polygonCanvas" class="w-full max-w-[215px] sm:max-w-[270px] aspect-square block cursor-pointer"></canvas></div>`;
                     appView.insertBefore(polyContainer, appView.firstChild);
 
                     setTimeout(() => {
@@ -916,7 +917,7 @@
                     typedSpan.onclick = (e) => copyEmailToClipboard('contacthelsing@gmail.com', e);
 
                     const aboutDiv = document.createElement('div');
-                    aboutDiv.className = `flex items-center justify-end w-full text-right mb-2 ${currentTheme === 'light' ? 'text-zinc-600' : 'text-zinc-400'} leading-relaxed font-normal not-italic select-none pr-4 sm:pr-6`;
+                    aboutDiv.className = `flex items-center justify-center w-full text-center mb-2 ${currentTheme === 'light' ? 'text-zinc-600' : 'text-zinc-400'} leading-relaxed font-normal not-italic select-none`;
                     const aboutSpan = document.createElement('span');
                     aboutSpan.className = "select-none";
                     aboutDiv.appendChild(aboutSpan);
@@ -936,19 +937,19 @@
                             setTimeout(typeAboutChar, 10);
                         } else {
                             aboutCursor.remove();
-                            aboutDiv.className = `flex items-center justify-end w-full text-right mb-2 ${currentTheme === 'light' ? 'text-zinc-600 hover:text-zinc-900' : 'text-zinc-400 hover:text-white'} cursor-pointer leading-relaxed font-normal not-italic select-none transition-all duration-200 hover:-translate-y-0.5 pr-4 sm:pr-6`;
+                            aboutDiv.className = `flex items-center justify-center w-full text-center mb-2 ${currentTheme === 'light' ? 'text-zinc-600 hover:text-zinc-900' : 'text-zinc-400 hover:text-white'} cursor-pointer leading-relaxed font-normal not-italic select-none transition-all duration-200 hover:-translate-y-0.5`;
                             aboutDiv.textContent = "Downloading Gnosis";
                             aboutDiv.setAttribute('onclick', "navigateTo('finding-gnosis')");
 
                             const navHeaderDiv = document.createElement('div');
-                            navHeaderDiv.className = `flex items-center justify-end w-full text-right mb-2 ${currentTheme === 'light' ? 'text-zinc-900' : 'text-white'} font-semibold select-none pr-4 sm:pr-6`;
+                            navHeaderDiv.className = `flex items-center justify-center w-full text-center mb-2 ${currentTheme === 'light' ? 'text-zinc-900' : 'text-white'} font-semibold select-none`;
                             navHeaderDiv.innerHTML = `Directory <svg class="w-3.5 h-3.5 ml-2 inline select-none" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>`;
                             appView.appendChild(navHeaderDiv);
 
                             const rootItems = [
                                 { content: 'Research', action: "navigateTo('research')" },
                                 { content: 'Portals', action: "navigateTo('portal')" },
-                                { content: 'Resume', action: "navigateTo('resume')" },
+                                { content: 'Resumé', action: "navigateTo('resume')" },
                                 { content: 'About', action: "navigateTo('metaepistemology')" },
                                 { content: 'AUM', action: "navigateTo('aum')" }
                             ];
@@ -958,14 +959,18 @@
                                 if (itemIdx < rootItems.length) {
                                     const item = rootItems[itemIdx];
                                     const itemDiv = document.createElement('div');
-                                    itemDiv.className = `flex items-center justify-end w-full text-right mb-2 cursor-pointer select-none ${currentTheme === 'light' ? 'text-zinc-600 hover:text-zinc-900' : 'text-zinc-400 hover:text-white'} transition-all duration-200 hover:-translate-y-0.5 pr-4 sm:pr-6`;
-                                    itemDiv.textContent = item.content;
+                                    itemDiv.className = `flex items-center justify-center w-full text-center mb-2 cursor-pointer select-none ${currentTheme === 'light' ? 'text-zinc-600 hover:text-zinc-900' : 'text-zinc-400 hover:text-white'} transition-all duration-200 hover:-translate-y-0.5`;
+                                    if (item.content === 'Resumé') {
+                                        itemDiv.innerHTML = `Resum&eacute;`;
+                                    } else {
+                                        itemDiv.textContent = item.content;
+                                    }
                                     itemDiv.setAttribute('onclick', item.action);
                                     appView.appendChild(itemDiv);
 
                                     if (item.content === 'AUM') {
                                         const qDiv = document.createElement('div');
-                                        qDiv.className = `flex items-center justify-end w-full text-right mb-2 select-none pr-4 sm:pr-6 ${currentTheme === 'light' ? 'text-zinc-600' : 'text-zinc-400'} text-sm`;
+                                        qDiv.className = `flex items-center justify-center w-full text-center mb-2 select-none ${currentTheme === 'light' ? 'text-zinc-600' : 'text-zinc-400'} text-sm`;
                                         qDiv.innerHTML = `<span class="floating-question cursor-pointer ${currentTheme === 'light' ? 'hover:text-zinc-900' : 'hover:text-white'} transition-colors" onclick="navigateTo('john-galt')">?</span>`;
                                         appView.appendChild(qDiv);
                                     }
@@ -986,25 +991,24 @@
         }
 
         function renderSubView(currentState, meta, appView) {
-        let subView = '';
-        let lines = [];
+            let lines = [];
 
-        if (currentState === 'metatrons-cube') {
-            lines = [
-                { type: 'back', content: '< Return', action: "navigateBack()", align: 'right' },
-                { type: 'text', content: "Metatron's Cube", align: 'right' },
-                { type: 'paragraph', content: profileData.metatronsCubeDetail, align: 'right' }
-            ];
-        } else if (currentState === 'john-galt') {
-            lines = [
-                { type: 'back', content: '< Return', action: "navigateBack()", align: 'right' },
-                { type: 'text', content: 'Who is?', align: 'right' },
-                { type: 'paragraph', content: 'John Galt', align: 'right' }
-            ];
-        } else if (currentState === 'metaepistemology') {
-            lines = [
-                { type: 'back', content: '< Return', action: "navigateBack()", align: 'right' },
-                { type: 'text', content: 'Metaepistemology', align: 'right' },
+            if (currentState === 'metatrons-cube') {
+                lines = [
+                    { type: 'back', content: '< Return', action: "navigateBack()", align: 'right' },
+                    { type: 'text', content: "Metatron's Cube", align: 'right' },
+                    { type: 'paragraph', content: profileData.metatronsCubeDetail, align: 'right' }
+                ];
+            } else if (currentState === 'john-galt') {
+                lines = [
+                    { type: 'back', content: '< Return', action: "navigateBack()", align: 'right' },
+                    { type: 'text', content: 'Who is?...', align: 'right' },
+                    { type: 'link', content: 'John Galt', url: 'https://www.youtube.com/watch?v=wseyWRBWzyM', indent: true, align: 'right' }
+                ];
+            } else if (currentState === 'metaepistemology') {
+                lines = [
+                    { type: 'back', content: '< Return', action: "navigateBack()", align: 'right' },
+                    { type: 'text', content: 'Metaepistemology', align: 'right' },
                     { type: 'paragraph', content: profileData.metaepistemologyDetail, align: 'right' }
                 ];
             } else if (currentState === 'aum') {
@@ -1238,7 +1242,7 @@
             } else if (currentState === 'portal') {
                 lines = [
                     { type: 'back', content: '< Return', action: "navigateBack()", align: 'right' },
-                    { type: 'text', content: 'Portals Index', align: 'right' },
+                    { type: 'text', content: 'Portals', align: 'right' },
                     { type: 'link', content: 'TerminAI', url: 'https://officialhelsing.github.io/TerminAI/', indent: true, align: 'right' },
                     { type: 'link', content: 'GitHub', url: 'https://github.com/officialhelsing', indent: true, align: 'right' },
                     { type: 'link', content: 'FoTCM', url: 'https://officialhelsing.github.io/Foundations-of-Topological-Continuum-Mathematics/', indent: true, align: 'right' }
@@ -1246,14 +1250,14 @@
             } else if (currentState === 'resume') {
                 lines = [
                     { type: 'back', content: '< Return', action: "navigateBack()", align: 'right' },
-                    { type: 'text', content: 'Resume Index', align: 'right' },
-                    { type: 'link', content: 'Summary', action: "navigateTo('summary')", indent: true, align: 'right' },
+                    { type: 'text', content: 'Resum&eacute;', align: 'right' },
+                    { type: 'link', content: 'Intro', action: "navigateTo('summary')", indent: true, align: 'right' },
                     { type: 'link', content: 'Work', action: "navigateTo('experience')", indent: true, align: 'right' }
                 ];
             } else if (currentState === 'summary') {
                 lines = [
                     { type: 'back', content: '< Return', action: "navigateBack()", align: 'right' },
-                    { type: 'text', content: 'Summary', align: 'right' },
+                    { type: 'text', content: 'Intro', align: 'right' },
                     { type: 'paragraph', content: profileData.resumeSummary, align: 'right' }
                 ];
             } else if (currentState === 'experience') {
@@ -1262,24 +1266,24 @@
                     { type: 'text', content: 'Work History', align: 'right' }
                 ];
                 profileData.experience.forEach((exp, idx) => {
-                if (exp.startYear === 'Now') {
-                    lines.push({ 
-                        type: 'rainbow-link', 
-                        content: `(${exp.startYear}) ${exp.title}`,
-                        url: exp.url,
-                        align: 'right'
-                    });
-                } else {
-                    lines.push({ 
-                        type: 'link', 
-                        content: `(${exp.startYear}) ${exp.title}`,
-                        action: `navigateTo('experience-detail', ${idx})`, 
-                        indent: true,
-                        align: 'right'
-                    });
-                }
-            });
-        } else if (currentState === 'experience-detail') {
+                    if (exp.startYear === 'Now') {
+                        lines.push({ 
+                            type: 'rainbow-link', 
+                            content: `(${exp.startYear}) ${exp.title}`,
+                            url: exp.url,
+                            align: 'right'
+                        });
+                    } else {
+                        lines.push({ 
+                            type: 'link', 
+                            content: `(${exp.startYear}) ${exp.title}`,
+                            action: `navigateTo('experience-detail', ${idx})`, 
+                            indent: true,
+                            align: 'right'
+                        });
+                    }
+                });
+            } else if (currentState === 'experience-detail') {
                 const exp = profileData.experience[meta];
                 lines = [
                     { type: 'back', content: '< Return', action: "navigateBack()", align: 'right' },
@@ -1289,7 +1293,7 @@
             } else if (currentState === 'research') {
                 lines = [
                     { type: 'back', content: '< Return', action: "navigateBack()", align: 'right' },
-                    { type: 'text', content: 'Theoretical Research', align: 'right' }
+                    { type: 'text', content: 'Theoretical Researching', align: 'right' }
                 ];
                 profileData.research.forEach((res, originalIdx) => {
                     lines.push({ 
@@ -1320,27 +1324,12 @@
                 }
 
                 if (item.type === 'text') {
-                div.className += ` ${currentTheme === 'light' ? 'text-zinc-900' : 'text-white'} font-semibold text-sm md:text-base select-none pr-4 sm:pr-6`;
-                div.textContent = item.content;
-            } else if (item.type === 'rainbow-title') {
-                div.className += ` rainbow-text font-semibold text-sm md:text-base select-none pr-4 sm:pr-6`;
-                div.textContent = item.content;
-            } else if (item.type === 'rainbow-paragraph') {
-                div.className += ` rainbow-text text-[11px] leading-relaxed pr-4 sm:pr-6 mt-2 font-normal not-italic select-none w-full`;
-                div.style.textAlign = 'justify';
-                div.style.textAlignLast = 'right';
-                div.innerHTML = item.content;
-            } else if (item.type === 'silver-paragraph') {
-                div.className += ` silver-wave-text text-[11px] leading-relaxed pr-4 sm:pr-6 mt-2 font-normal not-italic select-none w-full`;
-                div.style.textAlign = 'justify';
-                div.style.textAlignLast = 'right';
-                div.innerHTML = item.content;
-            } else if (item.type === 'text-sub') {
-                div.className += ` ${currentTheme === 'light' ? 'text-zinc-700' : 'text-zinc-300'} font-medium mt-1 mb-1 select-none pr-4 sm:pr-6 text-xs md:text-sm`;
-                div.textContent = item.content;
-                } else if (item.type === 'text-sub') {
-                    div.className += ` ${currentTheme === 'light' ? 'text-zinc-700' : 'text-zinc-300'} font-medium mt-1 mb-1 select-none pr-4 sm:pr-6 text-xs md:text-sm`;
-                    div.textContent = item.content;
+                    div.className += ` ${currentTheme === 'light' ? 'text-zinc-900' : 'text-white'} font-semibold text-sm md:text-base select-none pr-4 sm:pr-6`;
+                    if (item.content === 'Resum&eacute;') {
+                        div.innerHTML = `Resum&eacute;`;
+                    } else {
+                        div.textContent = item.content;
+                    }
                 } else if (item.type === 'back') {
                     div.className += ` select-none ${currentTheme === 'light' ? 'text-zinc-500 hover:text-zinc-800' : 'text-zinc-500 hover:text-zinc-300'} mb-2 transition-all duration-200 pr-4 sm:pr-6`;
                     
@@ -1363,31 +1352,28 @@
                     div.appendChild(backContainer);
                 } else if (item.type === 'link') {
                     div.className += ` cursor-pointer select-none ${currentTheme === 'light' ? 'text-zinc-600 hover:text-zinc-900' : 'text-zinc-400 hover:text-white'} transition-all duration-200 hover:-translate-y-0.5 ${item.indent ? 'pr-4 sm:pr-6' : ''}`;
-                    div.textContent = item.content;
+                    if (item.content === 'Resum&eacute;') {
+                        div.innerHTML = `Resum&eacute;`;
+                    } else {
+                        div.textContent = item.content;
+                    }
                     if (item.url) {
                         div.setAttribute('onclick', `window.open('${item.url}', '_blank')`);
                     } else {
                         div.setAttribute('onclick', item.action);
                     }
                 } else if (item.type === 'rainbow-link') {
-                div.className += ` cursor-pointer select-none pr-4 sm:pr-6 transition-all duration-200 hover:-translate-y-0.5`;
-                if (item.url) {
-                    div.setAttribute('onclick', `window.open('${item.url}', '_blank')`);
-                } else {
-                    div.setAttribute('onclick', item.action || "navigateTo('metatrons-cube')");
-                }
-                const span = document.createElement('span');
-                span.className = "rainbow-text font-medium select-none inline-block";
-                span.textContent = item.content;
-                div.appendChild(span);
-            } else if (item.type === 'silver-link') {
-                div.className += ` cursor-pointer select-none pr-4 sm:pr-6 transition-all duration-200 hover:-translate-y-0.5`;
-                div.setAttribute('onclick', item.action);
-                const span = document.createElement('span');
-                span.className = "silver-wave-text font-medium select-none inline-block";
-                span.textContent = item.content;
-                div.appendChild(span);
-            } else if (item.type === 'research-link') {
+                    div.className += ` cursor-pointer select-none pr-4 sm:pr-6 transition-all duration-200 hover:-translate-y-0.5`;
+                    if (item.url) {
+                        div.setAttribute('onclick', `window.open('${item.url}', '_blank')`);
+                    } else {
+                        div.setAttribute('onclick', item.action || "navigateTo('metatrons-cube')");
+                    }
+                    const span = document.createElement('span');
+                    span.className = "rainbow-text font-medium select-none inline-block";
+                    span.textContent = item.content;
+                    div.appendChild(span);
+                } else if (item.type === 'research-link') {
                     div.className += ` cursor-pointer select-none transition-all duration-200 hover:-translate-y-0.5 ${item.indent ? 'pr-4 sm:pr-6' : ''}`;
                     div.setAttribute('onclick', item.action);
                     
@@ -1397,18 +1383,6 @@
                     titleDiv.title = item.title;
                     
                     div.appendChild(titleDiv);
-                } else if (item.type === 'bullets') {
-                    div.className += ` ${currentTheme === 'light' ? 'text-zinc-600' : 'text-zinc-400'} text-[11px] leading-relaxed pr-4 sm:pr-6 mt-2 font-normal not-italic select-none w-full text-right`;
-                    const innerDiv = document.createElement('div');
-                    innerDiv.className = "space-y-1.5 w-full text-right";
-                    item.bullets.forEach(b => {
-                        const bDiv = document.createElement('div');
-                        bDiv.className = "w-full select-none text-right whitespace-nowrap overflow-hidden text-ellipsis";
-                        bDiv.title = b;
-                        bDiv.textContent = b;
-                        innerDiv.appendChild(bDiv);
-                    });
-                    div.appendChild(innerDiv);
                 } else if (item.type === 'paragraph') {
                     if (!alignRight) {
                         div.className += ` ${currentTheme === 'light' ? 'text-zinc-600' : 'text-zinc-400'} text-[11px] leading-relaxed pl-0 pr-0 mt-2 font-normal not-italic select-none w-full text-left`;
@@ -1462,6 +1436,37 @@
             const current = navigationStack[navigationStack.length - 1];
             const currentState = typeof current === 'string' ? current : current.view;
             const meta = typeof current === 'object' ? current.meta : null;
+
+            const mainContainer = document.getElementById('main-container');
+            const introContainer = document.getElementById('intro-container');
+
+            if (currentState === 'root') {
+                if (mainContainer) {
+                    mainContainer.classList.remove('items-end');
+                    mainContainer.classList.add('items-center');
+                }
+                if (introContainer) {
+                    introContainer.classList.remove('justify-end', 'text-right');
+                    introContainer.classList.add('justify-center', 'text-center');
+                }
+                if (appView) {
+                    appView.classList.remove('items-end', 'text-right');
+                    appView.classList.add('items-center', 'text-center');
+                }
+            } else {
+                if (mainContainer) {
+                    mainContainer.classList.remove('items-center');
+                    mainContainer.classList.add('items-end');
+                }
+                if (introContainer) {
+                    introContainer.classList.remove('justify-center', 'text-center');
+                    introContainer.classList.add('justify-end', 'text-right');
+                }
+                if (appView) {
+                    appView.classList.remove('items-center', 'text-center');
+                    appView.classList.add('items-end', 'text-right');
+                }
+            }
 
             if (currentState === 'root') {
                 if (!hasInitializedRoot) {
@@ -1519,9 +1524,9 @@
                 let notif = parent.querySelector('.copy-notif');
                 if (!notif) {
                     notif = document.createElement('span');
-                    notif.className = `copy-notif mr-3 text-[10px] sm:text-xs font-mono opacity-75 ${currentTheme === 'light' ? 'text-zinc-500' : 'text-zinc-400'} fade-in order-first`;
+                    notif.className = `copy-notif ml-3 text-[10px] sm:text-xs font-mono opacity-75 ${currentTheme === 'light' ? 'text-zinc-500' : 'text-zinc-400'} fade-in inline-block`;
                     notif.textContent = "COPIED";
-                    parent.insertBefore(notif, parent.firstChild);
+                    parent.appendChild(notif);
                     
                     setTimeout(() => {
                         notif.classList.add('fade-out');
