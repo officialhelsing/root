@@ -92,8 +92,8 @@
     <canvas id="starfield" class="fixed inset-0 pointer-events-none z-0"></canvas>
     <div class="fixed inset-0 vignette-overlay z-1 pointer-events-none"></div>
 
-    <div id="intro-container" class="fixed bottom-24 right-6 sm:right-24 md:right-32 z-20 text-right font-mono text-xs md:text-sm tracking-widest select-none opacity-0 transition-opacity duration-1000 max-w-[280px] sm:max-w-xl px-4 leading-relaxed overflow-hidden">
-        <div><span id="typed-intro" class="inline-block max-w-full align-bottom pl-6 text-right whitespace-nowrap overflow-hidden text-ellipsis"></span></div>
+    <div id="intro-container" class="fixed bottom-24 right-6 sm:right-24 md:right-32 z-20 text-right font-mono text-xs md:text-sm tracking-widest select-none opacity-0 transition-opacity duration-1000 max-w-[280px] sm:max-w-xl px-4 leading-relaxed">
+        <div><span id="typed-intro" class="inline-block max-w-full align-bottom pl-6 text-right whitespace-normal overflow-visible"></span></div>
         <div id="typed-author" class="text-[10px] text-zinc-500 mt-1 italic tracking-wider opacity-0 transition-opacity duration-1000 whitespace-normal"></div>
     </div>
 
@@ -431,136 +431,36 @@
         };
 
         const esotericQuotes = [
-            { quote: "Form is emptiness, emptiness is form.", author: "Nagarjuna" },
-            { quote: "Consciousness precedes spacetime.", author: "Hermes" },
-            { quote: "Every axiom carries its own negation.", author: "Gödel" },
-            { quote: "To map the continuum is to transcend scale.", author: "Thom" },
-            { quote: "Substrate and observer collapse.", author: "Schrödinger" },
-            { quote: "Unmanifest geometry breathes.", author: "Proclus" },
-            { quote: "Infinity requires recursive folding.", author: "Cantor" },
-            { quote: "Rigorous thought finds its limit.", author: "Wittgenstein" },
-            { quote: "Truth is the syntax of transit.", author: "Category Theory" },
-            { quote: "Axioms reflect cognitive bounds.", author: "Hilbert" },
-            { quote: "Coherence is intellectual integrity.", author: "Kant" },
-            { quote: "Entropy is semantic resolution.", author: "Boltzmann" },
-            { quote: "Realization reveals the observer.", author: "Vedanta" },
-            { quote: "Topological invariants survive.", author: "Poincaré" },
-            { quote: "The void holds all possible metrics.", author: "Anaximander" },
-            { quote: "Language tethers the unnamable.", author: "Lao Tzu" },
-            { quote: "Paradox is logic colliding with reality.", author: "Kierkegaard" },
-            { quote: "Every boundary is a distinction.", author: "Zhuangzi" },
-            { quote: "Knowing mirrors being without remainder.", author: "Spinoza" },
-            { quote: "Silence is the background frequency.", author: "Plotinus" },
-            { quote: "To formalize is immortal geometry.", author: "Gauss" },
-            { quote: "Causality is a local narrative.", author: "Bohm" },
-            { quote: "The absolute requires no justification.", author: "Hegel" },
-            { quote: "Discretion preserves the substrate.", author: "Leibniz" },
-            { quote: "Every proof is discovery.", author: "Hardy" },
-            { quote: "The noumenal escapes physics.", author: "Kant" },
-            { quote: "Reflexive awareness examines axioms.", author: "Wheeler" },
-            { quote: "Extension is relational distancing.", author: "Whitehead" },
-            { quote: "Inquiry ends in the inquirer's silence.", author: "Ramana" },
-            { quote: "Immanence and transcendence fold.", author: "Cusa" },
-            { quote: "Ontology accounts for its genesis.", author: "Heidegger" },
-            { quote: "Infinity is depth in any single point.", author: "Bonaventure" },
-            { quote: "The map reconfigures the observer.", author: "Korzybski" },
-            { quote: "Consistency is minimum ethics.", author: "Tarski" },
-            { quote: "Thought is transient flux.", author: "Heraclitus" },
-            { quote: "Dualism dissolves in metaepistemology.", author: "James" },
-            { quote: "Nothing is truly discrete.", author: "Nagarjuna" },
-            { quote: "Abstractions resist trivial negation.", author: "Mac Lane" },
-            { quote: "Inhabit the silence between thoughts.", author: "Patanjali" },
-            { quote: "Geometry is space speaking.", author: "Kepler" },
-            { quote: "Arrival departs from mystery.", author: "Jaspers" },
-            { quote: "Dialectic resolves in absolute unity.", author: "Proclus" },
-            { quote: "Precision illuminates awe.", author: "Weyl" },
-            { quote: "Finite cognition carves discrete forms.", author: "Dogen" },
-            { quote: "The universe calculates itself.", author: "Zuse" },
-            { quote: "Formalisms hold up intuition.", author: "Poincaré" },
-            { quote: "Inquiry begins where lexicons fail.", author: "Mies" },
-            { quote: "The observer is the cosmic field.", author: "Schrödinger" },
-            { quote: "Complexity is the shadow of simplicity.", author: "Wright" },
-            { quote: "Silence holds the blueprint.", author: "Upanishads" },
-            { quote: "Starlight awakens consciousness.", author: "Rumi" },
-            { quote: "Golden threads weave dawn.", author: "Hafiz" },
-            { quote: "Peace blooms in quiet breath.", author: "Buddha" },
-            { quote: "Heartbeats are universal songs.", author: "Kabir" },
-            { quote: "Kindness ripples through ocean being.", author: "Thich Nhat Hanh" },
-            { quote: "Soft light reveals radiant beauty.", author: "Basho" },
-            { quote: "Stillness finds a home.", author: "Li Bai" },
-            { quote: "Grace flows through open spirits.", author: "Lao Tzu" },
-            { quote: "Wonder unfolds across morning skies.", author: "Tu Fu" },
-            { quote: "Pure radiance shines from within.", author: "Milarepa" },
-            { quote: "Warmth illuminates existence.", author: "Sufi Maxim" },
-            { quote: "Breezes carry eternal possibilities.", author: "Tagore" },
-            { quote: "Joy resonates with universal harmony.", author: "Marcus Aurelius" },
-            { quote: "The heart blooms in perfection.", author: "Attar" },
-            { quote: "Serene light guides the traveler.", author: "Proverb" },
-            { quote: "Smiles bridge starry distances.", author: "Zen Koan" },
-            { quote: "Healing light pours through dawn.", author: "Hildegard" },
-            { quote: "Peace reflects unbroken cosmos.", author: "Ibn Arabi" },
-            { quote: "Clarity illuminates wisdom.", author: "Sant Mat" },
-            { quote: "Gentle touch restores the web.", author: "Chief Seattle" },
-            { quote: "Tapestries weave through light.", author: "Hermetic Maxim" },
-            { quote: "Pines carry forest secrets.", author: "Muir" },
-            { quote: "Awareness flows like a river.", author: "Chuang Tzu" },
-            { quote: "Stars ignite the deep canopy.", author: "Whitman" },
-            { quote: "Rain washes away illusion.", author: "Wang Wei" },
-            { quote: "Autumn fields sing quiet songs.", author: "Keats" },
-            { quote: "Moonlight traces silver lakes.", author: "Basho" },
-            { quote: "Tides echo cosmic breathing.", author: "Carson" },
-            { quote: "Open horizons invite clarity.", author: "Rilke" },
-            { quote: "A gentle flame burns steady.", author: "St. John" },
-            { quote: "Dewdrops reflect rising suns.", author: "Issa" },
-            { quote: "The universe hums a lullaby.", author: "Pythagoras" },
-            { quote: "Waters carve ancient stones.", author: "Lao Tzu" },
-            { quote: "Hope pierces thickest clouds.", author: "Dickinson" },
-            { quote: "Lotuses rise pristine from mud.", author: "Sutra" },
-            { quote: "Autumn leaves teach surrender.", author: "Zen Teaching" },
-            { quote: "Twilight cradles the earth.", author: "Thoreau" },
-            { quote: "Compassion mirrors space.", author: "Avalokiteshvara" },
-            { quote: "Quiet footsteps leave no mark.", author: "Tao Te Ching" },
-            { quote: "Pine scent fills crisp air.", author: "Muir" },
-            { quote: "Amber rays warm dusty rooms.", author: "Woolf" },
-            { quote: "Stillness settles like fresh snow.", author: "Frost" },
-            { quote: "Falling stars write poems.", author: "Celestial Maxim" },
-            { quote: "Jasmine lingers in night breeze.", author: "Persian Verse" },
-            { quote: "Rivers wind toward welcoming seas.", author: "Lao Tzu" },
-            { quote: "Lighthouse beams cut fog.", author: "Woolf" },
-            { quote: "Sunlight warms ancient stones.", author: "Seneca" },
-            { quote: "Temple bells echo across valleys.", author: "Ryokan" },
-            { quote: "Open hands give freely.", author: "Dhammapada" },
-            { quote: "Patience shields against haste.", author: "Saadi" },
-            { quote: "Morning light awakens flowers.", author: "Wordsworth" },
-            { quote: "Midnight forests hold reassurance.", author: "Emerson" },
-            { quote: "Crystal streams reflect blue skies.", author: "Li Bai" },
-            { quote: "Hearth fires cast dancing shadows.", author: "Homer" },
-            { quote: "White clouds drift across summer.", author: "Constable" },
-            { quote: "Footsteps bring sweet release.", author: "Basho" },
-            { quote: "Strength resides in the willow.", author: "Sun Tzu" },
-            { quote: "Constellations guide through dark nights.", author: "Aratus" },
-            { quote: "Quiet joy bubbles from springs.", author: "Eckhart" },
-            { quote: "Moss cushions weary feet.", author: "Basho" },
-            { quote: "Evening wind cools the day.", author: "Shelley" },
-            { quote: "Mountain lakes mirror peaks.", author: "Muir" },
-            { quote: "Encouragement dissolves doubt.", author: "Marcus Aurelius" },
-            { quote: "Leaves dance on winding creeks.", author: "Frost" },
-            { quote: "Summer sun heals hidden wounds.", author: "Hippocrates" },
-            { quote: "Shadows lengthen as twilight falls.", author: "Gray" },
-            { quote: "A sanctuary exists within the heart.", author: "Rumi" },
-            { quote: "Petals drift like spring snow.", author: "Saigyo" },
-            { quote: "Ancient wisdom lives in wind.", author: "Confucius" },
-            { quote: "Turquoise waters lap the shore.", author: "Homer" },
-            { quote: "Radiance emanates from presence.", author: "Ramana" },
-            { quote: "Ripples spread across ponds.", author: "Zhuangzi" },
-            { quote: "Desert nights reveal the Milky Way.", author: "Saint-Exupéry" },
-            { quote: "Amber lanterns cast glowing light.", author: "Basho" },
-            { quote: "Strength sustains changing seasons.", author: "Cicero" },
-            { quote: "Morning air renews wonder.", author: "Thoreau" },
-            { quote: "Falling leaves teach letting go.", author: "Zen Proverb" },
-            { quote: "Contentment turns water to feasts.", author: "Epicurus" },
-            { quote: "Rolling hills stretch to horizons.", author: "Clare" },
-            { quote: "Devotion warms cold corners.", author: "St. Teresa" }
+            { quote: "Honey never spoils; archaeologists have found 3,000-year-old honey in Egyptian tombs that is still perfectly edible." },
+            { quote: "A single day on Venus is longer than its entire year, taking 243 Earth days to rotate once." },
+            { quote: "Bananas are curved because they grow upwards towards the sun against gravity in a process called negative geotropism." },
+            { quote: "Octopuses have three hearts, nine brains, and blue blood due to copper-based hemocyanin." },
+            { quote: "Water can boil and freeze at the same time under a specific pressure condition known as the triple point." },
+            { quote: "Sharks existed on Earth before trees, appearing in the fossil record around 450 million years ago." },
+            { quote: "A bolt of lightning is five times hotter than the surface of the sun, reaching roughly 30,000 kelvins." },
+            { quote: "The total weight of all ants on Earth is roughly comparable to the total weight of all human beings." },
+            { quote: "Scotland has over 400 words for snow, ranging from sparkling drifting snow to heavy wet flurries." },
+            { quote: "There are more trees on Earth than stars in the Milky Way galaxy, with an estimated three trillion trees." },
+            { quote: "Sound travels about 4.3 times faster in water than it does through dry air at room temperature." },
+            { quote: "A day on Mercury features a strange double sunrise where the sun rises, pauses, sets, and rises again." },
+            { quote: "Wombat poop is uniquely cube-shaped, which prevents it from rolling away and marks their territory." },
+            { quote: "The human brain uses about 20 percent of the body's total energy and oxygen output despite its compact size." },
+            { quote: "Saturn has such a low density that if you could find a bathtub big enough, the giant planet would float in water." },
+            { quote: "Glass is technically an amorphous solid that flows extremely slowly over immense geological timescales." },
+            { quote: "Butterflies taste food using specialized sensory receptors located underneath their feet." },
+            { quote: "Neutron stars are so dense that a single teaspoon of their material would weigh about six billion tons." },
+            { quote: "Sea otters hold hands while sleeping in water to prevent themselves from drifting apart in currents." },
+            { quote: "The Eiffel Tower grows taller during hot summer days due to thermal expansion of its iron structure." },
+            { quote: "Sloths can hold their breath underwater longer than dolphins can, slowing their heart rate down significantly." },
+            { quote: "Cows have best friends and experience measurable stress when they are separated from them." },
+            { quote: "Cleopatra lived closer in time to the landing of the Apollo 11 moon mission than to the construction of the Great Pyramid." },
+            { quote: "Mars appears red because its surface contains massive amounts of iron oxide, which is essentially rust." },
+            { quote: "Pineapples take nearly two whole years to grow and fully mature before they can be harvested." },
+            { quote: "A blue whale's tongue can weigh as much as an entire adult elephant, and its heart is the size of a small car." },
+            { quote: "Light takes about 8 minutes and 20 seconds to travel from the surface of the sun to human eyes on Earth." },
+            { quote: "Humans are the only animals on planet Earth that are known to enjoy consuming spicy foods." },
+            { quote: "Flamingos are naturally born with white or gray feathers and turn pink from pigments in their diet of shrimp and algae." },
+            { quote: "A single cloud can easily weigh more than a million pounds due to the massive volume of water droplets it holds." }
         ];
 
         let recentQuoteIndices = [];
@@ -1072,9 +972,9 @@
                 if (charIndex < currentActiveText.length) {
                     typedIntroEl.textContent += currentActiveText.charAt(charIndex);
                     charIndex++;
-                    setTimeout(typeStep, 60);
+                    setTimeout(typeStep, 45);
                 } else {
-                    setTimeout(() => backspaceStep(onComplete), 1000);
+                    setTimeout(() => backspaceStep(onComplete), 1400);
                 }
             }
             typeStep();
@@ -1084,14 +984,14 @@
             if (charIndex > 0) {
                 typedIntroEl.textContent = currentActiveText.substring(0, charIndex - 1);
                 charIndex--;
-                setTimeout(() => backspaceStep(onComplete), 35);
+                setTimeout(() => backspaceStep(onComplete), 25);
             } else {
                 typedIntroEl.classList.remove('typing-cursor');
                 introContainer.style.opacity = '0';
                 setTimeout(() => {
                     introContainer.style.display = 'none';
                     if (onComplete) onComplete();
-                }, 600);
+                }, 500);
             }
         }
 
@@ -1103,21 +1003,21 @@
             setTimeout(() => {
                 navigationStack = ['root'];
                 let quoteObj = getRandomQuote();
-                startFadeInQuote(quoteObj.quote, quoteObj.author);
-            }, 600);
+                startFadeInQuote(quoteObj.quote);
+            }, 500);
         }
 
-        function startFadeInQuote(text, author) {
+        function startFadeInQuote(text) {
             introContainer.style.display = 'block';
             typedIntroEl.textContent = text;
             typedIntroEl.classList.remove('typing-cursor');
             if (typedAuthorEl) {
-                typedAuthorEl.textContent = `— ${author}`;
+                typedAuthorEl.textContent = '';
+                typedAuthorEl.style.opacity = '0';
             }
             
             setTimeout(() => {
                 introContainer.style.opacity = '1';
-                if (typedAuthorEl) typedAuthorEl.style.opacity = '1';
             }, 50);
 
             const appView = document.getElementById('app-view');
@@ -1125,14 +1025,13 @@
 
             setTimeout(() => {
                 introContainer.style.opacity = '0';
-                if (typedAuthorEl) typedAuthorEl.style.opacity = '0';
                 setTimeout(() => {
                     introContainer.style.display = 'none';
                     applyTheme();
                     renderView();
                     if (mainContainer) mainContainer.style.opacity = '1';
-                }, 600);
-            }, 3200);
+                }, 500);
+            }, 4200);
         }
 
         function renderView() {
