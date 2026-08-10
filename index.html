@@ -1031,7 +1031,7 @@
                     renderView();
                     if (mainContainer) mainContainer.style.opacity = '1';
                 }, 500);
-            }, 4200);
+            }, 4500);
         }
 
         function renderView() {
@@ -1071,7 +1071,12 @@
         function MapsTo(state, idx) {
             playTone(480, 'sine', 0.04, 0.015);
             navigationStack.push(state);
-            renderSubView(state, idx, document.getElementById('app-view'));
+            const appView = document.getElementById('app-view');
+            if (appView) {
+                appView.innerHTML = '';
+                appView.classList.remove('hidden');
+                renderSubView(state, idx, appView);
+            }
         }
 
         function copyEmailToClipboard(email, e) {
