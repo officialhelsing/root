@@ -125,7 +125,7 @@
         }
     </style>
 </head>
-<body class="bg-black h-screen w-screen overflow-hidden relative m-0 p-0 select-none flex flex-col justify-center items-center">
+<body class="bg-black h-screen w-screen overflow-hidden relative m-0 p-0 select-none flex flex-col justify-end items-end pb-12 pr-8 sm:pr-16 md:pr-24">
     <canvas id="starfield" class="fixed inset-0 pointer-events-none z-0"></canvas>
     <div class="fixed inset-0 vignette-overlay z-1 pointer-events-none"></div>
 
@@ -842,7 +842,7 @@
             const emailSpan = document.createElement('span');
             emailSpan.className = `cursor-pointer inline-flex items-center relative select-none ${currentTheme === 'light' ? 'hover:text-zinc-500' : 'hover:text-zinc-300'} transition-all duration-200 hover:-translate-y-0.5`;
             emailSpan.title = "Click to copy email";
-            emailSpan.textContent = "CONTACTHELSING@GMAIL.COM";
+            emailSpan.innerHTML = `CONTACTHELSING@GMAIL.COM <svg class="w-3.5 h-3.5 ml-2 inline select-none" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>`;
             emailSpan.onclick = (e) => copyEmailToClipboard('contacthelsing@gmail.com', e);
             emailDiv.appendChild(emailSpan);
 
@@ -856,7 +856,7 @@
 
             const navHeaderDiv = document.createElement('div');
             navHeaderDiv.className = `flex flex-col w-full text-right items-end mb-2 ${currentTheme === 'light' ? 'text-zinc-900' : 'text-white'} font-semibold select-none pr-4 sm:pr-6`;
-            navHeaderDiv.innerHTML = `<span class="inline-flex items-center">Directory <svg class="w-3.5 h-3.5 ml-2 inline select-none" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg></span>`;
+            navHeaderDiv.innerHTML = `<span class="inline-flex items-center">DIRECTORY <svg class="w-3.5 h-3.5 ml-2 inline select-none" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg></span>`;
             appView.appendChild(navHeaderDiv);
 
             const rootItems = [
@@ -903,7 +903,7 @@
             const emailSpan = document.createElement('span');
             emailSpan.className = `cursor-pointer inline-flex items-center relative select-none ${currentTheme === 'light' ? 'hover:text-zinc-500' : 'hover:text-zinc-300'} transition-all duration-200 hover:-translate-y-0.5`;
             emailSpan.title = "Click to copy email";
-            emailSpan.textContent = "CONTACTHELSING@GMAIL.COM";
+            emailSpan.innerHTML = `CONTACTHELSING@GMAIL.COM <svg class="w-3.5 h-3.5 ml-2 inline select-none" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>`;
             emailSpan.onclick = (e) => copyEmailToClipboard('contacthelsing@gmail.com', e);
             emailDiv.appendChild(emailSpan);
             appView.appendChild(emailDiv);
@@ -920,7 +920,7 @@
             const navHeaderDiv = document.createElement('div');
             navHeaderDiv.className = `glitch-element flex flex-col w-full text-right items-end mb-2 ${currentTheme === 'light' ? 'text-zinc-900' : 'text-white'} font-semibold select-none pr-4 sm:pr-6`;
             navHeaderDiv.style.animationDelay = `${animDelay}ms`;
-            navHeaderDiv.innerHTML = `<span class="inline-flex items-center">Directory <svg class="w-3.5 h-3.5 ml-2 inline select-none" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg></span>`;
+            navHeaderDiv.innerHTML = `<span class="inline-flex items-center">DIRECTORY <svg class="w-3.5 h-3.5 ml-2 inline select-none" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg></span>`;
             appView.appendChild(navHeaderDiv);
             animDelay += delayStep;
 
