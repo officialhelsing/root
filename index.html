@@ -84,11 +84,11 @@
         }
     </style>
 </head>
-<body class="bg-black h-screen w-screen overflow-hidden relative m-0 p-0 select-none flex flex-col justify-end items-end pb-32 pr-24 sm:pr-36 md:pr-48">
+<body class="bg-black h-screen w-screen overflow-hidden relative m-0 p-0 select-none flex flex-col justify-end items-end pb-24 pr-12 sm:pr-24 md:pr-32">
     <canvas id="starfield" class="fixed inset-0 pointer-events-none z-0"></canvas>
     <div class="fixed inset-0 vignette-overlay z-1 pointer-events-none"></div>
 
-    <div id="intro-container" class="fixed bottom-28 right-20 sm:right-32 md:right-44 z-20 text-right font-mono text-xs md:text-sm tracking-widest select-none">
+    <div id="intro-container" class="fixed bottom-24 right-12 sm:right-24 md:right-32 z-20 text-right font-mono text-xs md:text-sm tracking-widest select-none">
         <div><span id="typed-intro"></span><span id="intro-cursor" class="cursor text-white font-bold">_</span></div>
     </div>
 
@@ -472,15 +472,15 @@
             if (currentState === 'metaepistemology') {
                 headerItem = { type: 'text', content: 'About', align: 'right' };
                 lines = [
-                    headerItem,
                     { type: 'paragraph', content: profileData.metaepistemologyDetail, align: 'right' },
+                    headerItem,
                     returnItem
                 ];
             } else if (currentState === 'contact') {
                 headerItem = { type: 'text', content: 'Email', align: 'right' };
                 lines = [
-                    headerItem,
                     { type: 'paragraph', content: '<span class="relative inline-flex items-center justify-end"><span id="copied-badge" class="absolute -left-14 opacity-0 transition-opacity duration-300 text-[10px] tracking-wider text-emerald-500 font-mono select-none">copied</span><span class="cursor-pointer transition-all hover:opacity-75" onclick="copyEmailToClipboard(\'contacthelsing@gmail.com\', event)" title="Click to copy email">contacthelsing@gmail.com</span></span>', align: 'right' },
+                    headerItem,
                     returnItem
                 ];
             } else if (currentState === 'aum') {
@@ -605,8 +605,8 @@
                 `;
                 headerItem = { type: 'text', content: 'Assets Under Management', align: 'right' };
                 lines = [
-                    headerItem,
                     { type: 'paragraph', content: aumHtml, align: 'left' },
+                    headerItem,
                     returnItem
                 ];
 
@@ -714,8 +714,8 @@
                     { type: 'link', content: 'TerminAI', url: 'https://officialhelsing.github.io/TerminAI/', indent: true, align: 'right' }
                 ];
                 lines = [
-                    headerItem,
                     ...menuItems,
+                    headerItem,
                     returnItem
                 ];
             } else if (currentState === 'resume') {
@@ -726,15 +726,15 @@
                     { type: 'link', content: 'Works', action: "navigateTo('experience')", indent: true, align: 'right' }
                 ];
                 lines = [
-                    headerItem,
                     ...menuItems,
+                    headerItem,
                     returnItem
                 ];
             } else if (currentState === 'summary') {
                 headerItem = { type: 'text', content: 'Intro', align: 'right' };
                 lines = [
-                    headerItem,
                     { type: 'paragraph', content: profileData.resumeSummary, align: 'right' },
+                    headerItem,
                     returnItem
                 ];
             } else if (currentState === 'experience') {
@@ -751,16 +751,16 @@
                     });
                 });
                 lines = [
-                    headerItem,
                     ...menuItems,
+                    headerItem,
                     returnItem
                 ];
             } else if (currentState === 'experience-detail') {
                 const exp = profileData.experience[meta];
                 headerItem = { type: 'text', content: exp.location, align: 'right' };
                 lines = [
-                    headerItem,
                     { type: 'paragraph', content: exp.description, align: 'right' },
+                    headerItem,
                     returnItem
                 ];
             } else if (currentState === 'research') {
@@ -778,16 +778,16 @@
                     });
                 });
                 lines = [
-                    headerItem,
                     ...menuItems,
+                    headerItem,
                     returnItem
                 ];
             } else if (currentState === 'research-detail') {
                 const res = profileData.research[meta];
                 headerItem = { type: 'text', content: res.title, align: 'right' };
                 lines = [
-                    headerItem,
                     { type: 'paragraph', content: res.detail || res.description, align: 'right' },
+                    headerItem,
                     returnItem
                 ];
             }
@@ -806,7 +806,7 @@
                     div.className += ` ${currentTheme === 'light' ? 'text-zinc-900' : 'text-white'} font-semibold text-sm md:text-base select-none pr-0`;
                     div.innerHTML = item.content;
                 } else if (item.type === 'back') {
-                    div.className += ` select-none ${currentTheme === 'light' ? 'text-zinc-500 hover:text-zinc-800' : 'text-zinc-500 hover:text-zinc-300'} mt-2 mb-2 transition-all duration-200 pr-0`;
+                    div.className += ` select-none ${currentTheme === 'light' ? 'text-zinc-500 hover:text-zinc-800' : 'text-zinc-500 hover:text-zinc-300'} mb-2 transition-all duration-200 pr-0`;
                     
                     const backContainer = document.createElement('div');
                     backContainer.className = "inline-flex items-center space-x-2.5 justify-end w-full select-none";
