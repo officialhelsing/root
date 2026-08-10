@@ -108,18 +108,33 @@
             display: inline-block;
             animation: floatQuestion 3s ease-in-out infinite;
         }
+        @keyframes digitalGlitch {
+            0% { opacity: 0; transform: translate3d(8px, 0, 0) scaleX(1.05); filter: blur(3px); }
+            20% { opacity: 1; transform: translate3d(-4px, 0, 0) scaleX(0.95); filter: blur(0px); }
+            25% { opacity: 0.2; transform: translate3d(2px, 0, 0); }
+            35% { opacity: 1; transform: translate3d(-1px, 0, 0); }
+            45% { opacity: 0.1; }
+            55% { opacity: 1; }
+            65% { opacity: 0.8; filter: blur(1px); }
+            75% { opacity: 1; filter: blur(0px); }
+            100% { opacity: 1; transform: translate3d(0, 0, 0) scaleX(1); }
+        }
+        .glitch-element {
+            opacity: 0;
+            animation: digitalGlitch 0.35s cubic-bezier(0.1, 0.9, 0.2, 1) forwards;
+        }
     </style>
 </head>
 <body class="bg-black h-screen w-screen overflow-hidden relative m-0 p-0 select-none flex flex-col justify-center items-center">
     <canvas id="starfield" class="fixed inset-0 pointer-events-none z-0"></canvas>
     <div class="fixed inset-0 vignette-overlay z-1 pointer-events-none"></div>
 
-    <div id="main-container" class="relative z-10 flex flex-col items-center w-[320px] sm:w-[450px] md:w-[550px] px-4 select-none">
-        <div id="intro-container" class="flex items-center justify-center text-white font-mono text-xs md:text-sm tracking-widest w-full text-center select-none">
+    <div id="main-container" class="relative z-10 flex flex-col items-end w-[320px] sm:w-[450px] md:w-[550px] px-4 select-none">
+        <div id="intro-container" class="flex items-end justify-end text-right font-mono text-xs md:text-sm tracking-widest w-full select-none">
             <div><span id="typed-intro"></span><span id="intro-cursor" class="cursor text-white font-bold">_</span></div>
         </div>
 
-        <div id="app-view" class="hidden flex flex-col items-center text-xs md:text-sm text-zinc-400 tracking-widest w-full text-center select-none">
+        <div id="app-view" class="hidden flex flex-col items-end text-xs md:text-sm text-zinc-400 tracking-widest w-full text-right select-none">
             <!-- Content injected via JavaScript router -->
         </div>
     </div>
@@ -416,7 +431,7 @@
                 this.ctx = this.canvas.getContext('2d');
                 
                 const dpr = (window.devicePixelRatio || 1) * 2.5;
-                this.cssSize = 240; // Balanced size to ensure comfortable surrounding black space
+                this.cssSize = 240;
                 this.canvas.width = this.cssSize * dpr;
                 this.canvas.height = this.cssSize * dpr;
                 this.canvas.style.width = `${this.cssSize}px`;
@@ -552,7 +567,7 @@
 
                 let vertices = [];
                 vertices.push({ x: 0, y: 0, z: 0, type: 'node', hue: 0 });
-                let r1 = 44; // Inner ring radius adjusted for comfortable padding
+                let r1 = 44;
                 for (let i = 0; i < 6; i++) {
                     let angle = i * (Math.PI / 3);
                     vertices.push({
@@ -563,7 +578,7 @@
                         hue: i * 60
                     });
                 }
-                let r2 = 88; // Outer ring radius adjusted for comfortable padding
+                let r2 = 88;
                 for (let i = 0; i < 6; i++) {
                     let angle = i * (Math.PI / 3) + (Math.PI / 6);
                     vertices.push({
@@ -811,7 +826,7 @@
             if (activePolygonInstance) { activePolygonInstance.destroy(); activePolygonInstance = null; }
 
             const polyContainer = document.createElement('div');
-            polyContainer.className = "flex justify-center items-center w-full mb-3 select-none transform transition-all duration-1500 ease-out scale-95 opacity-0";
+            polyContainer.className = "flex justify-end items-end w-full mb-3 select-none transform transition-all duration-1500 ease-out scale-95 opacity-0 pr-4 sm:pr-6";
             polyContainer.id = "poly-wrapper";
             polyContainer.innerHTML = `<div class="polygon-float"><canvas id="polygonCanvas" class="w-full max-w-[240px] sm:max-w-[280px] aspect-square block cursor-pointer"></canvas></div>`;
             appView.appendChild(polyContainer);
@@ -822,7 +837,7 @@
             }, 50);
 
             const emailDiv = document.createElement('div');
-            emailDiv.className = `flex items-center justify-center w-full text-center mb-2 ${currentTheme === 'light' ? 'text-zinc-900' : 'text-white'} font-semibold select-none`;
+            emailDiv.className = `flex flex-col w-full text-right items-end mb-2 ${currentTheme === 'light' ? 'text-zinc-900' : 'text-white'} font-semibold select-none pr-4 sm:pr-6`;
 
             const emailSpan = document.createElement('span');
             emailSpan.className = `cursor-pointer inline-flex items-center relative select-none ${currentTheme === 'light' ? 'hover:text-zinc-500' : 'hover:text-zinc-300'} transition-all duration-200 hover:-translate-y-0.5`;
@@ -834,14 +849,14 @@
             appView.appendChild(emailDiv);
 
             const aboutDiv = document.createElement('div');
-            aboutDiv.className = `flex items-center justify-center w-full text-center mb-2 ${currentTheme === 'light' ? 'text-zinc-600 hover:text-zinc-900' : 'text-zinc-400 hover:text-white'} cursor-pointer leading-relaxed font-normal not-italic select-none transition-all duration-200 hover:-translate-y-0.5`;
-            aboutDiv.textContent = "Downloading Gnosis";
+            aboutDiv.className = `flex flex-col w-full text-right items-end mb-2 ${currentTheme === 'light' ? 'text-zinc-600 hover:text-zinc-900' : 'text-zinc-400 hover:text-white'} cursor-pointer leading-relaxed font-normal not-italic select-none transition-all duration-200 hover:-translate-y-0.5 pr-4 sm:pr-6`;
+            aboutDiv.textContent = "Finding Gnosis";
             aboutDiv.setAttribute('onclick', "navigateTo('finding-gnosis')");
             appView.appendChild(aboutDiv);
 
             const navHeaderDiv = document.createElement('div');
-            navHeaderDiv.className = `flex items-center justify-center w-full text-center mb-2 ${currentTheme === 'light' ? 'text-zinc-900' : 'text-white'} font-semibold select-none`;
-            navHeaderDiv.innerHTML = `Directory <svg class="w-3.5 h-3.5 ml-2 inline select-none" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>`;
+            navHeaderDiv.className = `flex flex-col w-full text-right items-end mb-2 ${currentTheme === 'light' ? 'text-zinc-900' : 'text-white'} font-semibold select-none pr-4 sm:pr-6`;
+            navHeaderDiv.innerHTML = `<span class="inline-flex items-center">Directory <svg class="w-3.5 h-3.5 ml-2 inline select-none" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg></span>`;
             appView.appendChild(navHeaderDiv);
 
             const rootItems = [
@@ -854,7 +869,7 @@
 
             rootItems.forEach(item => {
                 const itemDiv = document.createElement('div');
-                itemDiv.className = `flex items-center justify-center w-full text-center mb-2 cursor-pointer select-none ${currentTheme === 'light' ? 'text-zinc-600 hover:text-zinc-900' : 'text-zinc-400 hover:text-white'} transition-all duration-200 hover:-translate-y-0.5`;
+                itemDiv.className = `flex flex-col w-full text-right items-end mb-2 cursor-pointer select-none ${currentTheme === 'light' ? 'text-zinc-600 hover:text-zinc-900' : 'text-zinc-400 hover:text-white'} transition-all duration-200 hover:-translate-y-0.5 pr-4 sm:pr-6`;
                 if (item.content === 'Resumé') {
                     itemDiv.innerHTML = `Resum&eacute;`;
                 } else {
@@ -862,132 +877,85 @@
                 }
                 itemDiv.setAttribute('onclick', item.action);
                 appView.appendChild(itemDiv);
-
-                if (item.content === 'AUM') {
-                    const qDiv = document.createElement('div');
-                    qDiv.className = `flex items-center justify-center w-full text-center mb-2 select-none ${currentTheme === 'light' ? 'text-zinc-600' : 'text-zinc-400'} text-sm`;
-                    qDiv.innerHTML = `<span class="floating-question cursor-pointer ${currentTheme === 'light' ? 'hover:text-zinc-900' : 'hover:text-white'} transition-colors" onclick="navigateTo('john-galt')">?</span>`;
-                    appView.appendChild(qDiv);
-                }
             });
         }
 
         function renderRootTyping(appView) {
             if (activePolygonInstance) { activePolygonInstance.destroy(); activePolygonInstance = null; }
 
+            let animDelay = 0;
+            const delayStep = 100;
+
+            const polyContainer = document.createElement('div');
+            polyContainer.className = "glitch-element flex justify-end items-end w-full mb-3 select-none pr-4 sm:pr-6";
+            polyContainer.style.animationDelay = `${animDelay}ms`;
+            polyContainer.id = "poly-wrapper";
+            polyContainer.innerHTML = `<div class="polygon-float"><canvas id="polygonCanvas" class="w-full max-w-[240px] sm:max-w-[280px] aspect-square block cursor-pointer"></canvas></div>`;
+            appView.appendChild(polyContainer);
+            setTimeout(() => {
+                activePolygonInstance = new MetatronsCubeGenerator('polygonCanvas');
+            }, animDelay + 100);
+            animDelay += delayStep;
+            
             const emailDiv = document.createElement('div');
-            emailDiv.className = `flex items-center justify-center w-full text-center mb-2 ${currentTheme === 'light' ? 'text-zinc-900' : 'text-white'} font-semibold select-none`;
-
-            const typedSpan = document.createElement('span');
-            typedSpan.className = "select-none";
-            emailDiv.appendChild(typedSpan);
-            const cursorSpan = document.createElement('span');
-            cursorSpan.className = `cursor ${currentTheme === 'light' ? 'text-zinc-900' : 'text-white'} font-bold ml-0.5 select-none`;
-            cursorSpan.textContent = "_";
-            emailDiv.appendChild(cursorSpan);
+            emailDiv.className = `glitch-element flex flex-col w-full text-right items-end mb-2 ${currentTheme === 'light' ? 'text-zinc-900' : 'text-white'} font-semibold select-none pr-4 sm:pr-6`;
+            emailDiv.style.animationDelay = `${animDelay}ms`;
+            const emailSpan = document.createElement('span');
+            emailSpan.className = `cursor-pointer inline-flex items-center relative select-none ${currentTheme === 'light' ? 'hover:text-zinc-500' : 'hover:text-zinc-300'} transition-all duration-200 hover:-translate-y-0.5`;
+            emailSpan.title = "Click to copy email";
+            emailSpan.textContent = "CONTACTHELSING@GMAIL.COM";
+            emailSpan.onclick = (e) => copyEmailToClipboard('contacthelsing@gmail.com', e);
+            emailDiv.appendChild(emailSpan);
             appView.appendChild(emailDiv);
+            animDelay += delayStep;
 
-            const emailText = "CONTACTHELSING@GMAIL.COM";
-            let emailIdx = 0;
+            const aboutDiv = document.createElement('div');
+            aboutDiv.className = `glitch-element flex flex-col w-full text-right items-end mb-2 ${currentTheme === 'light' ? 'text-zinc-600 hover:text-zinc-900' : 'text-zinc-400 hover:text-white'} cursor-pointer leading-relaxed font-normal not-italic select-none transition-all duration-200 hover:-translate-y-0.5 pr-4 sm:pr-6`;
+            aboutDiv.style.animationDelay = `${animDelay}ms`;
+            aboutDiv.textContent = "Finding Gnosis";
+            aboutDiv.setAttribute('onclick', "navigateTo('finding-gnosis')");
+            appView.appendChild(aboutDiv);
+            animDelay += delayStep;
 
-            function typeEmailChar() {
-                if (emailIdx < emailText.length) {
-                    typedSpan.textContent += emailText.charAt(emailIdx);
-                    emailIdx++;
-                    if (Math.random() < 0.3) playTone(700, 'sine', 0.02, 0.005);
-                    setTimeout(typeEmailChar, 40);
+            const navHeaderDiv = document.createElement('div');
+            navHeaderDiv.className = `glitch-element flex flex-col w-full text-right items-end mb-2 ${currentTheme === 'light' ? 'text-zinc-900' : 'text-white'} font-semibold select-none pr-4 sm:pr-6`;
+            navHeaderDiv.style.animationDelay = `${animDelay}ms`;
+            navHeaderDiv.innerHTML = `<span class="inline-flex items-center">Directory <svg class="w-3.5 h-3.5 ml-2 inline select-none" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg></span>`;
+            appView.appendChild(navHeaderDiv);
+            animDelay += delayStep;
+
+            const rootItems = [
+                { content: 'Research', action: "navigateTo('research')" },
+                { content: 'Portals', action: "navigateTo('portal')" },
+                { content: 'Resumé', action: "navigateTo('resume')" },
+                { content: 'About', action: "navigateTo('metaepistemology')" },
+                { content: 'AUM', action: "navigateTo('aum')" }
+            ];
+
+            rootItems.forEach(item => {
+                const itemDiv = document.createElement('div');
+                itemDiv.className = `glitch-element flex flex-col w-full text-right items-end mb-2 cursor-pointer select-none ${currentTheme === 'light' ? 'text-zinc-600 hover:text-zinc-900' : 'text-zinc-400 hover:text-white'} transition-all duration-200 hover:-translate-y-0.5 pr-4 sm:pr-6`;
+                itemDiv.style.animationDelay = `${animDelay}ms`;
+                if (item.content === 'Resumé') {
+                    itemDiv.innerHTML = `Resum&eacute;`;
                 } else {
-                    cursorSpan.remove();
-                    
-                    const polyContainer = document.createElement('div');
-                    polyContainer.className = "flex justify-center items-center w-full mb-3 select-none transform transition-all duration-1500 ease-out scale-95 opacity-0";
-                    polyContainer.id = "poly-wrapper";
-                    polyContainer.innerHTML = `<div class="polygon-float"><canvas id="polygonCanvas" class="w-full max-w-[240px] sm:max-w-[280px] aspect-square block cursor-pointer"></canvas></div>`;
-                    appView.insertBefore(polyContainer, appView.firstChild);
-
-                    setTimeout(() => {
-                        polyContainer.classList.remove('scale-95', 'opacity-0');
-                        polyContainer.classList.add('scale-100', 'opacity-100', 'fade-in');
-                        activePolygonInstance = new MetatronsCubeGenerator('polygonCanvas');
-                    }, 50);
-
-                    typedSpan.className = `cursor-pointer inline-flex items-center relative select-none ${currentTheme === 'light' ? 'hover:text-zinc-500' : 'hover:text-zinc-300'} transition-all duration-200 hover:-translate-y-0.5`;
-                    typedSpan.title = "Click to copy email";
-                    typedSpan.textContent = "CONTACTHELSING@GMAIL.COM";
-                    typedSpan.onclick = (e) => copyEmailToClipboard('contacthelsing@gmail.com', e);
-
-                    const aboutDiv = document.createElement('div');
-                    aboutDiv.className = `flex items-center justify-center w-full text-center mb-2 ${currentTheme === 'light' ? 'text-zinc-600' : 'text-zinc-400'} leading-relaxed font-normal not-italic select-none`;
-                    const aboutSpan = document.createElement('span');
-                    aboutSpan.className = "select-none";
-                    aboutDiv.appendChild(aboutSpan);
-                    const aboutCursor = document.createElement('span');
-                    aboutCursor.className = `cursor ${currentTheme === 'light' ? 'text-zinc-600' : 'text-zinc-400'} font-bold ml-0.5 select-none`;
-                    aboutCursor.textContent = "_";
-                    aboutDiv.appendChild(aboutCursor);
-                    appView.appendChild(aboutDiv);
-
-                    const aboutText = "Downloading Gnosis";
-                    let aboutIdx = 0;
-
-                    function typeAboutChar() {
-                        if (aboutIdx < aboutText.length) {
-                            aboutSpan.textContent += aboutText.charAt(aboutIdx);
-                            aboutIdx++;
-                            setTimeout(typeAboutChar, 10);
-                        } else {
-                            aboutCursor.remove();
-                            aboutDiv.className = `flex items-center justify-center w-full text-center mb-2 ${currentTheme === 'light' ? 'text-zinc-600 hover:text-zinc-900' : 'text-zinc-400 hover:text-white'} cursor-pointer leading-relaxed font-normal not-italic select-none transition-all duration-200 hover:-translate-y-0.5`;
-                            aboutDiv.textContent = "Downloading Gnosis";
-                            aboutDiv.setAttribute('onclick', "navigateTo('finding-gnosis')");
-
-                            const navHeaderDiv = document.createElement('div');
-                            navHeaderDiv.className = `flex items-center justify-center w-full text-center mb-2 ${currentTheme === 'light' ? 'text-zinc-900' : 'text-white'} font-semibold select-none`;
-                            navHeaderDiv.innerHTML = `Directory <svg class="w-3.5 h-3.5 ml-2 inline select-none" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>`;
-                            appView.appendChild(navHeaderDiv);
-
-                            const rootItems = [
-                                { content: 'Research', action: "navigateTo('research')" },
-                                { content: 'Portals', action: "navigateTo('portal')" },
-                                { content: 'Resumé', action: "navigateTo('resume')" },
-                                { content: 'About', action: "navigateTo('metaepistemology')" },
-                                { content: 'AUM', action: "navigateTo('aum')" }
-                            ];
-
-                            let itemIdx = 0;
-                            function typeNextRootItemLine() {
-                                if (itemIdx < rootItems.length) {
-                                    const item = rootItems[itemIdx];
-                                    const itemDiv = document.createElement('div');
-                                    itemDiv.className = `flex items-center justify-center w-full text-center mb-2 cursor-pointer select-none ${currentTheme === 'light' ? 'text-zinc-600 hover:text-zinc-900' : 'text-zinc-400 hover:text-white'} transition-all duration-200 hover:-translate-y-0.5`;
-                                    if (item.content === 'Resumé') {
-                                        itemDiv.innerHTML = `Resum&eacute;`;
-                                    } else {
-                                        itemDiv.textContent = item.content;
-                                    }
-                                    itemDiv.setAttribute('onclick', item.action);
-                                    appView.appendChild(itemDiv);
-
-                                    if (item.content === 'AUM') {
-                                        const qDiv = document.createElement('div');
-                                        qDiv.className = `flex items-center justify-center w-full text-center mb-2 select-none ${currentTheme === 'light' ? 'text-zinc-600' : 'text-zinc-400'} text-sm`;
-                                        qDiv.innerHTML = `<span class="floating-question cursor-pointer ${currentTheme === 'light' ? 'hover:text-zinc-900' : 'hover:text-white'} transition-colors" onclick="navigateTo('john-galt')">?</span>`;
-                                        appView.appendChild(qDiv);
-                                    }
-
-                                    itemIdx++;
-                                    setTimeout(typeNextRootItemLine, 80);
-                                } else {
-                                    hasInitializedRoot = true;
-                                }
-                            }
-                            typeNextRootItemLine();
-                        }
-                    }
-                    typeAboutChar();
+                    itemDiv.textContent = item.content;
                 }
+                itemDiv.setAttribute('onclick', item.action);
+                appView.appendChild(itemDiv);
+                animDelay += delayStep * 0.7;
+            });
+
+            let currentDelay = 0;
+            while(currentDelay < animDelay + 100) {
+                const t = currentDelay;
+                setTimeout(() => {
+                    playTone(200 + Math.random() * 600, 'square', 0.015 + Math.random()*0.02, 0.005);
+                }, t);
+                currentDelay += Math.random() * 60 + 20;
             }
-            typeEmailChar();
+
+            hasInitializedRoot = true;
         }
 
         function renderSubView(currentState, meta, appView) {
@@ -1440,32 +1408,17 @@
             const mainContainer = document.getElementById('main-container');
             const introContainer = document.getElementById('intro-container');
 
-            if (currentState === 'root') {
-                if (mainContainer) {
-                    mainContainer.classList.remove('items-end');
-                    mainContainer.classList.add('items-center');
-                }
-                if (introContainer) {
-                    introContainer.classList.remove('justify-end', 'text-right');
-                    introContainer.classList.add('justify-center', 'text-center');
-                }
-                if (appView) {
-                    appView.classList.remove('items-end', 'text-right');
-                    appView.classList.add('items-center', 'text-center');
-                }
-            } else {
-                if (mainContainer) {
-                    mainContainer.classList.remove('items-center');
-                    mainContainer.classList.add('items-end');
-                }
-                if (introContainer) {
-                    introContainer.classList.remove('justify-center', 'text-center');
-                    introContainer.classList.add('justify-end', 'text-right');
-                }
-                if (appView) {
-                    appView.classList.remove('items-center', 'text-center');
-                    appView.classList.add('items-end', 'text-right');
-                }
+            if (mainContainer) {
+                mainContainer.classList.remove('items-center');
+                mainContainer.classList.add('items-end');
+            }
+            if (introContainer) {
+                introContainer.classList.remove('justify-center', 'text-center');
+                introContainer.classList.add('justify-end', 'text-right');
+            }
+            if (appView) {
+                appView.classList.remove('items-center', 'text-center');
+                appView.classList.add('items-end', 'text-right');
             }
 
             if (currentState === 'root') {
