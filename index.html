@@ -50,6 +50,10 @@
             0%, 100% { opacity: 1; }
             50% { opacity: 0; }
         }
+        @keyframes fadeInPhase {
+            0% { opacity: 0; transform: translateY(8px); filter: blur(2px); }
+            100% { opacity: 1; transform: translateY(0); filter: blur(0); }
+        }
         .vignette-overlay {
             background: radial-gradient(circle at center, transparent 40%, rgba(0, 0, 0, 0.65) 90%);
             pointer-events: none;
@@ -78,28 +82,13 @@
             -webkit-text-fill-color: transparent;
             animation: rainbowWave 8s ease infinite;
         }
-        @keyframes digitalGlitch {
-            0% { opacity: 0; transform: translate3d(8px, 0, 0) scaleX(1.05); filter: blur(3px); }
-            20% { opacity: 1; transform: translate3d(-4px, 0, 0) scaleX(0.95); filter: blur(0px); }
-            25% { opacity: 0.2; transform: translate3d(2px, 0, 0); }
-            35% { opacity: 1; transform: translate3d(-1px, 0, 0); }
-            45% { opacity: 0.1; }
-            55% { opacity: 1; }
-            65% { opacity: 0.8; filter: blur(1px); }
-            75% { opacity: 1; filter: blur(0px); }
-            100% { opacity: 1; transform: translate3d(0, 0, 0) scaleX(1); }
-        }
-        .glitch-element {
-            opacity: 0;
-            animation: digitalGlitch 0.35s cubic-bezier(0.1, 0.9, 0.2, 1) forwards;
-        }
     </style>
 </head>
-<body class="bg-black h-screen w-screen overflow-hidden relative m-0 p-0 select-none flex flex-col justify-end items-end pb-12 pr-8 sm:pr-16 md:pr-24">
+<body class="bg-black h-screen w-screen overflow-hidden relative m-0 p-0 select-none flex flex-col justify-end items-end pb-32 pr-24 sm:pr-36 md:pr-48">
     <canvas id="starfield" class="fixed inset-0 pointer-events-none z-0"></canvas>
     <div class="fixed inset-0 vignette-overlay z-1 pointer-events-none"></div>
 
-    <div id="intro-container" class="fixed bottom-12 right-8 sm:right-16 md:right-24 z-20 text-right font-mono text-xs md:text-sm tracking-widest select-none">
+    <div id="intro-container" class="fixed bottom-28 right-20 sm:right-32 md:right-44 z-20 text-right font-mono text-xs md:text-sm tracking-widest select-none">
         <div><span id="typed-intro"></span><span id="intro-cursor" class="cursor text-white font-bold">_</span></div>
     </div>
 
@@ -197,7 +186,7 @@
             distantStars = [];
             fastDriftStars = [];
             const count = 220;
-            const fastCount = 10; // 50% fewer of the faster ones
+            const fastCount = 14;
             const paletteDark = [
                 '#ffffff', '#ffffff', '#e0f2fe', '#fef3c7'
             ];
@@ -207,9 +196,9 @@
             
             for (let i = 0; i < count; i++) {
                 let tier = Math.random();
-                let speedMultiplier = tier < 0.5 ? 0.02 : 0.15;
-                let speed = (Math.random() * 0.04 + 0.02) * (speedMultiplier * 2.0);
-                let angle = Math.PI * 0.75 + (Math.random() - 0.5) * 0.25;
+                let speedMultiplier = Math.pow(Math.random(), 4.2) * 8.0 + 0.005; 
+                let speed = (Math.random() * 0.15 + 0.001) * speedMultiplier;
+                let angle = Math.PI * 0.75 + (Math.random() - 0.5) * 0.4;
                 let vx = Math.cos(angle) * speed;
                 let vy = Math.sin(angle) * speed;
 
@@ -226,16 +215,17 @@
             }
 
             for (let i = 0; i < fastCount; i++) {
-                let speed = Math.random() * 1.8 + 1.0;
-                let angle = Math.PI * 0.75 + (Math.random() - 0.5) * 0.3;
+                let speedCurve = Math.random();
+                let speed = speedCurve < 0.3 ? (Math.random() * 0.8 + 0.2) : (Math.random() * 4.5 + 0.6);
+                let angle = Math.PI * 0.75 + (Math.random() - 0.5) * 0.35;
                 let vx = Math.cos(angle) * speed;
                 let vy = Math.sin(angle) * speed;
 
                 fastDriftStars.push({
                     x: Math.random() * canvas.width,
                     y: Math.random() * canvas.height,
-                    radius: Math.random() * 0.75 + 0.35,
-                    alpha: Math.random() * 0.9 + 0.5,
+                    radius: Math.random() * 0.8 + 0.3,
+                    alpha: Math.random() * 0.9 + 0.4,
                     vx: vx,
                     vy: vy,
                     colorDark: paletteDark[Math.floor(Math.random() * paletteDark.length)],
@@ -399,16 +389,9 @@
                 },
                 {
                     title: "Project Consultant",
-                    startYear: "2023",
-                    location: "",
+                    startYear: "2023 – Now",
+                    location: "Global",
                     description: "Delivered high-level consultative advisory and specialized project controls expertise for complex enterprise-scale initiatives. Provided independent strategic oversight, audited scheduling baselines, and aligned executive stakeholders with rigorous earned value standards to ensure peak project governance."
-                },
-                {
-                    title: "Futures",
-                    startYear: "Now",
-                    location: "",
-                    description: "",
-                    url: "https://www.investopedia.com/terms/f/futures.asp"
                 }
             ],
             research: [
@@ -432,99 +415,73 @@
         };
 
         let navigationStack = ['root'];
-        let hasInitializedRoot = false;
         let aumInterval = null;
+        let rootLoadCount = 0;
 
-        function renderRootInstant(appView) {
-            const rootItems = [
+        function renderRoot(appView) {
+            let rootItems = [
                 { content: 'AUM', action: "navigateTo('aum')" },
                 { content: 'About', action: "navigateTo('metaepistemology')" },
                 { content: 'Resumé', action: "navigateTo('resume')" },
                 { content: 'Portals', action: "navigateTo('portal')" },
                 { content: 'Research', action: "navigateTo('research')" }
             ];
-            rootItems.sort((a, b) => a.content.length - b.content.length);
 
-            rootItems.forEach(item => {
-                const itemDiv = document.createElement('div');
-                itemDiv.className = `flex flex-col w-full text-right items-end mb-2 cursor-pointer select-none ${currentTheme === 'light' ? 'text-zinc-600 hover:text-zinc-900' : 'text-zinc-400 hover:text-white'} transition-all duration-200 hover:-translate-y-0.5 pr-4 sm:pr-6`;
-                if (item.content === 'Resumé') {
-                    itemDiv.innerHTML = `Resum&eacute;`;
-                } else {
-                    itemDiv.textContent = item.content;
+            const listContainer = document.createElement('div');
+            listContainer.className = "flex flex-col w-full text-right items-end select-none pr-0";
+            appView.appendChild(listContainer);
+
+            const shouldPhaseIn = (rootLoadCount === 0);
+            if (rootLoadCount === 0) rootLoadCount++;
+
+            rootItems.forEach((currentItem, index) => {
+                const newDiv = document.createElement('div');
+                newDiv.className = `flex flex-col w-full text-right items-end mb-2 cursor-pointer select-none ${currentTheme === 'light' ? 'text-zinc-600 hover:text-zinc-900' : 'text-zinc-400 hover:text-white'} transition-all duration-200 hover:-translate-y-0.5 pr-0`;
+                if (shouldPhaseIn) {
+                    newDiv.style.animation = `fadeInPhase 0.9s cubic-bezier(0.16, 1, 0.3, 1) ${index * 0.12}s forwards`;
+                    newDiv.style.opacity = '0';
                 }
-                itemDiv.setAttribute('onclick', item.action);
-                appView.appendChild(itemDiv);
+                newDiv.setAttribute('onclick', currentItem.action);
+                
+                const span = document.createElement('span');
+                span.innerHTML = currentItem.content;
+                newDiv.appendChild(span);
+                listContainer.appendChild(newDiv);
             });
 
             const navHeaderDiv = document.createElement('div');
-            navHeaderDiv.className = `flex flex-col w-full text-right items-end mt-2 ${currentTheme === 'light' ? 'text-zinc-900' : 'text-white'} font-semibold select-none pr-4 sm:pr-6`;
-            navHeaderDiv.innerHTML = `<span class="inline-flex items-center">DIRECTORY <svg class="w-3.5 h-3.5 ml-2 inline select-none" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg></span>`;
-            appView.appendChild(navHeaderDiv);
-        }
-
-        function renderRootTyping(appView) {
-            let animDelay = 0;
-            const delayStep = 100;
-
-            const rootItems = [
-                { content: 'AUM', action: "navigateTo('aum')" },
-                { content: 'About', action: "navigateTo('metaepistemology')" },
-                { content: 'Resumé', action: "navigateTo('resume')" },
-                { content: 'Portals', action: "navigateTo('portal')" },
-                { content: 'Research', action: "navigateTo('research')" }
-            ];
-            rootItems.sort((a, b) => a.content.length - b.content.length);
-
-            rootItems.forEach(item => {
-                const itemDiv = document.createElement('div');
-                itemDiv.className = `glitch-element flex flex-col w-full text-right items-end mb-2 cursor-pointer select-none ${currentTheme === 'light' ? 'text-zinc-600 hover:text-zinc-900' : 'text-zinc-400 hover:text-white'} transition-all duration-200 hover:-translate-y-0.5 pr-4 sm:pr-6`;
-                itemDiv.style.animationDelay = `${animDelay}ms`;
-                if (item.content === 'Resumé') {
-                    itemDiv.innerHTML = `Resum&eacute;`;
-                } else {
-                    itemDiv.textContent = item.content;
-                }
-                itemDiv.setAttribute('onclick', item.action);
-                appView.appendChild(itemDiv);
-                animDelay += delayStep * 0.7;
-            });
-
-            const navHeaderDiv = document.createElement('div');
-            navHeaderDiv.className = `glitch-element flex flex-col w-full text-right items-end mt-2 ${currentTheme === 'light' ? 'text-zinc-900' : 'text-white'} font-semibold select-none pr-4 sm:pr-6`;
-            navHeaderDiv.style.animationDelay = `${animDelay}ms`;
-            navHeaderDiv.innerHTML = `<span class="inline-flex items-center">DIRECTORY <svg class="w-3.5 h-3.5 ml-2 inline select-none" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg></span>`;
-            appView.appendChild(navHeaderDiv);
-            animDelay += delayStep;
-
-            let currentDelay = 0;
-            while(currentDelay < animDelay + 100) {
-                const t = currentDelay;
-                setTimeout(() => {
-                    playTone(200 + Math.random() * 600, 'square', 0.015 + Math.random()*0.02, 0.005);
-                }, t);
-                currentDelay += Math.random() * 60 + 20;
+            navHeaderDiv.className = `flex flex-col w-full text-right items-end mt-2 ${currentTheme === 'light' ? 'text-zinc-900' : 'text-white'} font-semibold select-none pr-0`;
+            if (shouldPhaseIn) {
+                navHeaderDiv.style.animation = `fadeInPhase 0.9s cubic-bezier(0.16, 1, 0.3, 1) ${rootItems.length * 0.12}s forwards`;
+                navHeaderDiv.style.opacity = '0';
             }
-
-            hasInitializedRoot = true;
+            
+            const headerSpan = document.createElement('span');
+            headerSpan.className = "inline-flex items-center";
+            headerSpan.innerHTML = `Directory<svg class="w-3.5 h-3.5 ml-0.5 inline select-none" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>`;
+            navHeaderDiv.appendChild(headerSpan);
+            appView.appendChild(navHeaderDiv);
         }
 
         function renderSubView(currentState, meta, appView) {
             let lines = [];
             let headerItem = null;
             let menuItems = [];
+            let returnItem = { type: 'back', content: '< Return', action: "navigateBack()", align: 'right' };
 
             if (currentState === 'metaepistemology') {
+                headerItem = { type: 'text', content: 'About', align: 'right' };
                 lines = [
+                    headerItem,
                     { type: 'paragraph', content: profileData.metaepistemologyDetail, align: 'right' },
-                    { type: 'text', content: 'About', align: 'right' },
-                    { type: 'back', content: '< Return', action: "navigateBack()", align: 'right' }
+                    returnItem
                 ];
             } else if (currentState === 'contact') {
+                headerItem = { type: 'text', content: 'Email', align: 'right' };
                 lines = [
+                    headerItem,
                     { type: 'paragraph', content: '<span class="relative inline-flex items-center justify-end"><span id="copied-badge" class="absolute -left-14 opacity-0 transition-opacity duration-300 text-[10px] tracking-wider text-emerald-500 font-mono select-none">copied</span><span class="cursor-pointer transition-all hover:opacity-75" onclick="copyEmailToClipboard(\'contacthelsing@gmail.com\', event)" title="Click to copy email">contacthelsing@gmail.com</span></span>', align: 'right' },
-                    { type: 'text', content: 'Email', align: 'right' },
-                    { type: 'back', content: '< Return', action: "navigateBack()", align: 'right' }
+                    returnItem
                 ];
             } else if (currentState === 'aum') {
                 const isLight = currentTheme === 'light';
@@ -576,17 +533,17 @@
                         <div class="flex flex-col space-y-3 items-start">
                             <div class="grid grid-cols-2 gap-y-1.5 gap-x-2 items-center w-full">
                                 <div class="text-[10px] sm:text-[11px] ${textSub} uppercase tracking-widest truncate text-left font-medium">METAEPISTEMI FUND</div>
-                                <div class="text-[10px] sm:text-[11px] ${textSub} uppercase tracking-widest truncate text-right pr-4 sm:pr-6">TOTAL VALUE</div>
+                                <div class="text-[10px] sm:text-[11px] ${textSub} uppercase tracking-widest truncate text-right pr-0">TOTAL VALUE</div>
                                 
                                 <div class="text-[10px] sm:text-[11px] ${textSub} text-left">$${Math.round(totalCost).toLocaleString()} (CB)</div>
-                                <div id="live-total-val" class="text-base sm:text-lg font-bold ${textMain} text-right pr-4 sm:pr-6">$${Math.round(totalVal).toLocaleString()}</div>
+                                <div id="live-total-val" class="text-base sm:text-lg font-bold ${textMain} text-right pr-0">$${Math.round(totalVal).toLocaleString()}</div>
                             </div>
                             <div class="pt-2 flex flex-col space-y-2 w-full items-start">
-                                <div class="flex justify-between items-center text-[10px] sm:text-[11px] ${textSub} w-full pr-4 sm:pr-6">
+                                <div class="flex justify-between items-center text-[10px] sm:text-[11px] ${textSub} w-full pr-0">
                                     <div class="flex items-center justify-start text-[9px] sm:text-[10px] ${textSub}"><span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse mr-1.5"></span>LIVE <span class="opacity-75 ml-1">(APEX)</span></div>
                                     <span id="live-total-return" class="${isPositiveReturn ? 'text-emerald-500' : 'text-red-500'} font-medium">${isPositiveReturn ? '+' : ''}${totalReturnPct}%</span>
                                 </div>
-                                <div class="w-full h-12 sm:h-16 relative my-1 pr-4 sm:pr-6">
+                                <div class="w-full h-12 sm:h-16 relative my-1 pr-0">
                                     <svg class="w-full h-full overflow-visible" viewBox="0 0 300 50" preserveAspectRatio="none">
                                         <defs>
                                             <linearGradient id="ytdGradient" x1="0" y1="0" x2="0" y2="1">
@@ -602,7 +559,7 @@
                         </div>
                         <div class="pt-3 space-y-3 w-full">
                             <div class="text-[10px] sm:text-[11px] ${textSub} uppercase tracking-widest font-medium mb-1 text-left">Asset Allocation & Cost Basis</div>
-                            <div class="space-y-3 w-full pr-4 sm:pr-6">
+                            <div class="space-y-3 w-full pr-0">
                                 <div class="w-full flex flex-col items-start">
                                     <div class="flex flex-col sm:flex-row sm:justify-between items-start sm:items-center text-[11px] sm:text-xs mb-1 w-full">
                                         <span class="${textMain} font-medium">110.453 BTC <span class="text-[10px] opacity-75 font-mono">($<span id="live-btc-price">${window.btcLivePrice.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}</span>)</span></span>
@@ -646,10 +603,11 @@
                         </div>
                     </div>
                 `;
+                headerItem = { type: 'text', content: 'Assets Under Management', align: 'right' };
                 lines = [
+                    headerItem,
                     { type: 'paragraph', content: aumHtml, align: 'left' },
-                    { type: 'text', content: 'Assets Under Management', align: 'right' },
-                    { type: 'back', content: '< Return', action: "navigateBack()", align: 'right' }
+                    returnItem
                 ];
 
                 if (aumInterval) clearInterval(aumInterval);
@@ -751,76 +709,87 @@
             } else if (currentState === 'portal') {
                 headerItem = { type: 'text', content: 'Portals', align: 'right' };
                 menuItems = [
-                    { type: 'link', content: 'TerminAI', url: 'https://officialhelsing.github.io/TerminAI/', indent: true, align: 'right' },
+                    { type: 'link', content: 'FoTCM', url: 'https://officialhelsing.github.io/Foundations-of-Topological-Continuum-Mathematics/', indent: true, align: 'right' },
                     { type: 'link', content: 'GitHub', url: 'https://github.com/officialhelsing', indent: true, align: 'right' },
-                    { type: 'link', content: 'FoTCM', url: 'https://officialhelsing.github.io/Foundations-of-Topological-Continuum-Mathematics/', indent: true, align: 'right' }
+                    { type: 'link', content: 'TerminAI', url: 'https://officialhelsing.github.io/TerminAI/', indent: true, align: 'right' }
+                ];
+                lines = [
+                    headerItem,
+                    ...menuItems,
+                    returnItem
                 ];
             } else if (currentState === 'resume') {
-                headerItem = { type: 'text', content: 'Resum&eacute;', align: 'right' };
+                headerItem = { type: 'text', content: 'Resumé', align: 'right' };
                 menuItems = [
                     { type: 'link', content: 'Email', action: "navigateTo('contact')", indent: true, align: 'right' },
                     { type: 'link', content: 'Intro', action: "navigateTo('summary')", indent: true, align: 'right' },
                     { type: 'link', content: 'Works', action: "navigateTo('experience')", indent: true, align: 'right' }
                 ];
-            } else if (currentState === 'summary') {
                 lines = [
+                    headerItem,
+                    ...menuItems,
+                    returnItem
+                ];
+            } else if (currentState === 'summary') {
+                headerItem = { type: 'text', content: 'Intro', align: 'right' };
+                lines = [
+                    headerItem,
                     { type: 'paragraph', content: profileData.resumeSummary, align: 'right' },
-                    { type: 'text', content: 'Intro', align: 'right' },
-                    { type: 'back', content: '< Return', action: "navigateBack()", align: 'right' }
+                    returnItem
                 ];
             } else if (currentState === 'experience') {
                 headerItem = { type: 'text', content: 'Works', align: 'right' };
-                profileData.experience.forEach((exp, idx) => {
-                    if (exp.startYear === 'Now') {
-                        menuItems.push({ 
-                            type: 'rainbow-link', 
-                            content: `(${exp.startYear}) ${exp.title}`,
-                            url: exp.url,
-                            align: 'right'
-                        });
-                    } else {
-                        menuItems.push({ 
-                            type: 'link', 
-                            content: `(${exp.startYear}) ${exp.title}`,
-                            action: `navigateTo('experience-detail', ${idx})`, 
-                            indent: true,
-                            align: 'right'
-                        });
-                    }
-                });
-            } else if (currentState === 'experience-detail') {
-                const exp = profileData.experience[meta];
-                lines = [
-                    { type: 'paragraph', content: exp.description, align: 'right' },
-                    { type: 'text', content: exp.location, align: 'right' },
-                    { type: 'back', content: '< Return', action: "navigateBack()", align: 'right' }
-                ];
-            } else if (currentState === 'research') {
-                headerItem = { type: 'text', content: 'Theoretical Researching', align: 'right' };
-                profileData.research.forEach((res, originalIdx) => {
+                const orderedIndices = [0, 1, 2, 3];
+                orderedIndices.forEach((idx) => {
+                    const exp = profileData.experience[idx];
                     menuItems.push({ 
-                        type: 'research-link', 
-                        title: res.title,
-                        content: res.title,
-                        action: `navigateTo('research-detail', ${originalIdx})`, 
+                        type: 'link', 
+                        content: `(${exp.startYear}) ${exp.title}`,
+                        action: `navigateTo('experience-detail', ${idx})`, 
                         indent: true,
                         align: 'right'
                     });
                 });
+                lines = [
+                    headerItem,
+                    ...menuItems,
+                    returnItem
+                ];
+            } else if (currentState === 'experience-detail') {
+                const exp = profileData.experience[meta];
+                headerItem = { type: 'text', content: exp.location, align: 'right' };
+                lines = [
+                    headerItem,
+                    { type: 'paragraph', content: exp.description, align: 'right' },
+                    returnItem
+                ];
+            } else if (currentState === 'research') {
+                headerItem = { type: 'text', content: 'Theoretical Researching', align: 'right' };
+                let sortedResearch = profileData.research.map((res, originalIdx) => ({ ...res, originalIdx }))
+                    .sort((a, b) => a.title.length - b.title.length);
+                sortedResearch.forEach((res) => {
+                    menuItems.push({ 
+                        type: 'research-link', 
+                        title: res.title,
+                        content: res.title,
+                        action: `navigateTo('research-detail', ${res.originalIdx})`, 
+                        indent: true,
+                        align: 'right'
+                    });
+                });
+                lines = [
+                    headerItem,
+                    ...menuItems,
+                    returnItem
+                ];
             } else if (currentState === 'research-detail') {
                 const res = profileData.research[meta];
+                headerItem = { type: 'text', content: res.title, align: 'right' };
                 lines = [
+                    headerItem,
                     { type: 'paragraph', content: res.detail || res.description, align: 'right' },
-                    { type: 'text', content: res.title, align: 'right' },
-                    { type: 'back', content: '< Return', action: "navigateBack()", align: 'right' }
+                    returnItem
                 ];
-            }
-
-            if (headerItem && menuItems.length > 0) {
-                menuItems.sort((a, b) => a.content.length - b.content.length);
-                menuItems.forEach(item => lines.push(item));
-                lines.push(headerItem);
-                lines.push({ type: 'back', content: '< Return', action: "navigateBack()", align: 'right' });
             }
 
             lines.forEach(item => {
@@ -834,14 +803,10 @@
                 }
 
                 if (item.type === 'text') {
-                    div.className += ` ${currentTheme === 'light' ? 'text-zinc-900' : 'text-white'} font-semibold text-sm md:text-base select-none pr-4 sm:pr-6`;
-                    if (item.content === 'Resum&eacute;') {
-                        div.innerHTML = `Resum&eacute;`;
-                    } else {
-                        div.textContent = item.content;
-                    }
+                    div.className += ` ${currentTheme === 'light' ? 'text-zinc-900' : 'text-white'} font-semibold text-sm md:text-base select-none pr-0`;
+                    div.innerHTML = item.content;
                 } else if (item.type === 'back') {
-                    div.className += ` select-none ${currentTheme === 'light' ? 'text-zinc-500 hover:text-zinc-800' : 'text-zinc-500 hover:text-zinc-300'} mb-2 transition-all duration-200 pr-4 sm:pr-6`;
+                    div.className += ` select-none ${currentTheme === 'light' ? 'text-zinc-500 hover:text-zinc-800' : 'text-zinc-500 hover:text-zinc-300'} mt-2 mb-2 transition-all duration-200 pr-0`;
                     
                     const backContainer = document.createElement('div');
                     backContainer.className = "inline-flex items-center space-x-2.5 justify-end w-full select-none";
@@ -861,19 +826,15 @@
                     backContainer.appendChild(homeSpan);
                     div.appendChild(backContainer);
                 } else if (item.type === 'link') {
-                    div.className += ` cursor-pointer select-none ${currentTheme === 'light' ? 'text-zinc-600 hover:text-zinc-900' : 'text-zinc-400 hover:text-white'} transition-all duration-200 hover:-translate-y-0.5 ${item.indent ? 'pr-4 sm:pr-6' : ''}`;
-                    if (item.content === 'Resum&eacute;') {
-                        div.innerHTML = `Resum&eacute;`;
-                    } else {
-                        div.textContent = item.content;
-                    }
+                    div.className += ` cursor-pointer select-none ${currentTheme === 'light' ? 'text-zinc-600 hover:text-zinc-900' : 'text-zinc-400 hover:text-white'} transition-all duration-200 hover:-translate-y-0.5 pr-0`;
+                    div.innerHTML = item.content;
                     if (item.url) {
                         div.setAttribute('onclick', `window.open('${item.url}', '_blank')`);
                     } else {
                         div.setAttribute('onclick', item.action);
                     }
                 } else if (item.type === 'rainbow-link') {
-                    div.className += ` cursor-pointer select-none pr-4 sm:pr-6 transition-all duration-200 hover:-translate-y-0.5`;
+                    div.className += ` cursor-pointer select-none pr-0 transition-all duration-200 hover:-translate-y-0.5`;
                     if (item.url) {
                         div.setAttribute('onclick', `window.open('${item.url}', '_blank')`);
                     } else {
@@ -884,7 +845,7 @@
                     span.textContent = item.content;
                     div.appendChild(span);
                 } else if (item.type === 'research-link') {
-                    div.className += ` cursor-pointer select-none transition-all duration-200 hover:-translate-y-0.5 ${item.indent ? 'pr-4 sm:pr-6' : ''}`;
+                    div.className += ` cursor-pointer select-none transition-all duration-200 hover:-translate-y-0.5 pr-0`;
                     div.setAttribute('onclick', item.action);
                     
                     const titleDiv = document.createElement('div');
@@ -898,7 +859,7 @@
                         div.className += ` ${currentTheme === 'light' ? 'text-zinc-600' : 'text-zinc-400'} text-[11px] leading-relaxed pl-0 pr-0 mt-2 font-normal not-italic select-none w-full text-left`;
                         div.innerHTML = item.content;
                     } else {
-                        div.className += ` ${currentTheme === 'light' ? 'text-zinc-600' : 'text-zinc-400'} text-[11px] leading-relaxed pr-4 sm:pr-6 mt-2 font-normal not-italic select-none w-full`;
+                        div.className += ` ${currentTheme === 'light' ? 'text-zinc-600' : 'text-zinc-400'} text-[11px] leading-relaxed pr-0 mt-2 font-normal not-italic select-none w-full`;
                         div.style.textAlign = 'justify';
                         div.style.textAlignLast = 'right';
                         div.innerHTML = item.content;
@@ -958,11 +919,7 @@
             }
 
             if (currentState === 'root') {
-                if (!hasInitializedRoot) {
-                    renderRootTyping(appView);
-                } else {
-                    renderRootInstant(appView);
-                }
+                renderRoot(appView);
             } else {
                 renderSubView(currentState, meta, appView);
             }
@@ -1057,7 +1014,7 @@
                     }
                 } else if (e.key.toLowerCase() === 't') {
                     toggleTheme();
-                } else if (currentState === 'root' && hasInitializedRoot) {
+                } else if (currentState === 'root') {
                     if (e.key === '1') navigateTo('aum');
                     if (e.key === '2') navigateTo('metaepistemology');
                     if (e.key === '3') navigateTo('resume');
