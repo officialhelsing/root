@@ -485,8 +485,8 @@
 
             const isLight = currentTheme === 'light';
             const frame = document.createElement('div');
-            // Artwork 20% smaller across all platforms
-            frame.className = `w-[172px] sm:w-[220px] md:w-[244px] h-[274px] sm:h-[334px] md:h-[365px] border ${isLight ? 'border-zinc-300 bg-zinc-200/30' : 'border-zinc-800 bg-zinc-900/20'} rounded-sm overflow-hidden flex flex-col items-center justify-center relative pointer-events-auto select-none transition-colors duration-800 shadow-xl cursor-pointer`;
+            // Artwork 20% smaller width, taller height across platforms
+            frame.className = `w-[172px] sm:w-[220px] md:w-[244px] h-[325px] sm:h-[400px] md:h-[440px] border ${isLight ? 'border-zinc-300 bg-zinc-200/30' : 'border-zinc-800 bg-zinc-900/20'} rounded-sm overflow-hidden flex flex-col items-center justify-center relative pointer-events-auto select-none transition-colors duration-800 shadow-xl cursor-pointer`;
             
             const shouldPhaseIn = (centerTickerLoadCount === 0);
             if (centerTickerLoadCount === 0) centerTickerLoadCount++;
