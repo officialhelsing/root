@@ -53,16 +53,16 @@
             0%, 100% { opacity: 1; }
             50% { opacity: 0; }
         }
-        @keyframes glitchFlash {
+        @keyframes mediumPixelGlitch {
             0% { filter: contrast(100%) blur(0px); transform: translate(0,0); }
-            20% { filter: contrast(350%) blur(3px) hue-rotate(90deg); transform: translate(-4px, 2px); }
-            40% { filter: contrast(450%) blur(5px) invert(15%); transform: translate(4px, -3px); }
-            60% { filter: contrast(350%) blur(3px) hue-rotate(-90deg); transform: translate(-3px, -2px); }
-            80% { filter: contrast(200%) blur(1px); transform: translate(1px, 1px); }
+            20% { filter: contrast(280%) blur(2px) hue-rotate(45deg); transform: translate(-2px, 1px); }
+            50% { filter: contrast(400%) blur(4px) invert(15%); transform: translate(3px, -2px); }
+            70% { filter: contrast(300%) blur(3px) hue-rotate(240deg) saturate(200%); transform: translate(-2px, 2px); }
+            85% { filter: contrast(250%) blur(1.5px); transform: translate(-1px, 1px); }
             100% { filter: contrast(100%) blur(0px); transform: translate(0,0); }
         }
-        .glitch-transition {
-            animation: glitchFlash 1.4s steps(6, end) forwards;
+        .pixel-glitch-medium {
+            animation: mediumPixelGlitch 0.7s steps(5, end) forwards;
             image-rendering: pixelated;
         }
         .typing-cursor::after {
@@ -334,6 +334,34 @@
             ]
         };
 
+        const firstArtImage = 'https://i2c.seadn.io/ethereum/0x495f947276749ce646f68ac8c248420045cb7b5e/1126738749bec27cb38e1688c15aaf/881126738749bec27cb38e1688c15aaf.jpeg?w=1000';
+        const baseArtCollection = [
+            'https://i2c.seadn.io/ethereum/0x495f947276749ce646f68ac8c248420045cb7b5e/90da0063cdc11a9c87ecee7e3dbd48/f290da0063cdc11a9c87ecee7e3dbd48.jpeg?w=500',
+            'https://i2c.seadn.io/ethereum/0x495f947276749ce646f68ac8c248420045cb7b5e/4c42d2ce233548a33c5aac71e4d838/3e4c42d2ce233548a33c5aac71e4d838.jpeg?w=500',
+            'https://i2c.seadn.io/ethereum/0x495f947276749ce646f68ac8c248420045cb7b5e/1fb7d43780f9771c500c229a0b457e/cb1fb7d43780f9771c500c229a0b457e.jpeg?w=500',
+            'https://i2c.seadn.io/ethereum/0x495f947276749ce646f68ac8c248420045cb7b5e/d5d3f8eec99192a644ea7550ec7309/32d5d3f8eec99192a644ea7550ec7309.jpeg?w=500',
+            'https://i2c.seadn.io/ethereum/0x495f947276749ce646f68ac8c248420045cb7b5e/29875a6d8e4ed4818ee567f79119f5/2529875a6d8e4ed4818ee567f79119f5.jpeg?w=500',
+            'https://i2c.seadn.io/ethereum/0x495f947276749ce646f68ac8c248420045cb7b5e/4e620d0f25adec419ad3fdff4c744a/734e620d0f25adec419ad3fdff4c744a.jpeg?w=500',
+            'https://i2c.seadn.io/ethereum/0x495f947276749ce646f68ac8c248420045cb7b5e/c94f70ea5458d0de0b08c9ea5dc8d9/62c94f70ea5458d0de0b08c9ea5dc8d9.jpeg?w=500',
+            'https://i2c.seadn.io/ethereum/0x495f947276749ce646f68ac8c248420045cb7b5e/84c681cce7515d984534cc885dc265/a584c681cce7515d984534cc885dc265.jpeg?w=500',
+            'https://i2c.seadn.io/ethereum/0x495f947276749ce646f68ac8c248420045cb7b5e/5919e0c4e17670a9321eb343228c36/735919e0c4e17670a9321eb343228c36.jpeg?w=500',
+            'https://i2c.seadn.io/ethereum/0x495f947276749ce646f68ac8c248420045cb7b5e/81b3475f6838b57c46b22d83fbb0cf/e881b3475f6838b57c46b22d83fbb0cf.jpeg?w=500',
+            'https://i2c.seadn.io/ethereum/0x495f947276749ce646f68ac8c248420045cb7b5e/93cbaa3441c0fbcea1d37285fb42d9/5c93cbaa3441c0fbcea1d37285fb42d9.jpeg?w=500',
+            'https://i2c.seadn.io/ethereum/0x495f947276749ce646f68ac8c248420045cb7b5e/c8355d4122fbc3bfc30df5cbd1a4c5/aec8355d4122fbc3bfc30df5cbd1a4c5.jpeg?w=500',
+            'https://i2c.seadn.io/ethereum/0x495f947276749ce646f68ac8c248420045cb7b5e/212a86abef7694e55884a5f6241e33/dc212a86abef7694e55884a5f6241e33.jpeg?w=500',
+            'https://i2c.seadn.io/ethereum/0x495f947276749ce646f68ac8c248420045cb7b5e/0eea027970070099cd39af85167810/1e0eea027970070099cd39af85167810.jpeg?w=500',
+            'https://i2c.seadn.io/ethereum/0x495f947276749ce646f68ac8c248420045cb7b5e/0cd625524cc3f6f79dc5ef302c5f39/ec0cd625524cc3f6f79dc5ef302c5f39.jpeg?w=500',
+            'https://i2c.seadn.io/ethereum/0x60f80121c31a0d46b5279700f9df786054aa5ee5/dc1d908291a085cfd25d7a43c79f4419.jpeg?w=500',
+            'https://i2c.seadn.io/ethereum/0x60f80121c31a0d46b5279700f9df786054aa5ee5/e4d4f45ed3f6329ec1cdcb7bb339ae/03e4d4f45ed3f6329ec1cdcb7bb339ae.jpeg?w=500'
+        ];
+
+        for (let i = baseArtCollection.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [baseArtCollection[i], baseArtCollection[j]] = [baseArtCollection[j], baseArtCollection[i]];
+        }
+
+        const openseaImages = [firstArtImage, ...baseArtCollection];
+
         let navigationStack = ['root'];
         let rootLoadCount = 0;
         let centerTickerLoadCount = 0;
@@ -346,13 +374,7 @@
             typedIntroEl.classList.add('typing-cursor');
             if (typedAuthorEl) typedAuthorEl.style.opacity = '0';
             introContainer.style.display = 'block';
-            introContainer.classList.add('glitch-transition');
-            setTimeout(() => {
-                introContainer.style.opacity = '1';
-            }, 50);
-            setTimeout(() => {
-                introContainer.classList.remove('glitch-transition');
-            }, 1400);
+            introContainer.style.opacity = '1';
             const appView = document.getElementById('app-view');
             if (appView) appView.classList.add('hidden');
 
@@ -406,7 +428,7 @@
             container.innerHTML = '';
 
             const frame = document.createElement('div');
-            frame.className = `w-[168px] sm:w-[208px] md:w-[236px] h-[342px] sm:h-[420px] md:h-[463px] border border-zinc-800 bg-zinc-900/20 rounded-sm overflow-hidden flex flex-col items-center justify-center relative pointer-events-auto select-none transition-colors duration-800 shadow-xl cursor-pointer`;
+            frame.className = `w-[192px] sm:w-[232px] md:w-[272px] h-[296px] sm:h-[360px] md:h-[400px] border border-zinc-800 bg-zinc-900/20 rounded-sm overflow-hidden flex flex-col items-center justify-center relative pointer-events-auto select-none transition-colors duration-800 shadow-xl cursor-pointer`;
             
             const shouldPhaseIn = (centerTickerLoadCount === 0);
             if (centerTickerLoadCount === 0) centerTickerLoadCount++;
@@ -423,13 +445,6 @@
                 window.open('https://opensea.io/justdieryan', '_blank');
             };
 
-            const openseaImages = [
-                'https://i2c.seadn.io/ethereum/0x495f947276749ce646f68ac8c248420045cb7b5e/1126738749bec27cb38e1688c15aaf/881126738749bec27cb38e1688c15aaf.jpeg?w=1000',
-                'https://i2c.seadn.io/ethereum/0x495f947276749ce646f68ac8c248420045cb7b5e/90da0063cdc11a9c87ecee7e3dbd48/f290da0063cdc11a9c87ecee7e3dbd48.jpeg?w=500',
-                'https://i2c.seadn.io/ethereum/0x495f947276749ce646f68ac8c248420045cb7b5e/4c42d2ce233548a33c5aac71e4d838/3e4c42d2ce233548a33c5aac71e4d838.jpeg?w=500',
-                'https://i2c.seadn.io/ethereum/0x495f947276749ce646f68ac8c248420045cb7b5e/1fb7d43780f9771c500c229a0b457e/cb1fb7d43780f9771c500c229a0b457e.jpeg?w=500'
-            ];
-
             let currentImgIndex = 0;
             const img = document.createElement('img');
             img.src = openseaImages[currentImgIndex];
@@ -437,10 +452,10 @@
             img.alt = 'OpenSea Art';
 
             if (shouldPhaseIn) {
-                img.classList.add('glitch-transition');
+                img.classList.add('pixel-glitch-medium');
                 setTimeout(() => {
-                    img.classList.remove('glitch-transition');
-                }, 1400);
+                    img.classList.remove('pixel-glitch-medium');
+                }, 700);
             }
 
             frame.appendChild(img);
@@ -448,17 +463,17 @@
 
             if (window.artTickerInterval) clearInterval(window.artTickerInterval);
             window.artTickerInterval = setInterval(() => {
-                img.classList.add('glitch-transition');
+                img.classList.add('pixel-glitch-medium');
 
                 setTimeout(() => {
                     currentImgIndex = (currentImgIndex + 1) % openseaImages.length;
                     img.src = openseaImages[currentImgIndex];
-                }, 700);
+                }, 350);
 
                 setTimeout(() => {
-                    img.classList.remove('glitch-transition');
-                }, 1400);
-            }, 9000);
+                    img.classList.remove('pixel-glitch-medium');
+                }, 700);
+            }, 5500);
         }
 
         const typedIntroEl = document.getElementById('typed-intro');
@@ -538,13 +553,13 @@
             if (!centerTickerEl) {
                 centerTickerEl = document.createElement('div');
                 centerTickerEl.id = 'center-ticker-container';
-                centerTickerEl.className = 'fixed inset-0 pointer-events-none flex items-center justify-center pb-20 z-15 px-6 select-none';
+                centerTickerEl.className = 'fixed inset-0 pointer-events-none flex items-center justify-center z-15 px-6 select-none';
                 document.body.appendChild(centerTickerEl);
+                setupCenterTicker(centerTickerEl);
             }
 
             if (currentState === 'root') {
                 centerTickerEl.style.display = 'flex';
-                setupCenterTicker(centerTickerEl);
                 if (aumInterval) { clearInterval(aumInterval); aumInterval = null; }
                 renderRoot(appView);
             } else {
@@ -668,11 +683,11 @@
                             <div class="text-[10px] sm:text-[11px] ${textSub} uppercase tracking-widest font-medium mb-0 text-right">Asset Allocation & Cost Basis</div>
                             <div class="space-y-1 w-full pr-0">
                                 <div class="w-full flex flex-col items-start">
-                                    <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center text-[11px] sm:text-xs mb-0 w-full">
-                                        <span class="${textMain} font-medium">110.453 BTC <span class="text-[10px] opacity-75 font-mono block sm:inline">($<span id="live-btc-price">${window.btcLivePrice.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}</span>)</span></span>
+                                    <div class="flex justify-between items-center text-[11px] sm:text-xs mb-0 w-full">
+                                        <span class="${textMain} font-medium">110.453 BTC <span class="text-[10px] opacity-75 font-mono">($<span id="live-btc-price">${window.btcLivePrice.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}</span>)</span></span>
                                         <span class="${textSub} text-right"><span id="live-btc-val">$${Math.round(btcVal).toLocaleString()}</span> <span class="text-[10px] opacity-75">(<span id="live-btc-pct">${btcPct}</span>%)</span></span>
                                     </div>
-                                    <div class="flex flex-row justify-between items-center text-[10px] opacity-75 mb-0 ${textSub} w-full">
+                                    <div class="flex justify-between items-center text-[10px] opacity-75 mb-0 ${textSub} w-full">
                                         <span><span>$23,493.39</span></span>
                                         <span id="live-btc-return" class="${isBtcPos ? 'text-emerald-500' : 'text-red-500'} font-medium text-right">${isBtcPos ? '+' : ''}${btcReturnPct}%</span>
                                     </div>
@@ -681,11 +696,11 @@
                                     </div>
                                 </div>
                                 <div class="w-full flex flex-col items-start">
-                                    <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center text-[11px] sm:text-xs mb-0 w-full">
-                                        <span class="${textMain} font-medium">10,394.245 AGQ <span class="text-[10px] opacity-75 font-mono block sm:inline">($<span id="live-agq-price">${window.agqLivePrice.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}</span>)</span></span>
+                                    <div class="flex justify-between items-center text-[11px] sm:text-xs mb-0 w-full">
+                                        <span class="${textMain} font-medium">10,394.245 AGQ <span class="text-[10px] opacity-75 font-mono">($<span id="live-agq-price">${window.agqLivePrice.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}</span>)</span></span>
                                         <span class="${textSub} text-right"><span id="live-agq-val">$${Math.round(agqVal).toLocaleString()}</span> <span class="text-[10px] opacity-75">(<span id="live-agq-pct">${agqPct}</span>%)</span></span>
                                     </div>
-                                    <div class="flex flex-row justify-between items-center text-[10px] opacity-75 mb-0 ${textSub} w-full">
+                                    <div class="flex justify-between items-center text-[10px] opacity-75 mb-0 ${textSub} w-full">
                                         <span><span>$25.38</span></span>
                                         <span id="live-agq-return" class="${isAgqPos ? 'text-emerald-500' : 'text-red-500'} font-medium text-right">${isAgqPos ? '+' : ''}${agqReturnPct}%</span>
                                     </div>
@@ -694,11 +709,11 @@
                                     </div>
                                 </div>
                                 <div class="w-full flex flex-col items-start">
-                                    <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center text-[11px] sm:text-xs mb-0 w-full">
-                                        <span class="${textMain} font-medium">1,193.428 SLV <span class="text-[10px] opacity-75 font-mono block sm:inline">($<span id="live-slv-price">${window.slvLivePrice.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}</span>)</span></span>
+                                    <div class="flex justify-between items-center text-[11px] sm:text-xs mb-0 w-full">
+                                        <span class="${textMain} font-medium">1,193.428 SLV <span class="text-[10px] opacity-75 font-mono">($<span id="live-slv-price">${window.slvLivePrice.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}</span>)</span></span>
                                         <span class="${textSub} text-right"><span id="live-slv-val">$${Math.round(slvVal).toLocaleString()}</span> <span class="text-[10px] opacity-75">(<span id="live-slv-pct">${slvPct}</span>%)</span></span>
                                     </div>
-                                    <div class="flex flex-row justify-between items-center text-[10px] opacity-75 mb-0 ${textSub} w-full">
+                                    <div class="flex justify-between items-center text-[10px] opacity-75 mb-0 ${textSub} w-full">
                                         <span><span>$16.48</span></span>
                                         <span id="live-slv-return" class="${isSlvPos ? 'text-emerald-500' : 'text-red-500'} font-medium text-right">${isSlvPos ? '+' : ''}${slvReturnPct}%</span>
                                     </div>
