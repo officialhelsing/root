@@ -132,7 +132,6 @@
         let distantStars = [];
         let fastDriftStars = [];
         let shootingStars = [];
-        let starships = [];
 
         function initDistantStars() {
             distantStars = [];
@@ -195,22 +194,6 @@
             }
         }
 
-        function spawnStarship() {
-            if (Math.random() < 0.0015 && starships.length < 1) {
-                let startY = Math.random() * (canvas.height * 0.65) + (canvas.height * 0.15);
-                let speed = Math.random() * 0.25 + 0.12;
-                let goingRight = Math.random() < 0.5;
-                starships.push({
-                    x: goingRight ? -120 : canvas.width + 120,
-                    y: startY,
-                    vx: goingRight ? speed : -speed,
-                    vy: (Math.random() - 0.5) * 0.03,
-                    length: Math.random() * 35 + 25,
-                    opacity: 0.65
-                });
-            }
-        }
-
         function renderStars() {
             mouseX += (targetMouseX - mouseX) * 0.05;
             mouseY += (targetMouseY - mouseY) * 0.05;
@@ -254,50 +237,9 @@
             }
 
             spawnShootingStar();
-            spawnStarship();
 
-            ctx.lineWidth = 1.5;
+            ctx.lineWidth = 1.0;
             ctx.lineCap = 'round';
-
-            for (let i = starships.length - 1; i >= 0; i--) {
-                let ship = starships[i];
-                ship.x += ship.vx;
-                ship.y += ship.vy;
-
-                ctx.save();
-                ctx.globalAlpha = ship.opacity;
-                ctx.strokeStyle = 'rgba(255, 255, 255, 0.45)';
-                ctx.fillStyle = 'rgba(255, 255, 255, 0.15)';
-                ctx.lineWidth = 0.75;
-
-                ctx.beginPath();
-                if (ship.vx > 0) {
-                    ctx.moveTo(ship.x + ship.length, ship.y);
-                    ctx.lineTo(ship.x - ship.length * 0.5, ship.y - 2.5);
-                    ctx.lineTo(ship.x - ship.length * 0.3, ship.y);
-                    ctx.lineTo(ship.x - ship.length * 0.5, ship.y + 2.5);
-                    ctx.closePath();
-                } else {
-                    ctx.moveTo(ship.x - ship.length, ship.y);
-                    ctx.lineTo(ship.x + ship.length * 0.5, ship.y - 2.5);
-                    ctx.lineTo(ship.x + ship.length * 0.3, ship.y);
-                    ctx.lineTo(ship.x + ship.length * 0.5, ship.y + 2.5);
-                    ctx.closePath();
-                }
-                ctx.fill();
-                ctx.stroke();
-
-                ctx.fillStyle = 'rgba(147, 197, 253, 0.7)';
-                ctx.beginPath();
-                let thrusterX = ship.vx > 0 ? ship.x - ship.length * 0.5 : ship.x + ship.length * 0.5;
-                ctx.arc(thrusterX, ship.y, 1.1, 0, Math.PI * 2);
-                ctx.fill();
-                ctx.restore();
-
-                if (ship.x < -200 || ship.x > canvas.width + 200) {
-                    starships.splice(i, 1);
-                }
-            }
 
             for (let i = clickParticles.length - 1; i >= 0; i--) {
                 let p = clickParticles[i];
@@ -487,7 +429,7 @@
             container.innerHTML = '';
 
             const frame = document.createElement('div');
-            frame.className = `w-[240px] sm:w-[320px] md:w-[420px] h-[350px] sm:h-[460px] md:h-[580px] border border-zinc-800 bg-zinc-900/20 rounded-sm overflow-hidden flex flex-col items-center justify-center relative pointer-events-auto select-none transition-colors duration-800 shadow-xl cursor-pointer`;
+            frame.className = `w-[320px] sm:w-[460px] md:w-[620px] h-[300px] sm:h-[400px] md:h-[500px] rounded-sm overflow-hidden grid grid-cols-3 grid-rows-2 gap-0 relative pointer-events-auto select-none transition-colors duration-800 shadow-xl`;
             
             const shouldPhaseIn = (centerTickerLoadCount === 0);
             if (centerTickerLoadCount === 0) centerTickerLoadCount++;
@@ -499,40 +441,47 @@
                 frame.style.opacity = '1';
             }
 
-            frame.title = "View on OpenSea";
-            frame.onclick = () => {
-                window.open('https://opensea.io/justdieryan', '_blank');
-            };
+            let indices = [0, 1, 2, 3, 4, 5];
+            const imgs = [];
 
-            let currentImgIndex = 0;
-            const img = document.createElement('img');
-            img.src = openseaImages[currentImgIndex];
-            img.className = 'w-full h-full object-cover';
-            img.alt = 'OpenSea Art';
+            for (let i = 0; i < 6; i++) {
+                const cell = document.createElement('div');
+                cell.className = 'relative w-full h-full overflow-hidden cursor-pointer transition-colors';
+                cell.title = "View on OpenSea";
+                cell.onclick = () => {
+                    window.open('https://opensea.io/justdieryan', '_blank');
+                };
 
-            if (shouldPhaseIn) {
-                img.classList.add('pixel-glitch-medium');
-                setTimeout(() => {
-                    img.classList.remove('pixel-glitch-medium');
-                }, 700);
+                const img = document.createElement('img');
+                img.src = openseaImages[indices[i]];
+                img.className = 'w-full h-full object-cover';
+                if (shouldPhaseIn) {
+                    img.classList.add('pixel-glitch-medium');
+                    setTimeout(() => img.classList.remove('pixel-glitch-medium'), 700);
+                }
+                cell.appendChild(img);
+                frame.appendChild(cell);
+                imgs.push(img);
             }
 
-            frame.appendChild(img);
             container.appendChild(frame);
 
             if (window.artTickerInterval) clearInterval(window.artTickerInterval);
             window.artTickerInterval = setInterval(() => {
-                img.classList.add('pixel-glitch-medium');
+                const slotToChange = Math.floor(Math.random() * 6);
+                const targetImg = imgs[slotToChange];
+                
+                targetImg.classList.add('pixel-glitch-medium');
 
                 setTimeout(() => {
-                    currentImgIndex = (currentImgIndex + 1) % openseaImages.length;
-                    img.src = openseaImages[currentImgIndex];
+                    indices[slotToChange] = (indices[slotToChange] + 6) % openseaImages.length;
+                    targetImg.src = openseaImages[indices[slotToChange]];
                 }, 350);
 
                 setTimeout(() => {
-                    img.classList.remove('pixel-glitch-medium');
+                    targetImg.classList.remove('pixel-glitch-medium');
                 }, 700);
-            }, 5500);
+            }, 3500);
         }
 
         const typedIntroEl = document.getElementById('typed-intro');
@@ -545,7 +494,7 @@
 
         function renderRoot(appView) {
             let rootItems = [
-                { content: '<svg class="w-4 h-4 inline select-none" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>', action: "navigateTo('artwork')" },
+                { content: '<svg class="w-4 h-4 inline select-none" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>', action: "navigateTo('artwork')" },
                 { content: 'AUM', action: "navigateTo('aum')" },
                 { content: 'About', action: "navigateTo('metaepistemology')" },
                 { content: 'Resumé', action: "navigateTo('resume')" },
