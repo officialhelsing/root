@@ -501,8 +501,8 @@
 
             const isLight = currentTheme === 'light';
             const frame = document.createElement('div');
-            // Artwork wider rectangle, taller height across platforms
-            frame.className = `w-[168px] sm:w-[208px] md:w-[236px] h-[310px] sm:h-[380px] md:h-[420px] border ${isLight ? 'border-zinc-300 bg-zinc-200/30' : 'border-zinc-800 bg-zinc-900/20'} rounded-sm overflow-hidden flex flex-col items-center justify-center relative pointer-events-auto select-none transition-colors duration-800 shadow-xl cursor-pointer`;
+            // Artwork wider rectangle, taller height across platforms (extended height by 5%)
+            frame.className = `w-[168px] sm:w-[208px] md:w-[236px] h-[326px] sm:h-[399px] md:h-[441px] border ${isLight ? 'border-zinc-300 bg-zinc-200/30' : 'border-zinc-800 bg-zinc-900/20'} rounded-sm overflow-hidden flex flex-col items-center justify-center relative pointer-events-auto select-none transition-colors duration-800 shadow-xl cursor-pointer`;
             
             const shouldPhaseIn = (centerTickerLoadCount === 0);
             if (centerTickerLoadCount === 0) centerTickerLoadCount++;
