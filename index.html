@@ -321,21 +321,23 @@
                     detail: "A high-precision formulation of continuous media dynamics leveraging differential geometry on arbitrary Riemannian manifolds, synthesizing non-linear strain kinematics, push-forward and pull-back tensor transport operations, and covariant balance laws. The research rigorously derives the tensor-valued constitutive equations governing stress-strain relationships, multi-phase deformation, and energy dissipation across continuously deforming topological spaces. The fundamental importance of this research rests on its ability to provide exact, invariant mathematical modeling for extreme physical environments, advanced aerospace structural mechanics, continuum multi-physics simulations, and geometric mechanics where standard Euclidean approximations break down entirely."
                 },
                 {
-                    title: "Non-Well-Founded Sets",
+                    title: "Non-Well-Found Sets",
                     detail: "An intensive analytical study of circular set membership enabled by Peter Aczel's anti-foundation axioms, superseding the classical foundation axiom to allow infinite descending chains and self-referential membership graphs. The research constructs formal operational frameworks to model circularity, infinite recursion, and corecursive data streams in universal algebra and semantics. The importance of this paradigm shift is critical for capturing semantic self-reference, circular processes in programming language theory, game-theoretic interaction semantics, and cognitive systems that inherently model reflexive loops."
                 },
                 {
-                    title: "Multi-Agent Topologies",
+                    title: "Agent Topologies",
                     detail: "A comprehensive formal inquiry into distributed epistemic networks and interactive multi-agent systems, studying the exact topological structures and communication constraints that govern decentralized information flow. The research models how autonomous nodes propagate higher-order knowledge, update distributed belief structures, and attain fault-tolerant logical consensus under adversarial network conditions. The importance of this framework is paramount for engineering ultra-resilient distributed architectures, decentralized autonomous systems, and fault-tolerant algorithmic protocols capable of operating deterministically without centralized coordination."
                 },
                 {
-                    title: "Point-Free Frame Theory",
+                    title: "Point-Free Frames",
                     detail: "A rigorous, foundational investigation into pointless topology and frame-theoretic structures, executed at a category-theoretic level of abstraction where traditional point-set spatial intuitions are entirely bypassed in favor of locales and algebraic lattices of open parts. The research explores the degree to which spatial properties can be reconstructed purely through lattice-theoretic implication, eliminating reliance on underlying points. The importance of this work lies in its profound capacity to resolve deep foundational paradoxes in quantum logic, continuous domain theory, and constructive mathematics where standard point-set topologies fail, providing a universal, point-free syntactic machinery for spaces in abstract algebra and computer science."
                 }
             ]
         };
 
         const firstArtImage = 'https://i2c.seadn.io/ethereum/0x495f947276749ce646f68ac8c248420045cb7b5e/1126738749bec27cb38e1688c15aaf/881126738749bec27cb38e1688c15aaf.jpeg?w=1000';
+        const universalInitialImg = 'https://i2c.seadn.io/ethereum/0x60f80121c31a0d46b5279700f9df786054aa5ee5/e4d4f45ed3f6329ec1cdcb7bb339ae/03e4d4f45ed3f6329ec1cdcb7bb339ae.jpeg?w=500';
+        
         const baseArtCollection = [
             'https://i2c.seadn.io/ethereum/0x495f947276749ce646f68ac8c248420045cb7b5e/90da0063cdc11a9c87ecee7e3dbd48/f290da0063cdc11a9c87ecee7e3dbd48.jpeg?w=500',
             'https://i2c.seadn.io/ethereum/0x495f947276749ce646f68ac8c248420045cb7b5e/4c42d2ce233548a33c5aac71e4d838/3e4c42d2ce233548a33c5aac71e4d838.jpeg?w=500',
@@ -428,8 +430,11 @@
         function setupCenterTicker(container) {
             container.innerHTML = '';
 
+            const wrapper = document.createElement('div');
+            wrapper.className = "relative flex items-center justify-center pointer-events-auto select-none";
+
             const frame = document.createElement('div');
-            frame.className = `w-[320px] sm:w-[460px] md:w-[620px] h-[300px] sm:h-[400px] md:h-[500px] rounded-sm overflow-hidden grid grid-cols-3 grid-rows-2 gap-0 relative pointer-events-auto select-none transition-colors duration-800 shadow-xl`;
+            frame.className = `w-[240px] sm:w-[320px] md:w-[400px] h-[320px] sm:h-[420px] md:h-[520px] overflow-hidden grid grid-cols-3 grid-rows-4 gap-0 relative pointer-events-auto select-none transition-colors duration-800`;
             
             const shouldPhaseIn = (centerTickerLoadCount === 0);
             if (centerTickerLoadCount === 0) centerTickerLoadCount++;
@@ -441,20 +446,31 @@
                 frame.style.opacity = '1';
             }
 
-            let indices = [0, 1, 2, 3, 4, 5];
+            let indices = new Array(12).fill(-1);
             const imgs = [];
 
-            for (let i = 0; i < 6; i++) {
+            let availableInitPool = Array.from({length: openseaImages.length}, (_, i) => i);
+            for (let i = availableInitPool.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [availableInitPool[i], availableInitPool[j]] = [availableInitPool[j], availableInitPool[i]];
+            }
+
+            for (let i = 0; i < 12; i++) {
                 const cell = document.createElement('div');
                 cell.className = 'relative w-full h-full overflow-hidden cursor-pointer transition-colors';
+                cell.style.perspective = '600px';
                 cell.title = "View on OpenSea";
                 cell.onclick = () => {
                     window.open('https://opensea.io/justdieryan', '_blank');
                 };
 
                 const img = document.createElement('img');
-                img.src = openseaImages[indices[i]];
-                img.className = 'w-full h-full object-cover';
+                const initialChoice = availableInitPool[i % availableInitPool.length];
+                indices[i] = initialChoice;
+                img.src = openseaImages[initialChoice];
+                img.className = 'w-full h-full object-cover transition-transform duration-500 ease-in-out';
+                img.style.transformStyle = 'preserve-3d';
+                
                 if (shouldPhaseIn) {
                     img.classList.add('pixel-glitch-medium');
                     setTimeout(() => img.classList.remove('pixel-glitch-medium'), 700);
@@ -464,24 +480,44 @@
                 imgs.push(img);
             }
 
-            container.appendChild(frame);
+            wrapper.appendChild(frame);
+            container.appendChild(wrapper);
 
             if (window.artTickerInterval) clearInterval(window.artTickerInterval);
+
             window.artTickerInterval = setInterval(() => {
-                const slotToChange = Math.floor(Math.random() * 6);
+                const slotToChange = Math.floor(Math.random() * 12);
                 const targetImg = imgs[slotToChange];
-                
+
+                let activeIndices = new Set();
+                for (let i = 0; i < 12; i++) {
+                    if (indices[i] !== -1) {
+                        activeIndices.add(indices[i]);
+                    }
+                }
+
+                let availableIndices = [];
+                for (let i = 0; i < openseaImages.length; i++) {
+                    if (!activeIndices.has(i)) {
+                        availableIndices.push(i);
+                    }
+                }
+                if (availableIndices.length === 0) {
+                    availableIndices = Array.from({length: openseaImages.length}, (_, i) => i);
+                }
+
+                const randomChoice = availableIndices[Math.floor(Math.random() * availableIndices.length)];
+
+                targetImg.style.transform = 'rotateY(90deg)';
                 targetImg.classList.add('pixel-glitch-medium');
 
                 setTimeout(() => {
-                    indices[slotToChange] = (indices[slotToChange] + 6) % openseaImages.length;
-                    targetImg.src = openseaImages[indices[slotToChange]];
-                }, 350);
-
-                setTimeout(() => {
-                    targetImg.classList.remove('pixel-glitch-medium');
-                }, 700);
-            }, 3500);
+                    indices[slotToChange] = randomChoice;
+                    targetImg.src = openseaImages[randomChoice];
+                    targetImg.style.transform = 'rotateY(0deg)';
+                    setTimeout(() => targetImg.classList.remove('pixel-glitch-medium'), 700);
+                }, 250);
+            }, 1000);
         }
 
         const typedIntroEl = document.getElementById('typed-intro');
@@ -494,7 +530,7 @@
 
         function renderRoot(appView) {
             let rootItems = [
-                { content: '<svg class="w-4 h-4 inline select-none" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>', action: "navigateTo('artwork')" },
+                { content: '<svg class="w-4 h-4 inline select-none align-middle mr-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>', action: "navigateTo('artwork')" },
                 { content: 'AUM', action: "navigateTo('aum')" },
                 { content: 'About', action: "navigateTo('metaepistemology')" },
                 { content: 'Resumé', action: "navigateTo('resume')" },
@@ -521,7 +557,7 @@
                     }
                     const headerSpan = document.createElement('span');
                     headerSpan.className = "inline-flex items-center";
-                    headerSpan.innerHTML = `Directory<svg class="w-3.5 h-3.5 ml-0.5 inline select-none" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>`;
+                    headerSpan.textContent = "Directory";
                     newDiv.appendChild(headerSpan);
                 } else if (!currentItem.action) {
                     newDiv.className = `flex flex-col w-full text-right items-end mb-2 select-none text-zinc-600 pr-0`;
@@ -602,21 +638,12 @@
                     returnItem
                 ];
             } else if (currentState === 'contact') {
-                headerItem = { type: 'text', content: 'Secure Dispatch', align: 'right' };
+                headerItem = { type: 'text', content: 'Email', align: 'right' };
                 const contactHtml = `
-                    <div class="space-y-3 w-full text-right font-mono text-xs md:text-sm select-none">
+                    <div class="space-y-2 w-full text-right font-mono text-xs md:text-sm select-none">
                         <div class="flex items-center justify-end space-x-2">
-                            <span class="text-zinc-500 text-[10px]">contacthelsing@gmail.com</span>
-                            <span class="cursor-pointer text-emerald-400 hover:underline" onclick="copyEmailToClipboard('contacthelsing@gmail.com', event)">[Copy]</span>
                             <span id="copied-badge" class="text-[10px] text-emerald-500 opacity-0 transition-opacity">Copied</span>
-                        </div>
-                        <div class="border border-zinc-800 bg-zinc-900/40 p-3 rounded text-left space-y-2">
-                            <div class="text-[11px] text-zinc-400">Send Encrypted Message:</div>
-                            <textarea id="secure-msg-input" placeholder="Type transmission..." class="w-full h-20 bg-black/50 border border-zinc-800 p-2 rounded text-zinc-200 text-xs resize-none outline-none focus:border-emerald-500"></textarea>
-                            <div class="flex justify-between items-center">
-                                <span id="dispatch-status" class="text-[10px] text-zinc-500">PGP Key ID: 0x9AF4</span>
-                                <button onclick="dispatchSecureMessage()" class="px-3 py-1 bg-zinc-800 hover:bg-emerald-600 hover:text-black transition-all rounded text-xs">Transmit</button>
-                            </div>
+                            <span class="cursor-pointer text-zinc-400 hover:text-white transition-colors text-xs sm:text-sm" onclick="copyEmailToClipboard('contacthelsing@gmail.com', event)">contacthelsing@gmail.com</span>
                         </div>
                     </div>
                 `;
@@ -987,16 +1014,7 @@
         }
 
         function dispatchSecureMessage() {
-            const input = document.getElementById('secure-msg-input');
-            const status = document.getElementById('dispatch-status');
-            if (input && input.value.trim().length > 0) {
-                status.textContent = 'Transmission encrypted & dispatched successfully.';
-                status.className = 'text-[10px] text-emerald-400 font-semibold';
-                input.value = '';
-            } else if (status) {
-                status.textContent = 'Error: Transmission buffer empty.';
-                status.className = 'text-[10px] text-red-400';
-            }
+            // Feature removed per request
         }
 
         function navigateTo(state) {
