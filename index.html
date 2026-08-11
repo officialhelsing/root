@@ -715,7 +715,10 @@
                                             <span>1,193.428 SLV</span>
                                             <span class="text-[10px] opacity-75 font-mono">($<span id="live-slv-price">${window.slvLivePrice.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}</span>)</span>
                                         </span>
-                                        <span class="${textSub} text-right"><span id="live-slv-val">$${Math.round(slvVal).toLocaleString()}</span> <span class="text-[10px] opacity-75">(<span id="live-slv-pct">${slvPct}</span>%)</span></span>
+                                        <span class="${textSub} text-right flex flex-col items-end sm:flex-row sm:items-center">
+                                            <span id="live-slv-val">$${Math.round(slvVal).toLocaleString()}</span>
+                                            <span class="text-[10px] opacity-75 sm:ml-1">(<span id="live-slv-pct">${slvPct}</span>%)</span>
+                                        </span>
                                     </div>
                                     <div class="flex justify-between items-center text-[10px] opacity-75 mb-0 ${textSub} w-full">
                                         <span><span>$16.48</span></span>
