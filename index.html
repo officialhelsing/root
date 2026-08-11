@@ -141,9 +141,7 @@
                 
                 osc.start();
                 osc.stop(audioCtx.currentTime + duration);
-            } catch (e) {
-                // Audio context fallback safeguard
-            }
+            } catch (e) {}
         }
 
         let clickParticles = [];
@@ -168,13 +166,8 @@
             targetMouseY = e.clientY;
         });
 
-        window.addEventListener('selectstart', (e) => {
-            e.preventDefault();
-        });
-
-        window.addEventListener('contextmenu', (e) => {
-            e.preventDefault();
-        });
+        window.addEventListener('selectstart', (e) => { e.preventDefault(); });
+        window.addEventListener('contextmenu', (e) => { e.preventDefault(); });
 
         function resizeCanvas() {
             canvas.width = window.innerWidth;
@@ -188,27 +181,13 @@
         let shootingStars = [];
         let currentTheme = 'dark';
 
-        function applyTheme() {
-            if (currentTheme === 'light') {
-                document.body.style.backgroundColor = '#f4f4f5';
-                document.body.style.color = '#18181b';
-            } else {
-                document.body.style.backgroundColor = '#000000';
-                document.body.style.color = '#d4d4d8';
-            }
-        }
-
         function initDistantStars() {
             distantStars = [];
             fastDriftStars = [];
             const count = 220;
             const fastCount = 14;
-            const paletteDark = [
-                '#ffffff', '#ffffff', '#e0f2fe', '#fef3c7'
-            ];
-            const paletteLight = [
-                '#18181b', '#27272a', '#3f3f46', '#52525b'
-            ];
+            const paletteDark = ['#ffffff', '#ffffff', '#e0f2fe', '#fef3c7'];
+            const paletteLight = ['#18181b', '#27272a', '#3f3f46', '#52525b'];
             
             for (let i = 0; i < count; i++) {
                 let tier = Math.random();
@@ -254,28 +233,15 @@
 
         function spawnShootingStar() {
             if (Math.random() < 0.004 && shootingStars.length < 1) {
-                const angles = [
-                    Math.PI * 0.75,
-                    Math.PI * 0.85,
-                    Math.PI * 1.15,
-                    Math.PI
-                ];
+                const angles = [Math.PI * 0.75, Math.PI * 0.85, Math.PI * 1.15, Math.PI];
                 let travelAngle = angles[Math.floor(Math.random() * angles.length)] + (Math.random() - 0.5) * 0.4;
                 let speed = Math.random() * 2.5 + 1.5;
                 let vx = Math.cos(travelAngle) * speed;
                 let vy = Math.sin(travelAngle) * speed;
-
                 let startX = vx < 0 ? canvas.width + 150 : -150;
                 let startY = Math.random() * (canvas.height * 0.6);
 
-                shootingStars.push({
-                    x: startX,
-                    y: startY,
-                    vx: vx,
-                    vy: vy,
-                    length: Math.random() * 250 + 150,
-                    opacity: 0.9
-                });
+                shootingStars.push({ x: startX, y: startY, vx: vx, vy: vy, length: Math.random() * 250 + 150, opacity: 0.9 });
             }
         }
 
@@ -290,7 +256,6 @@
             for (let s of distantStars) {
                 s.x += s.vx + parallaxOffsetX;
                 s.y += s.vy + parallaxOffsetY;
-
                 if (s.x < -10) s.x = canvas.width + 10;
                 if (s.x > canvas.width + 10) s.x = -10;
                 if (s.y < -10) s.y = canvas.height + 10;
@@ -308,7 +273,6 @@
             for (let s of fastDriftStars) {
                 s.x += s.vx + parallaxOffsetX * 2;
                 s.y += s.vy + parallaxOffsetY * 2;
-
                 if (s.x < -15) s.x = canvas.width + 15;
                 if (s.x > canvas.width + 15) s.x = -15;
                 if (s.y < -15) s.y = canvas.height + 15;
@@ -341,9 +305,7 @@
                 ctx.fill();
                 ctx.restore();
 
-                if (p.alpha <= 0) {
-                    clickParticles.splice(i, 1);
-                }
+                if (p.alpha <= 0) clickParticles.splice(i, 1);
             }
 
             for (let i = shootingStars.length - 1; i >= 0; i--) {
@@ -356,7 +318,6 @@
                 ctx.globalAlpha = Math.max(0, s.opacity);
                 let tailX = s.x - s.vx * 30;
                 let tailY = s.y - s.vy * 30;
-
                 let gradient = ctx.createLinearGradient(s.x, s.y, tailX, tailY);
                 if (currentTheme === 'light') {
                     gradient.addColorStop(0, 'rgba(39, 39, 42, 0.95)');
@@ -365,7 +326,6 @@
                     gradient.addColorStop(0, 'rgba(255, 255, 255, 1)');
                     gradient.addColorStop(1, 'rgba(255, 255, 255, 0)');
                 }
-                
                 ctx.strokeStyle = gradient;
                 ctx.beginPath();
                 ctx.moveTo(s.x, s.y);
@@ -382,7 +342,7 @@
         }
 
         const profileData = {
-            metaepistemologyDetail: "Metaepistemology operates as the rigorous architectural inquiry into the foundational topoi, formal syntax, and ontological substrates that govern all structures of knowing. By interrogating the generative rules and axiomatic frameworks through which cognition constructs models of reality, this discipline transcends ordinary epistemological critique to map the invariant geometries of thought itself, establishing an unyielding theoretical apparatus for evaluating the coherence, limits, and structural genesis of formal systems across abstract domains.",
+            metaepistemologyDetail: "I research the field acting as the ultimate gatekeeper for truth, controlling the very rules of validation that every other discipline must use to establish its own legitimacy. Before a metaphysician can declare what exists, a scientist can publish data, or a logician can state a rule, they must all make an implicit claim that their conclusions are true, rational, and justified. Metaepistemology is the only field that interrogates what those foundational concepts actually mean, meaning that any attempt to dethrone it, by using arguments, evidence, or logic, instantly triggers its jurisdiction and surrenders to its authority. It holds the ultimate veto power because you cannot even begin to construct a coherent thought about reality without first borrowing the conceptual permits that metaepistemology regulates.",
             resumeSummary: "Results-driven Project Controls Specialist and Nuclear Outage Scheduling expert with extensive experience managing complex capital infrastructure projects, nuclear plant maintenance outages, and earned value performance tracking. Adept at utilizing Primavera P6, maintaining rigorous baseline schedules, and aligning cross-functional engineering and field operations.",
             experience: [
                 {
@@ -413,19 +373,19 @@
             research: [
                 {
                     title: "Point-Free Frame Theory",
-                    detail: "Transcendence of the foundational illusion inherent to atomic spatial singularities unfolds through the systematic displacement of classical point set topology in favor of point free geometry utilizing locales and frames. This methodology constructs intricate spatial intuition through expansive lattices of open parts, completely dissolving absolute continuity paradoxes linked to infinitesimal boundaries by establishing spatial regions as irreducible primary primitives rather than derived aggregates. Through this framework, an elaborate mathematical architecture emerges, directly reflecting the primal continuum of unmanifest geometry and offering an unyielding foundation for topological continuum mechanics, cultivating absolute structural coherence across infinite dimensional topoi, binding lattice topologies within seamless unification."
+                    detail: "A rigorous, foundational investigation into pointless topology and frame-theoretic structures, executed at a category-theoretic level of abstraction where traditional point-set spatial intuitions are entirely bypassed in favor of locales and algebraic lattices of open parts. The research explores the degree to which spatial properties can be reconstructed purely through lattice-theoretic implication, eliminating reliance on underlying points. The importance of this work lies in its profound capacity to resolve deep foundational paradoxes in quantum logic, continuous domain theory, and constructive mathematics where standard point-set topologies fail, providing a universal, point-free syntactic machinery for spaces in abstract algebra and computer science."
                 },
                 {
                     title: "Multi-Agent Topologies",
-                    detail: "Unveiling multi-agent epistemic architectures and interactive dynamics operating across distributed cognitive frameworks requires formalizing the intricate mechanics by which autonomous centers of consciousness continuously update beliefs and propagate mutual knowledge through dense relational webs. By bypassing centralized coordination, this approach captures the organic distributed pulse of collective intelligence as it mirrors universal harmony, establishing rigorous topological models for belief revision, modal epistemics, and consensus emergence across high dimensional networks, weaving an immaculate fabric of collective gnosis in unbroken resonance."
+                    detail: "A comprehensive formal inquiry into distributed epistemic networks and interactive multi-agent systems, studying the exact topological structures and communication constraints that govern decentralized information flow. The research models how autonomous nodes propagate higher-order knowledge, update distributed belief structures, and attain fault-tolerant logical consensus under adversarial network conditions. The importance of this framework is paramount for engineering ultra-resilient distributed architectures, decentralized autonomous systems, and fault-tolerant algorithmic protocols capable of operating deterministically without centralized coordination."
                 },
                 {
                     title: "Non-Well-Founded Sets",
-                    detail: "Interrogating labyrinthine architectures of circular set topologies anchored in anti-foundation axioms enables mathematical modeling of infinite recursive phenomena and self-referential ontological genesis. Within this non-well-founded paradigm, foundational structures encompass their own internal generation as self-reflexive elements, forging a theoretical apparatus for modeling recursive feedback loops of sovereign consciousness and infinite self-containing structural dynamics across higher dimensional realms."
+                    detail: "An intensive analytical study of circular set membership enabled by Peter Aczel's anti-foundation axioms, superseding the classical foundation axiom to allow infinite descending chains and self-referential membership graphs. The research constructs formal operational frameworks to model circularity, infinite recursion, and corecursive data streams in universal algebra and semantics. The importance of this paradigm shift is critical for capturing semantic self-reference, circular processes in programming language theory, game-theoretic interaction semantics, and cognitive systems that inherently model reflexive loops."
                 },
                 {
                     title: "Continuum Mechanics",
-                    detail: "Transmuting continuous physical extension and dynamic continuum mechanics directly from intrinsic part-whole relations through advanced topological connectedness eliminates reliance on arbitrary set-theoretic coordinates. Modeling spatial adjacency and contact as primordial relations among fundamental regions establishes an unshakeable ontological bridge joining discrete structural parthood with continuous universal field equations across infinite scales, yielding a unified holographic field operating in total structural synchrony."
+                    detail: "A high-precision formulation of continuous media dynamics leveraging differential geometry on arbitrary Riemannian manifolds, synthesizing non-linear strain kinematics, push-forward and pull-back tensor transport operations, and covariant balance laws. The research rigorously derives the tensor-valued constitutive equations governing stress-strain relationships, multi-phase deformation, and energy dissipation across continuously deforming topological spaces. The fundamental importance of this research rests on its ability to provide exact, invariant mathematical modeling for extreme physical environments, advanced aerospace structural mechanics, continuum multi-physics simulations, and geometric mechanics where standard Euclidean approximations break down entirely."
                 }
             ]
         };
@@ -440,27 +400,7 @@
             { quote: "A bolt of lightning is five times hotter than the surface of the sun, reaching roughly 30,000 kelvins." },
             { quote: "The total weight of all ants on Earth is roughly comparable to the total weight of all human beings." },
             { quote: "Scotland has over 400 words for snow, ranging from sparkling drifting snow to heavy wet flurries." },
-            { quote: "There are more trees on Earth than stars in the Milky Way galaxy, with an estimated three trillion trees." },
-            { quote: "Sound travels about 4.3 times faster in water than it does through dry air at room temperature." },
-            { quote: "A day on Mercury features a strange double sunrise where the sun rises, pauses, sets, and rises again." },
-            { quote: "Wombat poop is uniquely cube-shaped, which prevents it from rolling away and marks their territory." },
-            { quote: "The human brain uses about 20 percent of the body's total energy and oxygen output despite its compact size." },
-            { quote: "Saturn has such a low density that if you could find a bathtub big enough, the giant planet would float in water." },
-            { quote: "Glass is technically an amorphous solid that flows extremely slowly over immense geological timescales." },
-            { quote: "Butterflies taste food using specialized sensory receptors located underneath their feet." },
-            { quote: "Neutron stars are so dense that a single teaspoon of their material would weigh about six billion tons." },
-            { quote: "Sea otters hold hands while sleeping in water to prevent themselves from drifting apart in currents." },
-            { quote: "The Eiffel Tower grows taller during hot summer days due to thermal expansion of its iron structure." },
-            { quote: "Sloths can hold their breath underwater longer than dolphins can, slowing their heart rate down significantly." },
-            { quote: "Cows have best friends and experience measurable stress when they are separated from them." },
-            { quote: "Cleopatra lived closer in time to the landing of the Apollo 11 moon mission than to the construction of the Great Pyramid." },
-            { quote: "Mars appears red because its surface contains massive amounts of iron oxide, which is essentially rust." },
-            { quote: "Pineapples take nearly two whole years to grow and fully mature before they can be harvested." },
-            { quote: "A blue whale's tongue can weigh as much as an entire adult elephant, and its heart is the size of a small car." },
-            { quote: "Light takes about 8 minutes and 20 seconds to travel from the surface of the sun to human eyes on Earth." },
-            { quote: "Humans are the only animals on planet Earth that are known to enjoy consuming spicy foods." },
-            { quote: "Flamingos are naturally born with white or gray feathers and turn pink from pigments in their diet of shrimp and algae." },
-            { quote: "A single cloud can easily weigh more than a million pounds due to the massive volume of water droplets it holds." }
+            { quote: "There are more trees on Earth than stars in the Milky Way galaxy, with an estimated three trillion trees." }
         ];
 
         let recentQuoteIndices = [];
@@ -477,11 +417,149 @@
         }
 
         let navigationStack = ['root'];
-        let aumInterval = null;
         let rootLoadCount = 0;
+        let centerTickerLoadCount = 0;
+        let aumInterval = null;
+
+        function triggerIntroQuote() {
+            const q = getRandomQuote();
+            startTypingSequence(q.quote, () => {});
+        }
+
+        function copyEmailToClipboard(email, e) {
+            e.stopPropagation();
+            const textArea = document.createElement("textarea");
+            textArea.value = email;
+            textArea.style.position = "fixed";
+            document.body.appendChild(textArea);
+            textArea.focus();
+            textArea.select();
+            try {
+                document.execCommand('copy');
+                const badge = document.getElementById('copied-badge');
+                if (badge) {
+                    badge.style.opacity = '1';
+                    setTimeout(() => { badge.style.opacity = '0'; }, 1500);
+                }
+            } catch (err) {}
+            document.body.removeChild(textArea);
+        }
+
+        function setupCenterTicker(container) {
+            container.innerHTML = '';
+
+            const isLight = currentTheme === 'light';
+            const frame = document.createElement('div');
+            frame.className = `w-[240px] sm:w-[290px] md:w-[320px] h-[380px] sm:h-[440px] md:h-[480px] border ${isLight ? 'border-zinc-300 bg-zinc-200/30' : 'border-zinc-800 bg-zinc-900/20'} rounded-sm overflow-hidden flex flex-col items-center justify-center relative pointer-events-auto select-none transition-colors duration-800 shadow-xl cursor-pointer`;
+            
+            const shouldPhaseIn = (centerTickerLoadCount === 0);
+            if (centerTickerLoadCount === 0) centerTickerLoadCount++;
+
+            if (shouldPhaseIn) {
+                frame.style.opacity = '0';
+                frame.style.animation = `fadeInPhase 2.4s cubic-bezier(0.16, 1, 0.3, 1) 0s forwards`;
+            } else {
+                frame.style.opacity = '1';
+            }
+
+            frame.title = "View on OpenSea";
+            frame.onclick = () => {
+                window.open('https://opensea.io/justdieryan', '_blank');
+            };
+
+            const openseaImages = [
+                'https://i2c.seadn.io/ethereum/0x495f947276749ce646f68ac8c248420045cb7b5e/1126738749bec27cb38e1688c15aaf/881126738749bec27cb38e1688c15aaf.jpeg?w=1000',
+                'https://i2c.seadn.io/ethereum/0x495f947276749ce646f68ac8c248420045cb7b5e/90da0063cdc11a9c87ecee7e3dbd48/f290da0063cdc11a9c87ecee7e3dbd48.jpeg?w=500',
+                'https://i2c.seadn.io/ethereum/0x495f947276749ce646f68ac8c248420045cb7b5e/4c42d2ce233548a33c5aac71e4d838/3e4c42d2ce233548a33c5aac71e4d838.jpeg?w=500',
+                'https://i2c.seadn.io/ethereum/0x495f947276749ce646f68ac8c248420045cb7b5e/1fb7d43780f9771c500c229a0b457e/cb1fb7d43780f9771c500c229a0b457e.jpeg?w=500',
+                'https://i2c.seadn.io/ethereum/0x495f947276749ce646f68ac8c248420045cb7b5e/d5d3f8eec99192a644ea7550ec7309/32d5d3f8eec99192a644ea7550ec7309.jpeg?w=500',
+                'https://i2c.seadn.io/ethereum/0x495f947276749ce646f68ac8c248420045cb7b5e/29875a6d8e4ed4818ee567f79119f5/2529875a6d8e4ed4818ee567f79119f5.jpeg?w=500',
+                'https://i2c.seadn.io/ethereum/0x495f947276749ce646f68ac8c248420045cb7b5e/4e620d0f25adec419ad3fdff4c744a/734e620d0f25adec419ad3fdff4c744a.jpeg?w=500',
+                'https://i2c.seadn.io/ethereum/0x495f947276749ce646f68ac8c248420045cb7b5e/c94f70ea5458d0de0b08c9ea5dc8d9/62c94f70ea5458d0de0b08c9ea5dc8d9.jpeg?w=500'
+            ];
+
+            let currentImgIndex = 0;
+            const img = document.createElement('img');
+            img.src = openseaImages[currentImgIndex];
+            img.className = 'w-full h-full object-cover transition-all duration-1000';
+            img.style.opacity = '1';
+            img.style.filter = 'blur(0px)';
+            img.style.transform = 'scale(1)';
+            img.alt = 'OpenSea Art';
+
+            frame.appendChild(img);
+            container.appendChild(frame);
+
+            if (window.artTickerInterval) clearInterval(window.artTickerInterval);
+            window.artTickerInterval = setInterval(() => {
+                img.style.opacity = '0';
+                img.style.filter = 'blur(10px)';
+                img.style.transform = 'scale(1.03)';
+
+                setTimeout(() => {
+                    currentImgIndex = (currentImgIndex + 1) % openseaImages.length;
+                    img.src = openseaImages[currentImgIndex];
+
+                    setTimeout(() => {
+                        img.style.opacity = '1';
+                        img.style.filter = 'blur(0px)';
+                        img.style.transform = 'scale(1)';
+                    }, 100);
+                }, 1000);
+            }, 6000);
+        }
+
+        const typedIntroEl = document.getElementById('typed-intro');
+        const typedAuthorEl = document.getElementById('typed-author');
+        const introContainer = document.getElementById('intro-container');
+        const mainContainer = document.getElementById('main-container');
+
+        let charIndex = 0;
+        let currentActiveText = "Welcome, friend.";
+
+        function startTypingSequence(text, onComplete) {
+            currentActiveText = text;
+            charIndex = 0;
+            typedIntroEl.textContent = '';
+            typedIntroEl.classList.add('typing-cursor');
+            if (typedAuthorEl) typedAuthorEl.style.opacity = '0';
+            introContainer.style.display = 'block';
+            setTimeout(() => {
+                introContainer.style.opacity = '1';
+            }, 50);
+            const appView = document.getElementById('app-view');
+            if (appView) appView.classList.add('hidden');
+
+            function typeStep() {
+                if (charIndex < currentActiveText.length) {
+                    typedIntroEl.textContent += currentActiveText.charAt(charIndex);
+                    charIndex++;
+                    setTimeout(typeStep, 45);
+                } else {
+                    setTimeout(() => backspaceStep(onComplete), 1400);
+                }
+            }
+            typeStep();
+        }
+
+        function backspaceStep(onComplete) {
+            if (charIndex > 0) {
+                typedIntroEl.textContent = currentActiveText.substring(0, charIndex - 1);
+                charIndex--;
+                setTimeout(() => backspaceStep(onComplete), 25);
+            } else {
+                typedIntroEl.classList.remove('typing-cursor');
+                introContainer.style.opacity = '0';
+                setTimeout(() => {
+                    introContainer.style.display = 'none';
+                    if (onComplete) onComplete();
+                }, 500);
+            }
+        }
 
         function renderRoot(appView) {
             let rootItems = [
+                { content: '<svg class="w-4 h-4 inline" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>', action: null, isIcon: true },
                 { content: 'AUM', action: "navigateTo('aum')" },
                 { content: 'About', action: "navigateTo('metaepistemology')" },
                 { content: 'Resumé', action: "navigateTo('resume')" },
@@ -497,47 +575,71 @@
             const shouldPhaseIn = (rootLoadCount === 0);
             if (rootLoadCount === 0) rootLoadCount++;
 
-            const homeDiv = document.createElement('div');
-            homeDiv.className = "flex flex-col w-full text-right items-end mb-2 select-none pr-0";
-            if (shouldPhaseIn) {
-                homeDiv.style.animation = `fadeInPhase 1.2s cubic-bezier(0.16, 1, 0.3, 1) 0s forwards`;
-                homeDiv.style.opacity = '0';
-            }
-            const homeSpan = document.createElement('span');
-            homeSpan.className = "inline-flex items-center hover:opacity-100 opacity-70 transition-all duration-300 hover:-translate-y-0.5 cursor-pointer select-none";
-            homeSpan.title = "Return to intro quote";
-            homeSpan.innerHTML = `<svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path></svg>`;
-            homeSpan.onclick = (e) => { e.stopPropagation(); triggerIntroQuote(); };
-            homeDiv.appendChild(homeSpan);
-            listContainer.appendChild(homeDiv);
-
             rootItems.forEach((currentItem, index) => {
                 const newDiv = document.createElement('div');
                 
                 if (currentItem.isHeader) {
                     newDiv.className = `flex flex-col w-full text-right items-end mb-2 ${currentTheme === 'light' ? 'text-zinc-900' : 'text-white'} font-semibold select-none pr-0`;
                     if (shouldPhaseIn) {
-                        newDiv.style.animation = `fadeInPhase 1.2s cubic-bezier(0.16, 1, 0.3, 1) ${(index + 1) * 0.15}s forwards`;
+                        newDiv.style.animation = `fadeInPhase 1.2s cubic-bezier(0.16, 1, 0.3, 1) ${index * 0.15}s forwards`;
                         newDiv.style.opacity = '0';
                     }
                     const headerSpan = document.createElement('span');
                     headerSpan.className = "inline-flex items-center";
                     headerSpan.innerHTML = `Directory<svg class="w-3.5 h-3.5 ml-0.5 inline select-none" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>`;
                     newDiv.appendChild(headerSpan);
+                } else if (currentItem.isIcon) {
+                    newDiv.className = `flex flex-col w-full text-right items-end mb-2 ${currentTheme === 'light' ? 'text-zinc-600' : 'text-zinc-400'} select-none pr-0 opacity-75`;
+                    if (shouldPhaseIn) {
+                        newDiv.style.animation = `fadeInPhase 1.2s cubic-bezier(0.16, 1, 0.3, 1) ${index * 0.15}s forwards`;
+                        newDiv.style.opacity = '0';
+                    }
+                    const span = document.createElement('span');
+                    span.innerHTML = currentItem.content;
+                    newDiv.appendChild(span);
                 } else {
                     newDiv.className = `flex flex-col w-full text-right items-end mb-2 cursor-pointer select-none ${currentTheme === 'light' ? 'text-zinc-600 hover:text-zinc-900' : 'text-zinc-400 hover:text-white'} transition-all duration-300 hover:-translate-y-0.5 pr-0`;
                     if (shouldPhaseIn) {
-                        newDiv.style.animation = `fadeInPhase 1.2s cubic-bezier(0.16, 1, 0.3, 1) ${(index + 1) * 0.15}s forwards`;
+                        newDiv.style.animation = `fadeInPhase 1.2s cubic-bezier(0.16, 1, 0.3, 1) ${index * 0.15}s forwards`;
                         newDiv.style.opacity = '0';
                     }
                     newDiv.setAttribute('onclick', currentItem.action);
-                    
+
                     const span = document.createElement('span');
                     span.innerHTML = currentItem.content;
                     newDiv.appendChild(span);
                 }
                 listContainer.appendChild(newDiv);
             });
+        }
+
+        function renderView() {
+            const appView = document.getElementById('app-view');
+            if (!appView) return;
+            appView.innerHTML = '';
+            appView.classList.remove('hidden');
+
+            const currentState = navigationStack[navigationStack.length - 1];
+            const meta = navigationStack.length > 2 ? navigationStack[navigationStack.length - 2] : null;
+
+            let centerTickerEl = document.getElementById('center-ticker-container');
+            if (!centerTickerEl) {
+                centerTickerEl = document.createElement('div');
+                centerTickerEl.id = 'center-ticker-container';
+                centerTickerEl.className = 'fixed inset-0 pointer-events-none flex items-center justify-center z-15 px-6 select-none';
+                document.body.appendChild(centerTickerEl);
+            }
+
+            if (currentState === 'root') {
+                centerTickerEl.style.display = 'flex';
+                setupCenterTicker(centerTickerEl);
+                if (aumInterval) { clearInterval(aumInterval); aumInterval = null; }
+                renderRoot(appView);
+            } else {
+                centerTickerEl.style.display = 'none';
+                if (aumInterval && currentState !== 'aum') { clearInterval(aumInterval); aumInterval = null; }
+                renderSubView(currentState, meta, appView);
+            }
         }
 
         function renderSubView(currentState, meta, appView) {
@@ -549,7 +651,7 @@
             if (currentState === 'metaepistemology') {
                 headerItem = { type: 'text', content: 'About', align: 'right' };
                 lines = [
-                    { type: 'paragraph', content: profileData.metaepistemologyDetail, align: 'right' },
+                    { type: 'paragraph', content: profileData.metaepistemologyDetail, align: 'right', rightJustify: true },
                     headerItem,
                     returnItem
                 ];
@@ -775,13 +877,6 @@
                         elSlvReturn.textContent = `${isNewSlvPos ? '+' : ''}${newSlvReturnPct}%`;
                         elSlvReturn.className = `${isNewSlvPos ? 'text-emerald-500' : 'text-red-500'}`;
                     }
-
-                    if (elTotal) {
-                        elTotal.style.color = btcDelta >= 0 ? (isLight ? '#15803d' : '#4ade80') : (isLight ? '#b91c1c' : '#f87171');
-                        setTimeout(() => {
-                            if (elTotal) elTotal.style.color = '';
-                        }, 500);
-                    }
                 }, 1000);
             } else if (currentState === 'portal') {
                 headerItem = { type: 'text', content: 'Portals', align: 'right' };
@@ -810,7 +905,7 @@
             } else if (currentState === 'summary') {
                 headerItem = { type: 'text', content: 'Intro', align: 'right' };
                 lines = [
-                    { type: 'paragraph', content: profileData.resumeSummary, align: 'right' },
+                    { type: 'paragraph', content: profileData.resumeSummary, align: 'right', rightJustify: true },
                     headerItem,
                     returnItem
                 ];
@@ -836,18 +931,17 @@
                 const exp = profileData.experience[meta];
                 headerItem = { type: 'text', content: exp.location, align: 'right' };
                 lines = [
-                    { type: 'paragraph', content: exp.description, align: 'right' },
+                    { type: 'paragraph', content: exp.description, align: 'right', rightJustify: true },
                     headerItem,
                     returnItem
                 ];
             } else if (currentState === 'research') {
-                headerItem = { type: 'text', content: 'Theoretical Researching', align: 'right' };
-                let sortedResearch = profileData.research.map((res, originalIdx) => ({ ...res, originalIdx }))
+                headerItem = { type: 'text', content: 'Research', align: 'right' };
+                const sortedResearch = profileData.research.map((res, idx) => ({ ...res, originalIdx: idx }))
                     .sort((a, b) => a.title.length - b.title.length);
                 sortedResearch.forEach((res) => {
                     menuItems.push({ 
-                        type: 'research-link', 
-                        title: res.title,
+                        type: 'link', 
                         content: res.title,
                         action: `MapsTo('research-detail', ${res.originalIdx})`, 
                         indent: true,
@@ -863,7 +957,7 @@
                 const res = profileData.research[meta];
                 headerItem = { type: 'text', content: res.title, align: 'right' };
                 lines = [
-                    { type: 'paragraph', content: res.detail || res.description, align: 'right' },
+                    { type: 'paragraph', content: res.detail, align: 'right', rightJustify: true },
                     headerItem,
                     returnItem
                 ];
@@ -873,7 +967,9 @@
                 const div = document.createElement('div');
                 const alignRight = item.align === 'right';
 
-                if (alignRight) {
+                if (item.type === 'paragraph') {
+                    div.className = "flex flex-col w-full text-right items-end mb-1 select-none";
+                } else if (alignRight) {
                     div.className = "flex flex-col w-full text-right items-end mb-1 select-none";
                 } else {
                     div.className = "flex flex-col w-full text-left items-start mb-1 select-none";
@@ -895,7 +991,7 @@
                     
                     const homeSpan = document.createElement('span');
                     homeSpan.className = "inline-flex items-center hover:opacity-100 opacity-70 transition-all duration-200 hover:-translate-y-0.5 cursor-pointer select-none";
-                    homeSpan.title = "Port to root page";
+                    homeSpan.title = "Return to root page";
                     homeSpan.innerHTML = `<svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path></svg>`;
                     homeSpan.onclick = (e) => { e.stopPropagation(); navigateToRoot(); };
                     
@@ -903,149 +999,25 @@
                     backContainer.appendChild(homeSpan);
                     div.appendChild(backContainer);
                 } else if (item.type === 'link') {
-                    div.className += ` cursor-pointer select-none ${currentTheme === 'light' ? 'text-zinc-600 hover:text-zinc-900' : 'text-zinc-400 hover:text-white'} transition-all duration-200 hover:-translate-y-0.5 pr-0 mb-0.5`;
-                    div.innerHTML = item.content;
+                    div.className += ` cursor-pointer select-none ${currentTheme === 'light' ? 'text-zinc-600 hover:text-zinc-900' : 'text-zinc-400 hover:text-white'} transition-all duration-300 hover:-translate-y-0.5 pr-0`;
                     if (item.url) {
                         div.setAttribute('onclick', `window.open('${item.url}', '_blank')`);
-                    } else {
+                    } else if (item.action) {
                         div.setAttribute('onclick', item.action);
                     }
-                } else if (item.type === 'rainbow-link') {
-                    div.className += ` cursor-pointer select-none pr-0 transition-all duration-200 hover:-translate-y-0.5 mb-0.5`;
-                    if (item.url) {
-                        div.setAttribute('onclick', `window.open('${item.url}', '_blank')`);
-                    } else {
-                        div.setAttribute('onclick', item.action || "navigateTo('metatrons-cube')");
-                    }
                     const span = document.createElement('span');
-                    span.className = "rainbow-text font-medium select-none inline-block";
-                    span.textContent = item.content;
+                    span.innerHTML = item.content;
                     div.appendChild(span);
-                } else if (item.type === 'research-link') {
-                    div.className += ` cursor-pointer select-none transition-all duration-200 hover:-translate-y-0.5 pr-0 mb-0.5`;
-                    div.setAttribute('onclick', item.action);
-                    
-                    const titleDiv = document.createElement('div');
-                    titleDiv.className = `${currentTheme === 'light' ? 'text-zinc-600 hover:text-zinc-900' : 'text-zinc-400 hover:text-white'} transition-colors duration-200 flex items-center justify-end w-full select-none truncate text-xs sm:text-sm leading-relaxed whitespace-nowrap overflow-hidden text-ellipsis text-right`;
-                    titleDiv.textContent = item.title;
-                    titleDiv.title = item.title;
-                    
-                    div.appendChild(titleDiv);
                 } else if (item.type === 'paragraph') {
-                    if (!alignRight) {
-                        div.className += ` ${currentTheme === 'light' ? 'text-zinc-600' : 'text-zinc-400'} text-[11px] leading-relaxed pl-0 pr-0 mt-0.5 font-normal not-italic select-none w-full text-left`;
-                        div.innerHTML = item.content;
-                    } else {
-                        div.className += ` ${currentTheme === 'light' ? 'text-zinc-600' : 'text-zinc-400'} text-[11px] leading-relaxed pr-0 mt-0.5 font-normal not-italic select-none w-full`;
-                        div.style.textAlign = 'justify';
+                    div.className += ` ${currentTheme === 'light' ? 'text-zinc-700' : 'text-zinc-300'} text-xs md:text-sm leading-relaxed ${item.rightJustify ? 'text-justify' : (item.justify ? 'text-justify' : 'text-right')} pr-0`;
+                    if (item.rightJustify) {
                         div.style.textAlignLast = 'right';
-                        div.innerHTML = item.content;
                     }
+                    div.innerHTML = item.content;
                 }
 
                 appView.appendChild(div);
             });
-        }
-
-        const typedIntroEl = document.getElementById('typed-intro');
-        const typedAuthorEl = document.getElementById('typed-author');
-        const introContainer = document.getElementById('intro-container');
-        const mainContainer = document.getElementById('main-container');
-
-        let charIndex = 0;
-        let currentActiveText = "Welcome, friend.";
-
-        function startTypingSequence(text, onComplete) {
-            currentActiveText = text;
-            charIndex = 0;
-            typedIntroEl.textContent = '';
-            typedIntroEl.classList.add('typing-cursor');
-            if (typedAuthorEl) typedAuthorEl.style.opacity = '0';
-            introContainer.style.display = 'block';
-            setTimeout(() => {
-                introContainer.style.opacity = '1';
-            }, 50);
-            const appView = document.getElementById('app-view');
-            if (appView) appView.classList.add('hidden');
-
-            function typeStep() {
-                if (charIndex < currentActiveText.length) {
-                    typedIntroEl.textContent += currentActiveText.charAt(charIndex);
-                    charIndex++;
-                    setTimeout(typeStep, 45);
-                } else {
-                    setTimeout(() => backspaceStep(onComplete), 1400);
-                }
-            }
-            typeStep();
-        }
-
-        function backspaceStep(onComplete) {
-            if (charIndex > 0) {
-                typedIntroEl.textContent = currentActiveText.substring(0, charIndex - 1);
-                charIndex--;
-                setTimeout(() => backspaceStep(onComplete), 25);
-            } else {
-                typedIntroEl.classList.remove('typing-cursor');
-                introContainer.style.opacity = '0';
-                setTimeout(() => {
-                    introContainer.style.display = 'none';
-                    if (onComplete) onComplete();
-                }, 500);
-            }
-        }
-
-        function triggerIntroQuote() {
-            playTone(350, 'sine', 0.05, 0.01);
-            
-            if (mainContainer) mainContainer.style.opacity = '0';
-            
-            setTimeout(() => {
-                navigationStack = ['root'];
-                let quoteObj = getRandomQuote();
-                startFadeInQuote(quoteObj.quote);
-            }, 500);
-        }
-
-        function startFadeInQuote(text) {
-            introContainer.style.display = 'block';
-            typedIntroEl.textContent = text;
-            typedIntroEl.classList.remove('typing-cursor');
-            if (typedAuthorEl) {
-                typedAuthorEl.textContent = '';
-                typedAuthorEl.style.opacity = '0';
-            }
-            
-            setTimeout(() => {
-                introContainer.style.opacity = '1';
-            }, 50);
-
-            const appView = document.getElementById('app-view');
-            if (appView) appView.classList.add('hidden');
-
-            setTimeout(() => {
-                introContainer.style.opacity = '0';
-                setTimeout(() => {
-                    introContainer.style.display = 'none';
-                    applyTheme();
-                    renderView();
-                    if (mainContainer) mainContainer.style.opacity = '1';
-                }, 500);
-            }, 4200);
-        }
-
-        function renderView() {
-            const appView = document.getElementById('app-view');
-            if (!appView) return;
-            appView.innerHTML = '';
-            appView.classList.remove('hidden');
-
-            const currentState = navigationStack[navigationStack.length - 1];
-            if (currentState === 'root') {
-                renderRoot(appView);
-            } else {
-                renderSubView(currentState, null, appView);
-            }
         }
 
         function navigateTo(state) {
@@ -1054,43 +1026,28 @@
             renderView();
         }
 
+        function MapsTo(state, idx) {
+            playTone(440, 'sine', 0.04, 0.015);
+            navigationStack.push(idx);
+            navigationStack.push(state);
+            renderView();
+        }
+
         function navigateBack() {
             playTone(330, 'sine', 0.04, 0.015);
             if (navigationStack.length > 1) {
                 navigationStack.pop();
+                if (!isNaN(navigationStack[navigationStack.length - 1])) {
+                    navigationStack.pop();
+                }
             }
             renderView();
         }
 
         function navigateToRoot() {
-            playTone(280, 'sine', 0.04, 0.015);
+            playTone(280, 'sine', 0.05, 0.02);
             navigationStack = ['root'];
             renderView();
-        }
-
-        function MapsTo(state, idx) {
-            playTone(480, 'sine', 0.04, 0.015);
-            navigationStack.push(state);
-            renderSubView(state, idx, document.getElementById('app-view'));
-        }
-
-        function copyEmailToClipboard(email, e) {
-            e.stopPropagation();
-            playTone(520, 'sine', 0.05, 0.02);
-            const textarea = document.createElement('textarea');
-            textarea.value = email;
-            document.body.appendChild(textarea);
-            textarea.select();
-            document.execCommand('copy');
-            document.body.removeChild(textarea);
-
-            const badge = document.getElementById('copied-badge');
-            if (badge) {
-                badge.style.opacity = '1';
-                setTimeout(() => {
-                    badge.style.opacity = '0';
-                }, 1500);
-            }
         }
 
         window.onload = function() {
