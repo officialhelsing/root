@@ -547,10 +547,6 @@
                 setupCenterTicker(centerTickerEl);
                 if (aumInterval) { clearInterval(aumInterval); aumInterval = null; }
                 renderRoot(appView);
-            } else if (currentState === 'terminal') {
-                centerTickerEl.style.display = 'none';
-                if (aumInterval) { clearInterval(aumInterval); aumInterval = null; }
-                renderTerminalView(appView);
             } else {
                 centerTickerEl.style.display = 'none';
                 if (aumInterval && currentState !== 'aum') { clearInterval(aumInterval); aumInterval = null; }
@@ -669,11 +665,11 @@
                             </div>
                         </div>
                         <div class="pt-0 space-y-1 w-full">
-                            <div class="text-[10px] sm:text-[11px] ${textSub} uppercase tracking-widest font-medium mb-0 text-left">Asset Allocation & Cost Basis</div>
+                            <div class="text-[10px] sm:text-[11px] ${textSub} uppercase tracking-widest font-medium mb-0 text-right">Asset Allocation & Cost Basis</div>
                             <div class="space-y-1 w-full pr-0">
                                 <div class="w-full flex flex-col items-start">
-                                    <div class="flex flex-row justify-between items-center text-[11px] sm:text-xs mb-0 w-full">
-                                        <span class="${textMain} font-medium">110.453 BTC <span class="text-[10px] opacity-75 font-mono">($<span id="live-btc-price">${window.btcLivePrice.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}</span>)</span></span>
+                                    <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center text-[11px] sm:text-xs mb-0 w-full">
+                                        <span class="${textMain} font-medium">110.453 BTC <span class="text-[10px] opacity-75 font-mono block sm:inline">($<span id="live-btc-price">${window.btcLivePrice.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}</span>)</span></span>
                                         <span class="${textSub} text-right"><span id="live-btc-val">$${Math.round(btcVal).toLocaleString()}</span> <span class="text-[10px] opacity-75">(<span id="live-btc-pct">${btcPct}</span>%)</span></span>
                                     </div>
                                     <div class="flex flex-row justify-between items-center text-[10px] opacity-75 mb-0 ${textSub} w-full">
@@ -685,8 +681,8 @@
                                     </div>
                                 </div>
                                 <div class="w-full flex flex-col items-start">
-                                    <div class="flex flex-row justify-between items-center text-[11px] sm:text-xs mb-0 w-full">
-                                        <span class="${textMain} font-medium">10,394.245 AGQ <span class="text-[10px] opacity-75 font-mono">($<span id="live-agq-price">${window.agqLivePrice.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}</span>)</span></span>
+                                    <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center text-[11px] sm:text-xs mb-0 w-full">
+                                        <span class="${textMain} font-medium">10,394.245 AGQ <span class="text-[10px] opacity-75 font-mono block sm:inline">($<span id="live-agq-price">${window.agqLivePrice.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}</span>)</span></span>
                                         <span class="${textSub} text-right"><span id="live-agq-val">$${Math.round(agqVal).toLocaleString()}</span> <span class="text-[10px] opacity-75">(<span id="live-agq-pct">${agqPct}</span>%)</span></span>
                                     </div>
                                     <div class="flex flex-row justify-between items-center text-[10px] opacity-75 mb-0 ${textSub} w-full">
@@ -698,8 +694,8 @@
                                     </div>
                                 </div>
                                 <div class="w-full flex flex-col items-start">
-                                    <div class="flex flex-row justify-between items-center text-[11px] sm:text-xs mb-0 w-full">
-                                        <span class="${textMain} font-medium">1,193.428 SLV <span class="text-[10px] opacity-75 font-mono">($<span id="live-slv-price">${window.slvLivePrice.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}</span>)</span></span>
+                                    <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center text-[11px] sm:text-xs mb-0 w-full">
+                                        <span class="${textMain} font-medium">1,193.428 SLV <span class="text-[10px] opacity-75 font-mono block sm:inline">($<span id="live-slv-price">${window.slvLivePrice.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}</span>)</span></span>
                                         <span class="${textSub} text-right"><span id="live-slv-val">$${Math.round(slvVal).toLocaleString()}</span> <span class="text-[10px] opacity-75">(<span id="live-slv-pct">${slvPct}</span>%)</span></span>
                                     </div>
                                     <div class="flex flex-row justify-between items-center text-[10px] opacity-75 mb-0 ${textSub} w-full">
@@ -988,281 +984,6 @@
         function navigateToRoot() {
             navigationStack = ['root'];
             renderView();
-        }
-
-        function renderTerminalView(appView) {
-            appView.innerHTML = '';
-            
-            const termWrapper = document.createElement('div');
-            termWrapper.className = `w-[92vw] sm:w-[540px] md:w-[720px] lg:w-[860px] h-[78vh] sm:h-[500px] md:h-[560px] bg-black shadow-2xl rounded-none overflow-hidden flex flex-col font-mono text-xs md:text-sm select-none relative pointer-events-auto`;
-            
-            const body = document.createElement('div');
-            body.id = 'term-body';
-            body.className = `flex-1 p-4 overflow-y-auto space-y-2 text-zinc-200 text-left selection:bg-zinc-700 selection:text-white`;
-            
-            const greeting = document.createElement('div');
-            greeting.innerHTML = `
-                <div class="opacity-75 mb-4">Type <span class="font-bold underline cursor-pointer text-emerald-400" onclick="runTerminalCommand('help')">help</span> to view available system directives or <span class="font-bold underline cursor-pointer text-emerald-400" onclick="navigateToRoot()">exit</span> to return.</div>
-            `;
-            body.appendChild(greeting);
-            
-            const logsContainer = document.createElement('div');
-            logsContainer.id = 'term-logs';
-            logsContainer.className = 'space-y-2';
-            body.appendChild(logsContainer);
-            
-            const inputContainer = document.createElement('div');
-            inputContainer.className = 'flex items-center mt-2 pt-2 border-t border-zinc-900';
-            inputContainer.innerHTML = `
-                <span class="text-emerald-500 font-semibold mr-2 select-none">root@helsing:~$</span>
-                <input id="term-input" type="text" autocomplete="off" spellcheck="false" class="flex-1 bg-transparent border-none outline-none font-mono text-xs md:text-sm text-white caret-emerald-400" autofocus />
-            `;
-            body.appendChild(inputContainer);
-            
-            termWrapper.appendChild(body);
-            appView.appendChild(termWrapper);
-            
-            const inputEl = document.getElementById('term-input');
-            if (inputEl) {
-                inputEl.focus();
-                termWrapper.onclick = () => inputEl.focus();
-                
-                let cmdHistory = [];
-                let historyIdx = -1;
-                
-                inputEl.addEventListener('keydown', (e) => {
-                    if (e.key === 'Enter') {
-                        const cmd = inputEl.value.trim();
-                        inputEl.value = '';
-                        if (cmd) {
-                            cmdHistory.push(cmd);
-                            historyIdx = cmdHistory.length;
-                            appendCommandLog(cmd, logsContainer, body);
-                        }
-                    } else if (e.key === 'ArrowUp') {
-                        e.preventDefault();
-                        if (cmdHistory.length > 0 && historyIdx > 0) {
-                            historyIdx--;
-                            inputEl.value = cmdHistory[historyIdx];
-                        }
-                    } else if (e.key === 'ArrowDown') {
-                        e.preventDefault();
-                        if (cmdHistory.length > 0 && historyIdx < cmdHistory.length - 1) {
-                            historyIdx++;
-                            inputEl.value = cmdHistory[historyIdx];
-                        } else if (historyIdx >= cmdHistory.length - 1) {
-                            historyIdx = cmdHistory.length;
-                            inputEl.value = '';
-                        }
-                    }
-                });
-            }
-        }
-
-        function appendCommandLog(cmd, logsContainer, body) {
-            const logItem = document.createElement('div');
-            logItem.className = 'space-y-1';
-            
-            const promptLine = document.createElement('div');
-            promptLine.className = 'flex items-center space-x-2';
-            promptLine.innerHTML = `<span class="text-emerald-500">root@helsing:~$</span> <span class="text-white font-medium">${escapeHtml(cmd)}</span>`;
-            logItem.appendChild(promptLine);
-            
-            const outputLine = document.createElement('div');
-            outputLine.className = `pl-4 text-zinc-300 whitespace-pre-wrap font-mono`;
-            
-            evaluateCommandAsync(cmd, outputLine, () => {
-                body.scrollTop = body.scrollHeight;
-            });
-            
-            logItem.appendChild(outputLine);
-            logsContainer.appendChild(logItem);
-            body.scrollTop = body.scrollHeight;
-        }
-
-        function clearTerminalLogs() {
-            const logsContainer = document.getElementById('term-logs');
-            if (logsContainer) logsContainer.innerHTML = '';
-        }
-
-        function runTerminalCommand(cmd) {
-            const inputEl = document.getElementById('term-input');
-            const logsContainer = document.getElementById('term-logs');
-            const body = document.getElementById('term-body');
-            if (inputEl && logsContainer && body) {
-                appendCommandLog(cmd, logsContainer, body);
-                inputEl.focus();
-            }
-        }
-
-        function escapeHtml(str) {
-            return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;");
-        }
-
-        function evaluateCommandAsync(rawCmd, outputEl, onComplete) {
-            const parts = rawCmd.trim().split(' ');
-            const cmd = parts[0].toLowerCase();
-            const arg = parts[1] ? parts[1].toLowerCase() : '';
-
-            switch(cmd) {
-                case 'help':
-                    outputEl.innerHTML = `Available system directives & API telemetry modules:
-  • help          Display this help manual
-  • ls            List directory contents
-  • cat [file]    Examine contents of a file (e.g. cat about.txt)
-  • whoami        Print active user credentials & role
-  • aum           Display fund assets under management
-  • liquidity     Fetch live central bank macro liquidity feed (FRED API)
-  • arbitrage     Compute inter-market precious metals arbitrage matrix
-  • freight       Query global dry bulk shipping & logistics telemetry
-  • mempool       Stream Bitcoin settlement layer & mempool pressure
-  • date          Display current UTC system timestamp
-  • matrix        Trigger visual simulation stream
-  • clear         Clear terminal output buffer
-  • exit / back   Return to primary interface`;
-                    if (onComplete) onComplete();
-                    break;
-                
-                case 'ls':
-                    outputEl.innerHTML = `total 42
-drwxr-xr-x  2 root root 4096 Aug 11 12:52 research/
--rw-r--r--  1 root root  512 Aug 11 12:52 about.txt
--rw-r--r--  1 root root  840 Aug 11 12:52 resume.md
--rw-r--r--  1 root root  320 Aug 11 12:52 aum_fund.cfg
--rw-r--r--  1 root root  180 Aug 11 12:52 contact.info`;
-                    if (onComplete) onComplete();
-                    break;
-
-                case 'cat':
-                    if (!arg) {
-                        outputEl.innerHTML = "cat: missing file operand. Try 'ls' to list files.";
-                    } else if (arg === 'about.txt') {
-                        outputEl.innerHTML = profileData.metaepistemologyDetail;
-                    } else if (arg === 'resume.md') {
-                        outputEl.innerHTML = profileData.resumeSummary;
-                    } else if (arg === 'aum_fund.cfg') {
-                        outputEl.innerHTML = `METAEPISTEMI FUND CONFIG:\n- Assets: BTC, AGQ, SLV\n- Status: Live Apex Tracking Enabled\n- Total Value: Dynamic multi-asset allocation.`;
-                    } else if (arg === 'contact.info') {
-                        outputEl.innerHTML = `Email: contacthelsing@gmail.com\nPGP Fingerprint: 0x9AF4E82B14C3E201`;
-                    } else {
-                        outputEl.innerHTML = `cat: ${arg}: No such file or directory`;
-                    }
-                    if (onComplete) onComplete();
-                    break;
-
-                case 'whoami':
-                    outputEl.innerHTML = `helsing@metaepisteme [Project Controls Specialist & Metaepistemologist]`;
-                    if (onComplete) onComplete();
-                    break;
-
-                case 'aum':
-                    navigateTo('aum');
-                    outputEl.innerHTML = `Redirecting to Assets Under Management (AUM) interface...`;
-                    if (onComplete) onComplete();
-                    break;
-
-                case 'liquidity':
-                    outputEl.innerHTML = `[CONNECTING TO FRED API & ECB WAREHOUSE...]`;
-                    if (onComplete) onComplete();
-                    fetch('https://api.stlouisfed.org/fred/series/observations?series_id=WALCL&api_key=abcdef123456&file_type=json').catch(() => {}).finally(() => {
-                        setTimeout(() => {
-                            outputEl.innerHTML = `=== GLOBAL LIQUIDITY & MONETARY VELOCITY (FRED / ECB) ===
-• Federal Reserve Total Assets (WALCL): $7.142 Trillion (-0.42% MoM)
-• Reverse Repo Facility (RRPONTSYD): $342.8 Billion (Drain active)
-• Treasury General Account (TGA): $789.4 Billion
-• Global M2 Money Supply Growth (YoY): +4.85%
-• Net Systemic Liquidity Pulse: EXPANSIONARY (+128.4B 30d delta)`;
-                            if (onComplete) onComplete();
-                        }, 600);
-                    });
-                    break;
-
-                case 'arbitrage':
-                    outputEl.innerHTML = `[COMPUTING INTER-MARKET SPREADS & DXY CORRELATION...]`;
-                    if (onComplete) onComplete();
-                    setTimeout(() => {
-                        const goldPrice = 2384.50;
-                        const silverPrice = window.slvLivePrice ? window.slvLivePrice * 30 : 31.20;
-                        const ratio = (goldPrice / silverPrice).toFixed(2);
-                        outputEl.innerHTML = `=== INTER-MARKET SPREAD & ARBITRAGE MATRIX ===
-• Gold Spot: $${goldPrice.toLocaleString()} / oz
-• Silver Spot: $${silverPrice.toLocaleString()} / oz
-• Gold/Silver Ratio (GSR): ${ratio}x
-• US Dollar Index (DXY): 104.28 (-0.14%)
-• Sovereign 10Y Real Yield (DFII10): +1.84%`;
-                        if (onComplete) onComplete();
-                    }, 600);
-                    break;
-
-                case 'freight':
-                    outputEl.innerHTML = `[FETCHING BALTIC EXCHANGE & AIS MARITIME TELEMETRY...]`;
-                    if (onComplete) onComplete();
-                    setTimeout(() => {
-                        outputEl.innerHTML = `=== PHYSICAL LOGISTICS & DRY BULK FREIGHT TELEMETRY ===
-• Baltic Dry Index (BDI): 1,942 pts (+18 pts 24h)
-• Capesize Rate Average: $24,850 / day
-• Panamax Transoceanic Flow Index: 98.4 (Normal congestion)
-• Panama Canal Draft Constraint: -1.2m (Operational mitigation active)`;
-                        if (onComplete) onComplete();
-                    }, 600);
-                    break;
-
-                case 'mempool':
-                    outputEl.innerHTML = `[QUERYING BLOCKSTREAM ESPLORA REST API...]`;
-                    if (onComplete) onComplete();
-                    fetch('https://blockstream.info/api/mempool').then(r => r.json()).then(data => {
-                        fetch('https://blockstream.info/api/fee-estimates').then(r2 => r2.json()).then(fees => {
-                            outputEl.innerHTML = `=== SETTLEMENT LAYER & MEMPOOL PRESSURE MONITOR ===
-• Unconfirmed Transactions: ${data.count.toLocaleString()} txs
-• Mempool Size: ${(data.vsize / 1000000).toFixed(2)} vMB
-• Recommended Fees: Low ${fees['6'] || 12} | Med ${fees['3'] || 18} | High ${fees['1'] || 24} sat/vB
-• Node Consensus Status: Synchronized (100% Verified)`;
-                            if (onComplete) onComplete();
-                        }).catch(() => fallbackMempool(outputEl, data, onComplete));
-                    }).catch(() => fallbackMempool(outputEl, null, onComplete));
-                    break;
-
-                case 'date':
-                    outputEl.innerHTML = new Date().toUTCString();
-                    if (onComplete) onComplete();
-                    break;
-
-                case 'matrix':
-                    outputEl.innerHTML = `[STREAMING KERNEL STREAM ACTIVATED]
-01001101 01000101 01010100 01000001
-01000101 01010000 01001001 01010011
-01010100 01000101 01001101 01001001
-System integrity: 100% secure. Zero telemetry detected.`;
-                    if (onComplete) onComplete();
-                    break;
-
-                case 'clear':
-                    setTimeout(clearTerminalLogs, 10);
-                    outputEl.innerHTML = '';
-                    if (onComplete) onComplete();
-                    break;
-
-                case 'exit':
-                case 'back':
-                    navigateToRoot();
-                    outputEl.innerHTML = `Terminating session... returning to root interface.`;
-                    if (onComplete) onComplete();
-                    break;
-
-                default:
-                    outputEl.innerHTML = `zsh: command not found: ${cmd}. Type 'help' for available directives.`;
-                    if (onComplete) onComplete();
-                    break;
-            }
-        }
-
-        function fallbackMempool(outputEl, data, onComplete) {
-            outputEl.innerHTML = `=== SETTLEMENT LAYER & MEMPOOL PRESSURE MONITOR (CACHED) ===
-• Unconfirmed Transactions: ${data ? data.count.toLocaleString() : '14,820'} txs
-• Mempool Size: ${data ? (data.vsize / 1000000).toFixed(2) : '24.50'} vMB
-• Recommended Fees: Low 14 | Med 22 | High 31 sat/vB
-• Node Consensus Status: Synchronized`;
-            if (onComplete) onComplete();
         }
 
         window.onload = function() {
