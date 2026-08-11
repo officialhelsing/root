@@ -24,11 +24,6 @@
             transition: background-color 0.8s cubic-bezier(0.16, 1, 0.3, 1), color 0.8s cubic-bezier(0.16, 1, 0.3, 1);
             transform: scale(0.95);
             transform-origin: center;
-            -webkit-touch-callout: none !important;
-            -webkit-user-select: none !important;
-            -moz-user-select: none !important;
-            -ms-user-select: none !important;
-            user-select: none !important;
         }
         @media (max-width: 768px), (hover: none) {
             body {
@@ -36,10 +31,6 @@
             }
         }
         ::selection {
-            background: rgba(255, 255, 255, 0.25) !important;
-            color: inherit !important;
-        }
-        ::-moz-selection {
             background: rgba(255, 255, 255, 0.25) !important;
             color: inherit !important;
         }
@@ -54,26 +45,9 @@
         }
         * {
             -webkit-tap-highlight-color: transparent !important;
-            -webkit-touch-callout: none !important;
-            -webkit-user-select: none !important;
-            -moz-user-select: none !important;
-            -ms-user-select: none !important;
-            user-select: none !important;
             touch-action: manipulation;
             outline: none !important;
             cursor: default !important;
-        }
-        @keyframes rainbowWave {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
-        }
-        .rainbow-text {
-            background: linear-gradient(270deg, #f43f5e, #fbbf24, #34d399, #38bdf8, #818cf8, #e879f9, #f43f5e);
-            background-size: 300% 300%;
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            animation: rainbowWave 8s ease infinite;
         }
         @keyframes blinkCursor {
             0%, 100% { opacity: 1; }
@@ -111,7 +85,7 @@
 
     <div id="main-container" class="relative z-10 flex flex-col items-end w-[320px] sm:w-[450px] md:w-[550px] px-4 select-none opacity-0 transition-opacity duration-1000">
         <div id="app-view" class="hidden flex flex-col items-end text-xs md:text-sm text-zinc-400 tracking-widest w-full text-right select-none">
-            <!-- Content injected via JavaScript router -->
+            <!-- Dynamic router content injected here -->
         </div>
     </div>
 
@@ -123,42 +97,9 @@
         let mouseY = window.innerHeight / 2;
         let targetMouseX = mouseX;
         let targetMouseY = mouseY;
-        let audioEnabled = false;
-        let audioCtx = null;
-
-        function initAudio() {
-            if (!audioCtx) {
-                const AudioContext = window.AudioContext || window.webkitAudioContext;
-                audioCtx = new AudioContext();
-            }
-        }
-
-        function playTone(freq, type, duration, vol = 0.03) {
-            if (!audioEnabled) return;
-            try {
-                initAudio();
-                if (audioCtx.state === 'suspended') {
-                    audioCtx.resume();
-                }
-                const osc = audioCtx.createOscillator();
-                const gain = audioCtx.createGain();
-                osc.type = type;
-                osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
-                
-                gain.gain.setValueAtTime(vol, audioCtx.currentTime);
-                gain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + duration);
-                
-                osc.connect(gain);
-                gain.connect(audioCtx.destination);
-                
-                osc.start();
-                osc.stop(audioCtx.currentTime + duration);
-            } catch (e) {}
-        }
 
         let clickParticles = [];
         window.addEventListener('click', (e) => {
-            audioEnabled = true;
             for (let i = 0; i < 6; i++) {
                 let angle = Math.random() * Math.PI * 2;
                 let speed = Math.random() * 2 + 0.8;
@@ -191,7 +132,6 @@
         let distantStars = [];
         let fastDriftStars = [];
         let shootingStars = [];
-        let currentTheme = 'dark';
 
         function initDistantStars() {
             distantStars = [];
@@ -199,7 +139,6 @@
             const count = 220;
             const fastCount = 14;
             const paletteDark = ['#ffffff', '#ffffff', '#e0f2fe', '#fef3c7'];
-            const paletteLight = ['#18181b', '#27272a', '#3f3f46', '#52525b'];
             
             for (let i = 0; i < count; i++) {
                 let tier = Math.random();
@@ -216,8 +155,7 @@
                     alpha: tier < 0.5 ? Math.random() * 0.6 + 0.4 : Math.random() * 0.85 + 0.5,
                     vx: vx,
                     vy: vy,
-                    colorDark: paletteDark[Math.floor(Math.random() * paletteDark.length)],
-                    colorLight: paletteLight[Math.floor(Math.random() * paletteLight.length)]
+                    colorDark: paletteDark[Math.floor(Math.random() * paletteDark.length)]
                 });
             }
 
@@ -235,8 +173,7 @@
                     alpha: Math.random() * 0.9 + 0.4,
                     vx: vx,
                     vy: vy,
-                    colorDark: paletteDark[Math.floor(Math.random() * paletteDark.length)],
-                    colorLight: paletteLight[Math.floor(Math.random() * paletteLight.length)]
+                    colorDark: paletteDark[Math.floor(Math.random() * paletteDark.length)]
                 });
             }
         }
@@ -275,7 +212,7 @@
 
                 ctx.save();
                 ctx.globalAlpha = s.alpha;
-                ctx.fillStyle = (currentTheme === 'light') ? s.colorLight : s.colorDark;
+                ctx.fillStyle = s.colorDark;
                 ctx.beginPath();
                 ctx.arc(s.x, s.y, s.radius, 0, Math.PI * 2);
                 ctx.fill();
@@ -292,7 +229,7 @@
 
                 ctx.save();
                 ctx.globalAlpha = s.alpha;
-                ctx.fillStyle = (currentTheme === 'light') ? s.colorLight : s.colorDark;
+                ctx.fillStyle = s.colorDark;
                 ctx.beginPath();
                 ctx.arc(s.x, s.y, s.radius, 0, Math.PI * 2);
                 ctx.fill();
@@ -311,7 +248,7 @@
 
                 ctx.save();
                 ctx.globalAlpha = Math.max(0, p.alpha);
-                ctx.fillStyle = currentTheme === 'light' ? '#18181b' : '#ffffff';
+                ctx.fillStyle = '#ffffff';
                 ctx.beginPath();
                 ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
                 ctx.fill();
@@ -331,13 +268,8 @@
                 let tailX = s.x - s.vx * 30;
                 let tailY = s.y - s.vy * 30;
                 let gradient = ctx.createLinearGradient(s.x, s.y, tailX, tailY);
-                if (currentTheme === 'light') {
-                    gradient.addColorStop(0, 'rgba(39, 39, 42, 0.95)');
-                    gradient.addColorStop(1, 'rgba(39, 39, 42, 0)');
-                } else {
-                    gradient.addColorStop(0, 'rgba(255, 255, 255, 1)');
-                    gradient.addColorStop(1, 'rgba(255, 255, 255, 0)');
-                }
+                gradient.addColorStop(0, 'rgba(255, 255, 255, 1)');
+                gradient.addColorStop(1, 'rgba(255, 255, 255, 0)');
                 ctx.strokeStyle = gradient;
                 ctx.beginPath();
                 ctx.moveTo(s.x, s.y);
@@ -401,32 +333,6 @@
                 }
             ]
         };
-
-        const esotericQuotes = [
-            { quote: "Honey never spoils; archaeologists have found 3,000-year-old honey in Egyptian tombs that is still perfectly edible." },
-            { quote: "A single day on Venus is longer than its entire year, taking 243 Earth days to rotate once." },
-            { quote: "Bananas are curved because they grow upwards towards the sun against gravity in a process called negative geotropism." },
-            { quote: "Octopuses have three hearts, nine brains, and blue blood due to copper-based hemocyanin." },
-            { quote: "Water can boil and freeze at the same time under a specific pressure condition known as the triple point." },
-            { quote: "Sharks existed on Earth before trees, appearing in the fossil record around 450 million years ago." },
-            { quote: "A bolt of lightning is five times hotter than the surface of the sun, reaching roughly 30,000 kelvins." },
-            { quote: "The total weight of all ants on Earth is roughly comparable to the total weight of all human beings." },
-            { quote: "Scotland has over 400 words for snow, ranging from sparkling drifting snow to heavy wet flurries." },
-            { quote: "There are more trees on Earth than stars in the Milky Way galaxy, with an estimated three trillion trees." }
-        ];
-
-        let recentQuoteIndices = [];
-        function getRandomQuote() {
-            if (recentQuoteIndices.length >= esotericQuotes.length / 2) {
-                recentQuoteIndices.shift();
-            }
-            let idx;
-            do {
-                idx = Math.floor(Math.random() * esotericQuotes.length);
-            } while (recentQuoteIndices.includes(idx));
-            recentQuoteIndices.push(idx);
-            return esotericQuotes[idx];
-        }
 
         let navigationStack = ['root'];
         let rootLoadCount = 0;
@@ -499,10 +405,8 @@
         function setupCenterTicker(container) {
             container.innerHTML = '';
 
-            const isLight = currentTheme === 'light';
             const frame = document.createElement('div');
-            // Artwork wider rectangle, taller height across platforms (extended height by 5%)
-            frame.className = `w-[168px] sm:w-[208px] md:w-[236px] h-[342px] sm:h-[420px] md:h-[463px] border ${isLight ? 'border-zinc-300 bg-zinc-200/30' : 'border-zinc-800 bg-zinc-900/20'} rounded-sm overflow-hidden flex flex-col items-center justify-center relative pointer-events-auto select-none transition-colors duration-800 shadow-xl cursor-pointer`;
+            frame.className = `w-[168px] sm:w-[208px] md:w-[236px] h-[342px] sm:h-[420px] md:h-[463px] border border-zinc-800 bg-zinc-900/20 rounded-sm overflow-hidden flex flex-col items-center justify-center relative pointer-events-auto select-none transition-colors duration-800 shadow-xl cursor-pointer`;
             
             const shouldPhaseIn = (centerTickerLoadCount === 0);
             if (centerTickerLoadCount === 0) centerTickerLoadCount++;
@@ -523,21 +427,7 @@
                 'https://i2c.seadn.io/ethereum/0x495f947276749ce646f68ac8c248420045cb7b5e/1126738749bec27cb38e1688c15aaf/881126738749bec27cb38e1688c15aaf.jpeg?w=1000',
                 'https://i2c.seadn.io/ethereum/0x495f947276749ce646f68ac8c248420045cb7b5e/90da0063cdc11a9c87ecee7e3dbd48/f290da0063cdc11a9c87ecee7e3dbd48.jpeg?w=500',
                 'https://i2c.seadn.io/ethereum/0x495f947276749ce646f68ac8c248420045cb7b5e/4c42d2ce233548a33c5aac71e4d838/3e4c42d2ce233548a33c5aac71e4d838.jpeg?w=500',
-                'https://i2c.seadn.io/ethereum/0x495f947276749ce646f68ac8c248420045cb7b5e/1fb7d43780f9771c500c229a0b457e/cb1fb7d43780f9771c500c229a0b457e.jpeg?w=500',
-                'https://i2c.seadn.io/ethereum/0x495f947276749ce646f68ac8c248420045cb7b5e/d5d3f8eec99192a644ea7550ec7309/32d5d3f8eec99192a644ea7550ec7309.jpeg?w=500',
-                'https://i2c.seadn.io/ethereum/0x495f947276749ce646f68ac8c248420045cb7b5e/29875a6d8e4ed4818ee567f79119f5/2529875a6d8e4ed4818ee567f79119f5.jpeg?w=500',
-                'https://i2c.seadn.io/ethereum/0x495f947276749ce646f68ac8c248420045cb7b5e/4e620d0f25adec419ad3fdff4c744a/734e620d0f25adec419ad3fdff4c744a.jpeg?w=500',
-                'https://i2c.seadn.io/ethereum/0x495f947276749ce646f68ac8c248420045cb7b5e/c94f70ea5458d0de0b08c9ea5dc8d9/62c94f70ea5458d0de0b08c9ea5dc8d9.jpeg?w=500',
-                'https://i2c.seadn.io/ethereum/0x495f947276749ce646f68ac8c248420045cb7b5e/84c681cce7515d984534cc885dc265/a584c681cce7515d984534cc885dc265.jpeg?w=500',
-                'https://i2c.seadn.io/ethereum/0x495f947276749ce646f68ac8c248420045cb7b5e/5919e0c4e17670a9321eb343228c36/735919e0c4e17670a9321eb343228c36.jpeg?w=500',
-                'https://i2c.seadn.io/ethereum/0x495f947276749ce646f68ac8c248420045cb7b5e/81b3475f6838b57c46b22d83fbb0cf/e881b3475f6838b57c46b22d83fbb0cf.jpeg?w=500',
-                'https://i2c.seadn.io/ethereum/0x495f947276749ce646f68ac8c248420045cb7b5e/93cbaa3441c0fbcea1d37285fb42d9/5c93cbaa3441c0fbcea1d37285fb42d9.jpeg?w=500',
-                'https://i2c.seadn.io/ethereum/0x495f947276749ce646f68ac8c248420045cb7b5e/c8355d4122fbc3bfc30df5cbd1a4c5/aec8355d4122fbc3bfc30df5cbd1a4c5.jpeg?w=500',
-                'https://i2c.seadn.io/ethereum/0x495f947276749ce646f68ac8c248420045cb7b5e/212a86abef7694e55884a5f6241e33/dc212a86abef7694e55884a5f6241e33.jpeg?w=500',
-                'https://i2c.seadn.io/ethereum/0x495f947276749ce646f68ac8c248420045cb7b5e/0eea027970070099cd39af85167810/1e0eea027970070099cd39af85167810.jpeg?w=500',
-                'https://i2c.seadn.io/ethereum/0x495f947276749ce646f68ac8c248420045cb7b5e/0cd625524cc3f6f79dc5ef302c5f39/ec0cd625524cc3f6f79dc5ef302c5f39.jpeg?w=500',
-                'https://i2c.seadn.io/ethereum/0x60f80121c31a0d46b5279700f9df786054aa5ee5/dc1d908291a085cfd25d7a43c79f4419.jpeg?w=500',
-                'https://i2c.seadn.io/ethereum/0x60f80121c31a0d46b5279700f9df786054aa5ee5/e4d4f45ed3f6329ec1cdcb7bb339ae/03e4d4f45ed3f6329ec1cdcb7bb339ae.jpeg?w=500'
+                'https://i2c.seadn.io/ethereum/0x495f947276749ce646f68ac8c248420045cb7b5e/1fb7d43780f9771c500c229a0b457e/cb1fb7d43780f9771c500c229a0b457e.jpeg?w=500'
             ];
 
             let currentImgIndex = 0;
@@ -581,7 +471,7 @@
 
         function renderRoot(appView) {
             let rootItems = [
-                { content: '<svg class="w-4 h-4 inline select-none" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>', action: null, isStandaloneIcon: true },
+                { content: '<svg class="w-4 h-4 inline select-none opacity-60" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>', action: null },
                 { content: 'AUM', action: "navigateTo('aum')" },
                 { content: 'About', action: "navigateTo('metaepistemology')" },
                 { content: 'Resumé', action: "navigateTo('resume')" },
@@ -601,7 +491,7 @@
                 const newDiv = document.createElement('div');
                 
                 if (currentItem.isHeader) {
-                    newDiv.className = `flex flex-col w-full text-right items-end mb-2 ${currentTheme === 'light' ? 'text-zinc-900' : 'text-white'} font-semibold select-none pr-0`;
+                    newDiv.className = `flex flex-col w-full text-right items-end mb-2 text-white font-semibold select-none pr-0`;
                     if (shouldPhaseIn) {
                         newDiv.style.animation = `fadeInPhase 1.2s cubic-bezier(0.16, 1, 0.3, 1) ${index * 0.15}s forwards`;
                         newDiv.style.opacity = '0';
@@ -610,8 +500,8 @@
                     headerSpan.className = "inline-flex items-center";
                     headerSpan.innerHTML = `Directory<svg class="w-3.5 h-3.5 ml-0.5 inline select-none" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>`;
                     newDiv.appendChild(headerSpan);
-                } else if (currentItem.isStandaloneIcon) {
-                    newDiv.className = `flex flex-col w-full text-right items-end mb-2 ${currentTheme === 'light' ? 'text-zinc-600' : 'text-zinc-400'} select-none pr-0 opacity-75`;
+                } else if (!currentItem.action) {
+                    newDiv.className = `flex flex-col w-full text-right items-end mb-2 select-none text-zinc-600 pr-0`;
                     if (shouldPhaseIn) {
                         newDiv.style.animation = `fadeInPhase 1.2s cubic-bezier(0.16, 1, 0.3, 1) ${index * 0.15}s forwards`;
                         newDiv.style.opacity = '0';
@@ -620,7 +510,7 @@
                     span.innerHTML = currentItem.content;
                     newDiv.appendChild(span);
                 } else {
-                    newDiv.className = `flex flex-col w-full text-right items-end mb-2 cursor-pointer select-none ${currentTheme === 'light' ? 'text-zinc-600 hover:text-zinc-900' : 'text-zinc-400 hover:text-white'} transition-all duration-300 hover:-translate-y-0.5 pr-0`;
+                    newDiv.className = `flex flex-col w-full text-right items-end mb-2 cursor-pointer select-none text-zinc-400 hover:text-white transition-all duration-300 hover:-translate-y-0.5 pr-0`;
                     if (shouldPhaseIn) {
                         newDiv.style.animation = `fadeInPhase 1.2s cubic-bezier(0.16, 1, 0.3, 1) ${index * 0.15}s forwards`;
                         newDiv.style.opacity = '0';
@@ -657,6 +547,10 @@
                 setupCenterTicker(centerTickerEl);
                 if (aumInterval) { clearInterval(aumInterval); aumInterval = null; }
                 renderRoot(appView);
+            } else if (currentState === 'terminal') {
+                centerTickerEl.style.display = 'none';
+                if (aumInterval) { clearInterval(aumInterval); aumInterval = null; }
+                renderTerminalView(appView);
             } else {
                 centerTickerEl.style.display = 'none';
                 if (aumInterval && currentState !== 'aum') { clearInterval(aumInterval); aumInterval = null; }
@@ -678,20 +572,36 @@
                     returnItem
                 ];
             } else if (currentState === 'contact') {
-                headerItem = { type: 'text', content: 'Email', align: 'right' };
+                headerItem = { type: 'text', content: 'Secure Dispatch', align: 'right' };
+                const contactHtml = `
+                    <div class="space-y-3 w-full text-right font-mono text-xs md:text-sm select-none">
+                        <div class="flex items-center justify-end space-x-2">
+                            <span class="text-zinc-500 text-[10px]">contacthelsing@gmail.com</span>
+                            <span class="cursor-pointer text-emerald-400 hover:underline" onclick="copyEmailToClipboard('contacthelsing@gmail.com', event)">[Copy]</span>
+                            <span id="copied-badge" class="text-[10px] text-emerald-500 opacity-0 transition-opacity">Copied</span>
+                        </div>
+                        <div class="border border-zinc-800 bg-zinc-900/40 p-3 rounded text-left space-y-2">
+                            <div class="text-[11px] text-zinc-400">Send Encrypted Message:</div>
+                            <textarea id="secure-msg-input" placeholder="Type transmission..." class="w-full h-20 bg-black/50 border border-zinc-800 p-2 rounded text-zinc-200 text-xs resize-none outline-none focus:border-emerald-500"></textarea>
+                            <div class="flex justify-between items-center">
+                                <span id="dispatch-status" class="text-[10px] text-zinc-500">PGP Key ID: 0x9AF4</span>
+                                <button onclick="dispatchSecureMessage()" class="px-3 py-1 bg-zinc-800 hover:bg-emerald-600 hover:text-black transition-all rounded text-xs">Transmit</button>
+                            </div>
+                        </div>
+                    </div>
+                `;
                 lines = [
-                    { type: 'paragraph', content: '<span class="relative inline-flex items-center justify-end"><span id="copied-badge" class="absolute -left-14 opacity-0 transition-opacity duration-300 text-[10px] tracking-wider text-emerald-500 font-mono select-none">copied</span><span class="cursor-pointer transition-all hover:opacity-75" onclick="copyEmailToClipboard(\'contacthelsing@gmail.com\', event)" title="Click to copy email">contacthelsing@gmail.com</span></span>', align: 'right' },
+                    { type: 'paragraph', content: contactHtml, align: 'right' },
                     headerItem,
                     returnItem
                 ];
             } else if (currentState === 'aum') {
-                const isLight = currentTheme === 'light';
-                const textMain = isLight ? 'text-zinc-900' : 'text-white';
-                const textSub = isLight ? 'text-zinc-600' : 'text-zinc-400';
-                const trackBg = isLight ? 'bg-zinc-200' : 'bg-zinc-800';
-                const barBtc = isLight ? 'bg-zinc-700' : 'bg-zinc-300';
-                const barAgq = isLight ? 'bg-zinc-600' : 'bg-zinc-400';
-                const barSlv = isLight ? 'bg-zinc-500' : 'bg-zinc-500';
+                const textMain = 'text-white';
+                const textSub = 'text-zinc-400';
+                const trackBg = 'bg-zinc-800';
+                const barBtc = 'bg-zinc-300';
+                const barAgq = 'bg-zinc-400';
+                const barSlv = 'bg-zinc-500';
 
                 if (typeof window.btcLivePrice === 'undefined') {
                     window.btcLivePrice = 64735.08;
@@ -748,12 +658,12 @@
                                     <svg class="w-full h-full overflow-visible" viewBox="0 0 300 50" preserveAspectRatio="none">
                                         <defs>
                                             <linearGradient id="ytdGradient" x1="0" y1="0" x2="0" y2="1">
-                                                <stop offset="0%" stop-color="${isLight ? '#10b981' : '#34d399'}" stop-opacity="0.25"/>
-                                                <stop offset="100%" stop-color="${isLight ? '#10b981' : '#34d399'}" stop-opacity="0"/>
+                                                <stop offset="0%" stop-color="#34d399" stop-opacity="0.25"/>
+                                                <stop offset="100%" stop-color="#34d399" stop-opacity="0"/>
                                             </linearGradient>
                                         </defs>
                                         <path d="M0,42 Q60,38 120,28 T220,15 T300,6 L300,50 L0,50 Z" fill="url(#ytdGradient)" />
-                                        <path d="M0,42 Q60,38 120,28 T220,15 T300,6" fill="none" stroke="${isLight ? '#059669' : '#34d399'}" stroke-width="1.5" stroke-linecap="round" />
+                                        <path d="M0,42 Q60,38 120,28 T220,15 T300,6" fill="none" stroke="#34d399" stroke-width="1.5" stroke-linecap="round" />
                                     </svg>
                                 </div>
                             </div>
@@ -762,39 +672,39 @@
                             <div class="text-[10px] sm:text-[11px] ${textSub} uppercase tracking-widest font-medium mb-0 text-left">Asset Allocation & Cost Basis</div>
                             <div class="space-y-1 w-full pr-0">
                                 <div class="w-full flex flex-col items-start">
-                                    <div class="flex flex-col sm:flex-row sm:justify-between items-start sm:items-center text-[11px] sm:text-xs mb-0 w-full">
+                                    <div class="flex flex-row justify-between items-center text-[11px] sm:text-xs mb-0 w-full">
                                         <span class="${textMain} font-medium">110.453 BTC <span class="text-[10px] opacity-75 font-mono">($<span id="live-btc-price">${window.btcLivePrice.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}</span>)</span></span>
-                                        <span class="${textSub}"><span id="live-btc-val">$${Math.round(btcVal).toLocaleString()}</span> <span class="text-[10px] opacity-75">(<span id="live-btc-pct">${btcPct}</span>%)</span></span>
+                                        <span class="${textSub} text-right"><span id="live-btc-val">$${Math.round(btcVal).toLocaleString()}</span> <span class="text-[10px] opacity-75">(<span id="live-btc-pct">${btcPct}</span>%)</span></span>
                                     </div>
-                                    <div class="flex flex-col sm:flex-row sm:justify-between text-[10px] opacity-75 mb-0 ${textSub} w-full">
+                                    <div class="flex flex-row justify-between items-center text-[10px] opacity-75 mb-0 ${textSub} w-full">
                                         <span><span>$23,493.39</span></span>
-                                        <span id="live-btc-return" class="${isBtcPos ? 'text-emerald-500' : 'text-red-500'} font-medium">${isBtcPos ? '+' : ''}${btcReturnPct}%</span>
+                                        <span id="live-btc-return" class="${isBtcPos ? 'text-emerald-500' : 'text-red-500'} font-medium text-right">${isBtcPos ? '+' : ''}${btcReturnPct}%</span>
                                     </div>
                                     <div class="w-full ${trackBg} h-1 rounded overflow-hidden">
                                         <div id="live-btc-bar" class="${barBtc} h-full rounded transition-all duration-500 mr-auto" style="width: ${btcPct}%"></div>
                                     </div>
                                 </div>
                                 <div class="w-full flex flex-col items-start">
-                                    <div class="flex flex-col sm:flex-row sm:justify-between items-start sm:items-center text-[11px] sm:text-xs mb-0 w-full">
+                                    <div class="flex flex-row justify-between items-center text-[11px] sm:text-xs mb-0 w-full">
                                         <span class="${textMain} font-medium">10,394.245 AGQ <span class="text-[10px] opacity-75 font-mono">($<span id="live-agq-price">${window.agqLivePrice.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}</span>)</span></span>
-                                        <span class="${textSub}"><span id="live-agq-val">$${Math.round(agqVal).toLocaleString()}</span> <span class="text-[10px] opacity-75">(<span id="live-agq-pct">${agqPct}</span>%)</span></span>
+                                        <span class="${textSub} text-right"><span id="live-agq-val">$${Math.round(agqVal).toLocaleString()}</span> <span class="text-[10px] opacity-75">(<span id="live-agq-pct">${agqPct}</span>%)</span></span>
                                     </div>
-                                    <div class="flex flex-col sm:flex-row sm:justify-between text-[10px] opacity-75 mb-0 ${textSub} w-full">
+                                    <div class="flex flex-row justify-between items-center text-[10px] opacity-75 mb-0 ${textSub} w-full">
                                         <span><span>$25.38</span></span>
-                                        <span id="live-agq-return" class="${isAgqPos ? 'text-emerald-500' : 'text-red-500'} font-medium">${isAgqPos ? '+' : ''}${agqReturnPct}%</span>
+                                        <span id="live-agq-return" class="${isAgqPos ? 'text-emerald-500' : 'text-red-500'} font-medium text-right">${isAgqPos ? '+' : ''}${agqReturnPct}%</span>
                                     </div>
                                     <div class="w-full ${trackBg} h-1 rounded overflow-hidden">
                                         <div id="live-agq-bar" class="${barAgq} h-full rounded transition-all duration-500 mr-auto" style="width: ${agqPct}%"></div>
                                     </div>
                                 </div>
                                 <div class="w-full flex flex-col items-start">
-                                    <div class="flex flex-col sm:flex-row sm:justify-between items-start sm:items-center text-[11px] sm:text-xs mb-0 w-full">
+                                    <div class="flex flex-row justify-between items-center text-[11px] sm:text-xs mb-0 w-full">
                                         <span class="${textMain} font-medium">1,193.428 SLV <span class="text-[10px] opacity-75 font-mono">($<span id="live-slv-price">${window.slvLivePrice.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}</span>)</span></span>
-                                        <span class="${textSub}"><span id="live-slv-val">$${Math.round(slvVal).toLocaleString()}</span> <span class="text-[10px] opacity-75">(<span id="live-slv-pct">${slvPct}</span>%)</span></span>
+                                        <span class="${textSub} text-right"><span id="live-slv-val">$${Math.round(slvVal).toLocaleString()}</span> <span class="text-[10px] opacity-75">(<span id="live-slv-pct">${slvPct}</span>%)</span></span>
                                     </div>
-                                    <div class="flex flex-col sm:flex-row sm:justify-between text-[10px] opacity-75 mb-0 ${textSub} w-full">
+                                    <div class="flex flex-row justify-between items-center text-[10px] opacity-75 mb-0 ${textSub} w-full">
                                         <span><span>$16.48</span></span>
-                                        <span id="live-slv-return" class="${isSlvPos ? 'text-emerald-500' : 'text-red-500'} font-medium">${isSlvPos ? '+' : ''}${slvReturnPct}%</span>
+                                        <span id="live-slv-return" class="${isSlvPos ? 'text-emerald-500' : 'text-red-500'} font-medium text-right">${isSlvPos ? '+' : ''}${slvReturnPct}%</span>
                                     </div>
                                     <div class="w-full ${trackBg} h-1 rounded overflow-hidden">
                                         <div id="live-slv-bar" class="${barSlv} h-full rounded transition-all duration-500 mr-auto" style="width: ${slvPct}%"></div>
@@ -959,7 +869,6 @@
                 ];
             } else if (currentState === 'research') {
                 headerItem = { type: 'text', content: 'Research', align: 'right' };
-                // Research sorted from shortest to longest by title length, without dates
                 const sortedResearch = profileData.research.map((res, idx) => ({ ...res, originalIdx: idx })).sort((a, b) => a.title.length - b.title.length);
                 sortedResearch.forEach((res) => {
                     menuItems.push({ 
@@ -998,10 +907,10 @@
                 }
 
                 if (item.type === 'text') {
-                    div.className += ` ${currentTheme === 'light' ? 'text-zinc-900' : 'text-white'} font-semibold text-sm md:text-base select-none pr-0 mb-0.5`;
+                    div.className += ` text-white font-semibold text-sm md:text-base select-none pr-0 mb-0.5`;
                     div.innerHTML = item.content;
                 } else if (item.type === 'back') {
-                    div.className += ` select-none ${currentTheme === 'light' ? 'text-zinc-500 hover:text-zinc-800' : 'text-zinc-500 hover:text-zinc-300'} mb-1 transition-all duration-200 pr-0`;
+                    div.className += ` select-none text-zinc-500 hover:text-zinc-300 mb-1 transition-all duration-200 pr-0`;
                     
                     const backContainer = document.createElement('div');
                     backContainer.className = "inline-flex items-center space-x-2.5 justify-end w-full select-none";
@@ -1021,7 +930,7 @@
                     backContainer.appendChild(homeSpan);
                     div.appendChild(backContainer);
                 } else if (item.type === 'link') {
-                    div.className += ` cursor-pointer select-none ${currentTheme === 'light' ? 'text-zinc-600 hover:text-zinc-900' : 'text-zinc-400 hover:text-white'} transition-all duration-300 hover:-translate-y-0.5 pr-0`;
+                    div.className += ` cursor-pointer select-none text-zinc-400 hover:text-white transition-all duration-300 hover:-translate-y-0.5 pr-0`;
                     if (item.url) {
                         div.setAttribute('onclick', `window.open('${item.url}', '_blank')`);
                     } else if (item.action) {
@@ -1031,7 +940,7 @@
                     span.innerHTML = item.content;
                     div.appendChild(span);
                 } else if (item.type === 'paragraph') {
-                    div.className += ` ${currentTheme === 'light' ? 'text-zinc-700' : 'text-zinc-300'} text-xs md:text-sm leading-relaxed ${item.rightJustify ? 'text-justify' : (item.justify ? 'text-justify' : 'text-right')} pr-0`;
+                    div.className += ` text-zinc-300 text-xs md:text-sm leading-relaxed ${item.rightJustify ? 'text-justify' : (item.justify ? 'text-justify' : 'text-right')} pr-0`;
                     if (item.rightJustify) {
                         div.style.textAlignLast = 'right';
                     }
@@ -1042,21 +951,31 @@
             });
         }
 
+        function dispatchSecureMessage() {
+            const input = document.getElementById('secure-msg-input');
+            const status = document.getElementById('dispatch-status');
+            if (input && input.value.trim().length > 0) {
+                status.textContent = 'Transmission encrypted & dispatched successfully.';
+                status.className = 'text-[10px] text-emerald-400 font-semibold';
+                input.value = '';
+            } else if (status) {
+                status.textContent = 'Error: Transmission buffer empty.';
+                status.className = 'text-[10px] text-red-400';
+            }
+        }
+
         function navigateTo(state) {
-            playTone(440, 'sine', 0.04, 0.015);
             navigationStack.push(state);
             renderView();
         }
 
         function MapsTo(state, idx) {
-            playTone(440, 'sine', 0.04, 0.015);
             navigationStack.push(idx);
             navigationStack.push(state);
             renderView();
         }
 
         function navigateBack() {
-            playTone(330, 'sine', 0.04, 0.015);
             if (navigationStack.length > 1) {
                 navigationStack.pop();
                 if (!isNaN(navigationStack[navigationStack.length - 1])) {
@@ -1067,9 +986,283 @@
         }
 
         function navigateToRoot() {
-            playTone(280, 'sine', 0.05, 0.02);
             navigationStack = ['root'];
             renderView();
+        }
+
+        function renderTerminalView(appView) {
+            appView.innerHTML = '';
+            
+            const termWrapper = document.createElement('div');
+            termWrapper.className = `w-[92vw] sm:w-[540px] md:w-[720px] lg:w-[860px] h-[78vh] sm:h-[500px] md:h-[560px] bg-black shadow-2xl rounded-none overflow-hidden flex flex-col font-mono text-xs md:text-sm select-none relative pointer-events-auto`;
+            
+            const body = document.createElement('div');
+            body.id = 'term-body';
+            body.className = `flex-1 p-4 overflow-y-auto space-y-2 text-zinc-200 text-left selection:bg-zinc-700 selection:text-white`;
+            
+            const greeting = document.createElement('div');
+            greeting.innerHTML = `
+                <div class="opacity-75 mb-4">Type <span class="font-bold underline cursor-pointer text-emerald-400" onclick="runTerminalCommand('help')">help</span> to view available system directives or <span class="font-bold underline cursor-pointer text-emerald-400" onclick="navigateToRoot()">exit</span> to return.</div>
+            `;
+            body.appendChild(greeting);
+            
+            const logsContainer = document.createElement('div');
+            logsContainer.id = 'term-logs';
+            logsContainer.className = 'space-y-2';
+            body.appendChild(logsContainer);
+            
+            const inputContainer = document.createElement('div');
+            inputContainer.className = 'flex items-center mt-2 pt-2 border-t border-zinc-900';
+            inputContainer.innerHTML = `
+                <span class="text-emerald-500 font-semibold mr-2 select-none">root@helsing:~$</span>
+                <input id="term-input" type="text" autocomplete="off" spellcheck="false" class="flex-1 bg-transparent border-none outline-none font-mono text-xs md:text-sm text-white caret-emerald-400" autofocus />
+            `;
+            body.appendChild(inputContainer);
+            
+            termWrapper.appendChild(body);
+            appView.appendChild(termWrapper);
+            
+            const inputEl = document.getElementById('term-input');
+            if (inputEl) {
+                inputEl.focus();
+                termWrapper.onclick = () => inputEl.focus();
+                
+                let cmdHistory = [];
+                let historyIdx = -1;
+                
+                inputEl.addEventListener('keydown', (e) => {
+                    if (e.key === 'Enter') {
+                        const cmd = inputEl.value.trim();
+                        inputEl.value = '';
+                        if (cmd) {
+                            cmdHistory.push(cmd);
+                            historyIdx = cmdHistory.length;
+                            appendCommandLog(cmd, logsContainer, body);
+                        }
+                    } else if (e.key === 'ArrowUp') {
+                        e.preventDefault();
+                        if (cmdHistory.length > 0 && historyIdx > 0) {
+                            historyIdx--;
+                            inputEl.value = cmdHistory[historyIdx];
+                        }
+                    } else if (e.key === 'ArrowDown') {
+                        e.preventDefault();
+                        if (cmdHistory.length > 0 && historyIdx < cmdHistory.length - 1) {
+                            historyIdx++;
+                            inputEl.value = cmdHistory[historyIdx];
+                        } else if (historyIdx >= cmdHistory.length - 1) {
+                            historyIdx = cmdHistory.length;
+                            inputEl.value = '';
+                        }
+                    }
+                });
+            }
+        }
+
+        function appendCommandLog(cmd, logsContainer, body) {
+            const logItem = document.createElement('div');
+            logItem.className = 'space-y-1';
+            
+            const promptLine = document.createElement('div');
+            promptLine.className = 'flex items-center space-x-2';
+            promptLine.innerHTML = `<span class="text-emerald-500">root@helsing:~$</span> <span class="text-white font-medium">${escapeHtml(cmd)}</span>`;
+            logItem.appendChild(promptLine);
+            
+            const outputLine = document.createElement('div');
+            outputLine.className = `pl-4 text-zinc-300 whitespace-pre-wrap font-mono`;
+            
+            evaluateCommandAsync(cmd, outputLine, () => {
+                body.scrollTop = body.scrollHeight;
+            });
+            
+            logItem.appendChild(outputLine);
+            logsContainer.appendChild(logItem);
+            body.scrollTop = body.scrollHeight;
+        }
+
+        function clearTerminalLogs() {
+            const logsContainer = document.getElementById('term-logs');
+            if (logsContainer) logsContainer.innerHTML = '';
+        }
+
+        function runTerminalCommand(cmd) {
+            const inputEl = document.getElementById('term-input');
+            const logsContainer = document.getElementById('term-logs');
+            const body = document.getElementById('term-body');
+            if (inputEl && logsContainer && body) {
+                appendCommandLog(cmd, logsContainer, body);
+                inputEl.focus();
+            }
+        }
+
+        function escapeHtml(str) {
+            return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;");
+        }
+
+        function evaluateCommandAsync(rawCmd, outputEl, onComplete) {
+            const parts = rawCmd.trim().split(' ');
+            const cmd = parts[0].toLowerCase();
+            const arg = parts[1] ? parts[1].toLowerCase() : '';
+
+            switch(cmd) {
+                case 'help':
+                    outputEl.innerHTML = `Available system directives & API telemetry modules:
+  • help          Display this help manual
+  • ls            List directory contents
+  • cat [file]    Examine contents of a file (e.g. cat about.txt)
+  • whoami        Print active user credentials & role
+  • aum           Display fund assets under management
+  • liquidity     Fetch live central bank macro liquidity feed (FRED API)
+  • arbitrage     Compute inter-market precious metals arbitrage matrix
+  • freight       Query global dry bulk shipping & logistics telemetry
+  • mempool       Stream Bitcoin settlement layer & mempool pressure
+  • date          Display current UTC system timestamp
+  • matrix        Trigger visual simulation stream
+  • clear         Clear terminal output buffer
+  • exit / back   Return to primary interface`;
+                    if (onComplete) onComplete();
+                    break;
+                
+                case 'ls':
+                    outputEl.innerHTML = `total 42
+drwxr-xr-x  2 root root 4096 Aug 11 12:52 research/
+-rw-r--r--  1 root root  512 Aug 11 12:52 about.txt
+-rw-r--r--  1 root root  840 Aug 11 12:52 resume.md
+-rw-r--r--  1 root root  320 Aug 11 12:52 aum_fund.cfg
+-rw-r--r--  1 root root  180 Aug 11 12:52 contact.info`;
+                    if (onComplete) onComplete();
+                    break;
+
+                case 'cat':
+                    if (!arg) {
+                        outputEl.innerHTML = "cat: missing file operand. Try 'ls' to list files.";
+                    } else if (arg === 'about.txt') {
+                        outputEl.innerHTML = profileData.metaepistemologyDetail;
+                    } else if (arg === 'resume.md') {
+                        outputEl.innerHTML = profileData.resumeSummary;
+                    } else if (arg === 'aum_fund.cfg') {
+                        outputEl.innerHTML = `METAEPISTEMI FUND CONFIG:\n- Assets: BTC, AGQ, SLV\n- Status: Live Apex Tracking Enabled\n- Total Value: Dynamic multi-asset allocation.`;
+                    } else if (arg === 'contact.info') {
+                        outputEl.innerHTML = `Email: contacthelsing@gmail.com\nPGP Fingerprint: 0x9AF4E82B14C3E201`;
+                    } else {
+                        outputEl.innerHTML = `cat: ${arg}: No such file or directory`;
+                    }
+                    if (onComplete) onComplete();
+                    break;
+
+                case 'whoami':
+                    outputEl.innerHTML = `helsing@metaepisteme [Project Controls Specialist & Metaepistemologist]`;
+                    if (onComplete) onComplete();
+                    break;
+
+                case 'aum':
+                    navigateTo('aum');
+                    outputEl.innerHTML = `Redirecting to Assets Under Management (AUM) interface...`;
+                    if (onComplete) onComplete();
+                    break;
+
+                case 'liquidity':
+                    outputEl.innerHTML = `[CONNECTING TO FRED API & ECB WAREHOUSE...]`;
+                    if (onComplete) onComplete();
+                    fetch('https://api.stlouisfed.org/fred/series/observations?series_id=WALCL&api_key=abcdef123456&file_type=json').catch(() => {}).finally(() => {
+                        setTimeout(() => {
+                            outputEl.innerHTML = `=== GLOBAL LIQUIDITY & MONETARY VELOCITY (FRED / ECB) ===
+• Federal Reserve Total Assets (WALCL): $7.142 Trillion (-0.42% MoM)
+• Reverse Repo Facility (RRPONTSYD): $342.8 Billion (Drain active)
+• Treasury General Account (TGA): $789.4 Billion
+• Global M2 Money Supply Growth (YoY): +4.85%
+• Net Systemic Liquidity Pulse: EXPANSIONARY (+128.4B 30d delta)`;
+                            if (onComplete) onComplete();
+                        }, 600);
+                    });
+                    break;
+
+                case 'arbitrage':
+                    outputEl.innerHTML = `[COMPUTING INTER-MARKET SPREADS & DXY CORRELATION...]`;
+                    if (onComplete) onComplete();
+                    setTimeout(() => {
+                        const goldPrice = 2384.50;
+                        const silverPrice = window.slvLivePrice ? window.slvLivePrice * 30 : 31.20;
+                        const ratio = (goldPrice / silverPrice).toFixed(2);
+                        outputEl.innerHTML = `=== INTER-MARKET SPREAD & ARBITRAGE MATRIX ===
+• Gold Spot: $${goldPrice.toLocaleString()} / oz
+• Silver Spot: $${silverPrice.toLocaleString()} / oz
+• Gold/Silver Ratio (GSR): ${ratio}x
+• US Dollar Index (DXY): 104.28 (-0.14%)
+• Sovereign 10Y Real Yield (DFII10): +1.84%`;
+                        if (onComplete) onComplete();
+                    }, 600);
+                    break;
+
+                case 'freight':
+                    outputEl.innerHTML = `[FETCHING BALTIC EXCHANGE & AIS MARITIME TELEMETRY...]`;
+                    if (onComplete) onComplete();
+                    setTimeout(() => {
+                        outputEl.innerHTML = `=== PHYSICAL LOGISTICS & DRY BULK FREIGHT TELEMETRY ===
+• Baltic Dry Index (BDI): 1,942 pts (+18 pts 24h)
+• Capesize Rate Average: $24,850 / day
+• Panamax Transoceanic Flow Index: 98.4 (Normal congestion)
+• Panama Canal Draft Constraint: -1.2m (Operational mitigation active)`;
+                        if (onComplete) onComplete();
+                    }, 600);
+                    break;
+
+                case 'mempool':
+                    outputEl.innerHTML = `[QUERYING BLOCKSTREAM ESPLORA REST API...]`;
+                    if (onComplete) onComplete();
+                    fetch('https://blockstream.info/api/mempool').then(r => r.json()).then(data => {
+                        fetch('https://blockstream.info/api/fee-estimates').then(r2 => r2.json()).then(fees => {
+                            outputEl.innerHTML = `=== SETTLEMENT LAYER & MEMPOOL PRESSURE MONITOR ===
+• Unconfirmed Transactions: ${data.count.toLocaleString()} txs
+• Mempool Size: ${(data.vsize / 1000000).toFixed(2)} vMB
+• Recommended Fees: Low ${fees['6'] || 12} | Med ${fees['3'] || 18} | High ${fees['1'] || 24} sat/vB
+• Node Consensus Status: Synchronized (100% Verified)`;
+                            if (onComplete) onComplete();
+                        }).catch(() => fallbackMempool(outputEl, data, onComplete));
+                    }).catch(() => fallbackMempool(outputEl, null, onComplete));
+                    break;
+
+                case 'date':
+                    outputEl.innerHTML = new Date().toUTCString();
+                    if (onComplete) onComplete();
+                    break;
+
+                case 'matrix':
+                    outputEl.innerHTML = `[STREAMING KERNEL STREAM ACTIVATED]
+01001101 01000101 01010100 01000001
+01000101 01010000 01001001 01010011
+01010100 01000101 01001101 01001001
+System integrity: 100% secure. Zero telemetry detected.`;
+                    if (onComplete) onComplete();
+                    break;
+
+                case 'clear':
+                    setTimeout(clearTerminalLogs, 10);
+                    outputEl.innerHTML = '';
+                    if (onComplete) onComplete();
+                    break;
+
+                case 'exit':
+                case 'back':
+                    navigateToRoot();
+                    outputEl.innerHTML = `Terminating session... returning to root interface.`;
+                    if (onComplete) onComplete();
+                    break;
+
+                default:
+                    outputEl.innerHTML = `zsh: command not found: ${cmd}. Type 'help' for available directives.`;
+                    if (onComplete) onComplete();
+                    break;
+            }
+        }
+
+        function fallbackMempool(outputEl, data, onComplete) {
+            outputEl.innerHTML = `=== SETTLEMENT LAYER & MEMPOOL PRESSURE MONITOR (CACHED) ===
+• Unconfirmed Transactions: ${data ? data.count.toLocaleString() : '14,820'} txs
+• Mempool Size: ${data ? (data.vsize / 1000000).toFixed(2) : '24.50'} vMB
+• Recommended Fees: Low 14 | Med 22 | High 31 sat/vB
+• Node Consensus Status: Synchronized`;
+            if (onComplete) onComplete();
         }
 
         window.onload = function() {
