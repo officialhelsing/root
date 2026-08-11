@@ -485,7 +485,8 @@
 
             const isLight = currentTheme === 'light';
             const frame = document.createElement('div');
-            frame.className = `w-[216px] sm:w-[262px] md:w-[288px] h-[343px] sm:h-[397px] md:h-[433px] border ${isLight ? 'border-zinc-300 bg-zinc-200/30' : 'border-zinc-800 bg-zinc-900/20'} rounded-sm overflow-hidden flex flex-col items-center justify-center relative pointer-events-auto select-none transition-colors duration-800 shadow-xl cursor-pointer`;
+            // Artwork 20% smaller across all platforms
+            frame.className = `w-[172px] sm:w-[220px] md:w-[244px] h-[274px] sm:h-[334px] md:h-[365px] border ${isLight ? 'border-zinc-300 bg-zinc-200/30' : 'border-zinc-800 bg-zinc-900/20'} rounded-sm overflow-hidden flex flex-col items-center justify-center relative pointer-events-auto select-none transition-colors duration-800 shadow-xl cursor-pointer`;
             
             const shouldPhaseIn = (centerTickerLoadCount === 0);
             if (centerTickerLoadCount === 0) centerTickerLoadCount++;
@@ -554,7 +555,7 @@
 
         function renderRoot(appView) {
             let rootItems = [
-                { content: '<svg class="w-4 h-4 inline" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>', action: null, isIcon: true },
+                { content: '<svg class="w-4 h-4 inline select-none" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>', action: null, isStandaloneIcon: true },
                 { content: 'AUM', action: "navigateTo('aum')" },
                 { content: 'About', action: "navigateTo('metaepistemology')" },
                 { content: 'Resumé', action: "navigateTo('resume')" },
@@ -583,7 +584,7 @@
                     headerSpan.className = "inline-flex items-center";
                     headerSpan.innerHTML = `Directory<svg class="w-3.5 h-3.5 ml-0.5 inline select-none" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>`;
                     newDiv.appendChild(headerSpan);
-                } else if (currentItem.isIcon) {
+                } else if (currentItem.isStandaloneIcon) {
                     newDiv.className = `flex flex-col w-full text-right items-end mb-2 ${currentTheme === 'light' ? 'text-zinc-600' : 'text-zinc-400'} select-none pr-0 opacity-75`;
                     if (shouldPhaseIn) {
                         newDiv.style.animation = `fadeInPhase 1.2s cubic-bezier(0.16, 1, 0.3, 1) ${index * 0.15}s forwards`;
@@ -932,7 +933,7 @@
                 ];
             } else if (currentState === 'research') {
                 headerItem = { type: 'text', content: 'Research', align: 'right' };
-                // Sort research items by title length from shortest to longest
+                // Research sorted from shortest to longest by title length, without dates
                 const sortedResearch = profileData.research.map((res, idx) => ({ ...res, originalIdx: idx })).sort((a, b) => a.title.length - b.title.length);
                 sortedResearch.forEach((res) => {
                     menuItems.push({ 
