@@ -44,7 +44,7 @@
             color: inherit !important;
         }
         @keyframes fadeInPhase {
-            0% { opacity: 0; transform: translateY(8px); filter: blur(2px); }
+            0% { opacity: 0; transform: translateY(8px); filter: blur(6px); }
             100% { opacity: 1; transform: translateY(0); filter: blur(0); }
         }
         .vignette-overlay {
@@ -372,20 +372,20 @@
             ],
             research: [
                 {
-                    title: "Point-Free Frame Theory",
-                    detail: "A rigorous, foundational investigation into pointless topology and frame-theoretic structures, executed at a category-theoretic level of abstraction where traditional point-set spatial intuitions are entirely bypassed in favor of locales and algebraic lattices of open parts. The research explores the degree to which spatial properties can be reconstructed purely through lattice-theoretic implication, eliminating reliance on underlying points. The importance of this work lies in its profound capacity to resolve deep foundational paradoxes in quantum logic, continuous domain theory, and constructive mathematics where standard point-set topologies fail, providing a universal, point-free syntactic machinery for spaces in abstract algebra and computer science."
-                },
-                {
-                    title: "Multi-Agent Topologies",
-                    detail: "A comprehensive formal inquiry into distributed epistemic networks and interactive multi-agent systems, studying the exact topological structures and communication constraints that govern decentralized information flow. The research models how autonomous nodes propagate higher-order knowledge, update distributed belief structures, and attain fault-tolerant logical consensus under adversarial network conditions. The importance of this framework is paramount for engineering ultra-resilient distributed architectures, decentralized autonomous systems, and fault-tolerant algorithmic protocols capable of operating deterministically without centralized coordination."
+                    title: "Continuum Mechanics",
+                    detail: "A high-precision formulation of continuous media dynamics leveraging differential geometry on arbitrary Riemannian manifolds, synthesizing non-linear strain kinematics, push-forward and pull-back tensor transport operations, and covariant balance laws. The research rigorously derives the tensor-valued constitutive equations governing stress-strain relationships, multi-phase deformation, and energy dissipation across continuously deforming topological spaces. The fundamental importance of this research rests on its ability to provide exact, invariant mathematical modeling for extreme physical environments, advanced aerospace structural mechanics, continuum multi-physics simulations, and geometric mechanics where standard Euclidean approximations break down entirely."
                 },
                 {
                     title: "Non-Well-Founded Sets",
                     detail: "An intensive analytical study of circular set membership enabled by Peter Aczel's anti-foundation axioms, superseding the classical foundation axiom to allow infinite descending chains and self-referential membership graphs. The research constructs formal operational frameworks to model circularity, infinite recursion, and corecursive data streams in universal algebra and semantics. The importance of this paradigm shift is critical for capturing semantic self-reference, circular processes in programming language theory, game-theoretic interaction semantics, and cognitive systems that inherently model reflexive loops."
                 },
                 {
-                    title: "Continuum Mechanics",
-                    detail: "A high-precision formulation of continuous media dynamics leveraging differential geometry on arbitrary Riemannian manifolds, synthesizing non-linear strain kinematics, push-forward and pull-back tensor transport operations, and covariant balance laws. The research rigorously derives the tensor-valued constitutive equations governing stress-strain relationships, multi-phase deformation, and energy dissipation across continuously deforming topological spaces. The fundamental importance of this research rests on its ability to provide exact, invariant mathematical modeling for extreme physical environments, advanced aerospace structural mechanics, continuum multi-physics simulations, and geometric mechanics where standard Euclidean approximations break down entirely."
+                    title: "Multi-Agent Topologies",
+                    detail: "A comprehensive formal inquiry into distributed epistemic networks and interactive multi-agent systems, studying the exact topological structures and communication constraints that govern decentralized information flow. The research models how autonomous nodes propagate higher-order knowledge, update distributed belief structures, and attain fault-tolerant logical consensus under adversarial network conditions. The importance of this framework is paramount for engineering ultra-resilient distributed architectures, decentralized autonomous systems, and fault-tolerant algorithmic protocols capable of operating deterministically without centralized coordination."
+                },
+                {
+                    title: "Point-Free Frame Theory",
+                    detail: "A rigorous, foundational investigation into pointless topology and frame-theoretic structures, executed at a category-theoretic level of abstraction where traditional point-set spatial intuitions are entirely bypassed in favor of locales and algebraic lattices of open parts. The research explores the degree to which spatial properties can be reconstructed purely through lattice-theoretic implication, eliminating reliance on underlying points. The importance of this work lies in its profound capacity to resolve deep foundational paradoxes in quantum logic, continuous domain theory, and constructive mathematics where standard point-set topologies fail, providing a universal, point-free syntactic machinery for spaces in abstract algebra and computer science."
                 }
             ]
         };
@@ -421,9 +421,44 @@
         let centerTickerLoadCount = 0;
         let aumInterval = null;
 
-        function triggerIntroQuote() {
-            const q = getRandomQuote();
-            startTypingSequence(q.quote, () => {});
+        function startTypingSequence(text, onComplete) {
+            currentActiveText = text;
+            charIndex = 0;
+            typedIntroEl.textContent = '';
+            typedIntroEl.classList.add('typing-cursor');
+            if (typedAuthorEl) typedAuthorEl.style.opacity = '0';
+            introContainer.style.display = 'block';
+            setTimeout(() => {
+                introContainer.style.opacity = '1';
+            }, 50);
+            const appView = document.getElementById('app-view');
+            if (appView) appView.classList.add('hidden');
+
+            function typeStep() {
+                if (charIndex < currentActiveText.length) {
+                    typedIntroEl.textContent += currentActiveText.charAt(charIndex);
+                    charIndex++;
+                    setTimeout(typeStep, 45);
+                } else {
+                    setTimeout(() => backspaceStep(onComplete), 1400);
+                }
+            }
+            typeStep();
+        }
+
+        function backspaceStep(onComplete) {
+            if (charIndex > 0) {
+                typedIntroEl.textContent = currentActiveText.substring(0, charIndex - 1);
+                charIndex--;
+                setTimeout(() => backspaceStep(onComplete), 25);
+            } else {
+                typedIntroEl.classList.remove('typing-cursor');
+                introContainer.style.opacity = '0';
+                setTimeout(() => {
+                    introContainer.style.display = 'none';
+                    if (onComplete) onComplete();
+                }, 500);
+            }
         }
 
         function copyEmailToClipboard(email, e) {
@@ -450,7 +485,7 @@
 
             const isLight = currentTheme === 'light';
             const frame = document.createElement('div');
-            frame.className = `w-[240px] sm:w-[290px] md:w-[320px] h-[380px] sm:h-[440px] md:h-[480px] border ${isLight ? 'border-zinc-300 bg-zinc-200/30' : 'border-zinc-800 bg-zinc-900/20'} rounded-sm overflow-hidden flex flex-col items-center justify-center relative pointer-events-auto select-none transition-colors duration-800 shadow-xl cursor-pointer`;
+            frame.className = `w-[216px] sm:w-[262px] md:w-[288px] h-[343px] sm:h-[397px] md:h-[433px] border ${isLight ? 'border-zinc-300 bg-zinc-200/30' : 'border-zinc-800 bg-zinc-900/20'} rounded-sm overflow-hidden flex flex-col items-center justify-center relative pointer-events-auto select-none transition-colors duration-800 shadow-xl cursor-pointer`;
             
             const shouldPhaseIn = (centerTickerLoadCount === 0);
             if (centerTickerLoadCount === 0) centerTickerLoadCount++;
@@ -516,46 +551,6 @@
 
         let charIndex = 0;
         let currentActiveText = "Welcome, friend.";
-
-        function startTypingSequence(text, onComplete) {
-            currentActiveText = text;
-            charIndex = 0;
-            typedIntroEl.textContent = '';
-            typedIntroEl.classList.add('typing-cursor');
-            if (typedAuthorEl) typedAuthorEl.style.opacity = '0';
-            introContainer.style.display = 'block';
-            setTimeout(() => {
-                introContainer.style.opacity = '1';
-            }, 50);
-            const appView = document.getElementById('app-view');
-            if (appView) appView.classList.add('hidden');
-
-            function typeStep() {
-                if (charIndex < currentActiveText.length) {
-                    typedIntroEl.textContent += currentActiveText.charAt(charIndex);
-                    charIndex++;
-                    setTimeout(typeStep, 45);
-                } else {
-                    setTimeout(() => backspaceStep(onComplete), 1400);
-                }
-            }
-            typeStep();
-        }
-
-        function backspaceStep(onComplete) {
-            if (charIndex > 0) {
-                typedIntroEl.textContent = currentActiveText.substring(0, charIndex - 1);
-                charIndex--;
-                setTimeout(() => backspaceStep(onComplete), 25);
-            } else {
-                typedIntroEl.classList.remove('typing-cursor');
-                introContainer.style.opacity = '0';
-                setTimeout(() => {
-                    introContainer.style.display = 'none';
-                    if (onComplete) onComplete();
-                }, 500);
-            }
-        }
 
         function renderRoot(appView) {
             let rootItems = [
@@ -937,8 +932,8 @@
                 ];
             } else if (currentState === 'research') {
                 headerItem = { type: 'text', content: 'Research', align: 'right' };
-                const sortedResearch = profileData.research.map((res, idx) => ({ ...res, originalIdx: idx }))
-                    .sort((a, b) => a.title.length - b.title.length);
+                // Sort research items by title length from shortest to longest
+                const sortedResearch = profileData.research.map((res, idx) => ({ ...res, originalIdx: idx })).sort((a, b) => a.title.length - b.title.length);
                 sortedResearch.forEach((res) => {
                     menuItems.push({ 
                         type: 'link', 
