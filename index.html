@@ -440,9 +440,13 @@
             typedIntroEl.classList.add('typing-cursor');
             if (typedAuthorEl) typedAuthorEl.style.opacity = '0';
             introContainer.style.display = 'block';
+            introContainer.classList.add('glitch-transition');
             setTimeout(() => {
                 introContainer.style.opacity = '1';
             }, 50);
+            setTimeout(() => {
+                introContainer.classList.remove('glitch-transition');
+            }, 1400);
             const appView = document.getElementById('app-view');
             if (appView) appView.classList.add('hidden');
 
@@ -497,8 +501,8 @@
 
             const isLight = currentTheme === 'light';
             const frame = document.createElement('div');
-            // Artwork wider rectangle, taller height across platforms
-            frame.className = `w-[210px] sm:w-[260px] md:w-[295px] h-[325px] sm:h-[400px] md:h-[440px] border ${isLight ? 'border-zinc-300 bg-zinc-200/30' : 'border-zinc-800 bg-zinc-900/20'} rounded-sm overflow-hidden flex flex-col items-center justify-center relative pointer-events-auto select-none transition-colors duration-800 shadow-xl cursor-pointer`;
+            // Artwork wider rectangle, taller height across platforms (20% smaller)
+            frame.className = `w-[168px] sm:w-[208px] md:w-[236px] h-[260px] sm:h-[320px] md:h-[352px] border ${isLight ? 'border-zinc-300 bg-zinc-200/30' : 'border-zinc-800 bg-zinc-900/20'} rounded-sm overflow-hidden flex flex-col items-center justify-center relative pointer-events-auto select-none transition-colors duration-800 shadow-xl cursor-pointer`;
             
             const shouldPhaseIn = (centerTickerLoadCount === 0);
             if (centerTickerLoadCount === 0) centerTickerLoadCount++;
@@ -541,6 +545,13 @@
             img.src = openseaImages[currentImgIndex];
             img.className = 'w-full h-full object-cover';
             img.alt = 'OpenSea Art';
+
+            if (shouldPhaseIn) {
+                img.classList.add('glitch-transition');
+                setTimeout(() => {
+                    img.classList.remove('glitch-transition');
+                }, 1400);
+            }
 
             frame.appendChild(img);
             container.appendChild(frame);
