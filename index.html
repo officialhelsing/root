@@ -502,7 +502,7 @@
             const isLight = currentTheme === 'light';
             const frame = document.createElement('div');
             // Artwork wider rectangle, taller height across platforms (extended height by 5%)
-            frame.className = `w-[168px] sm:w-[208px] md:w-[236px] h-[326px] sm:h-[399px] md:h-[441px] border ${isLight ? 'border-zinc-300 bg-zinc-200/30' : 'border-zinc-800 bg-zinc-900/20'} rounded-sm overflow-hidden flex flex-col items-center justify-center relative pointer-events-auto select-none transition-colors duration-800 shadow-xl cursor-pointer`;
+            frame.className = `w-[168px] sm:w-[208px] md:w-[236px] h-[342px] sm:h-[420px] md:h-[463px] border ${isLight ? 'border-zinc-300 bg-zinc-200/30' : 'border-zinc-800 bg-zinc-900/20'} rounded-sm overflow-hidden flex flex-col items-center justify-center relative pointer-events-auto select-none transition-colors duration-800 shadow-xl cursor-pointer`;
             
             const shouldPhaseIn = (centerTickerLoadCount === 0);
             if (centerTickerLoadCount === 0) centerTickerLoadCount++;
@@ -648,7 +648,7 @@
             if (!centerTickerEl) {
                 centerTickerEl = document.createElement('div');
                 centerTickerEl.id = 'center-ticker-container';
-                centerTickerEl.className = 'fixed inset-0 pointer-events-none flex items-center justify-center z-15 px-6 select-none';
+                centerTickerEl.className = 'fixed inset-0 pointer-events-none flex items-center justify-center pb-20 z-15 px-6 select-none';
                 document.body.appendChild(centerTickerEl);
             }
 
