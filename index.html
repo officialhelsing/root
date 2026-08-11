@@ -92,13 +92,13 @@
     <canvas id="starfield" class="fixed inset-0 pointer-events-none z-0"></canvas>
     <div class="fixed inset-0 vignette-overlay z-1 pointer-events-none"></div>
 
-    <div id="intro-container" class="fixed bottom-24 right-6 sm:right-24 md:right-32 z-20 text-right font-mono text-[14.5px] md:text-[17px] tracking-widest select-none opacity-0 transition-opacity duration-1000 max-w-[280px] sm:max-w-xl px-4 leading-relaxed">
+    <div id="intro-container" class="fixed bottom-24 right-6 sm:right-24 md:right-32 z-20 text-right font-mono text-xs md:text-sm tracking-widest select-none opacity-0 transition-opacity duration-1000 max-w-[280px] sm:max-w-xl px-4 leading-relaxed">
         <div><span id="typed-intro" class="inline-block max-w-full align-bottom pl-6 text-right whitespace-normal overflow-visible"></span></div>
-        <div class="text-[11px] md:text-[13px] text-zinc-500 mt-1 opacity-0 transition-opacity duration-500" id="typed-author"></div>
+        <div id="typed-author" class="text-[10px] text-zinc-500 mt-1 italic tracking-wider opacity-0 transition-opacity duration-1000 whitespace-normal"></div>
     </div>
 
     <div id="main-container" class="relative z-10 flex flex-col items-end w-[320px] sm:w-[450px] md:w-[550px] px-4 select-none opacity-0 transition-opacity duration-1000">
-        <div id="app-view" class="hidden flex flex-col items-end text-[14.5px] md:text-[17px] text-zinc-400 tracking-widest w-full text-right select-none">
+        <div id="app-view" class="hidden flex flex-col items-end text-xs md:text-sm text-zinc-400 tracking-widest w-full text-right select-none">
             <!-- Content injected via JavaScript router -->
         </div>
     </div>
@@ -504,9 +504,9 @@
                 homeDiv.style.opacity = '0';
             }
             const homeSpan = document.createElement('span');
-            homeSpan.className = "inline-flex items-center hover:opacity-100 opacity-70 transition-all duration-300 hover:-translate-y-0.5 cursor-pointer select-none text-[14.5px] md:text-[17px]";
+            homeSpan.className = "inline-flex items-center hover:opacity-100 opacity-70 transition-all duration-300 hover:-translate-y-0.5 cursor-pointer select-none";
             homeSpan.title = "Return to intro quote";
-            homeSpan.innerHTML = `<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path></svg>`;
+            homeSpan.innerHTML = `<svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path></svg>`;
             homeSpan.onclick = (e) => { e.stopPropagation(); triggerIntroQuote(); };
             homeDiv.appendChild(homeSpan);
             listContainer.appendChild(homeDiv);
@@ -521,8 +521,8 @@
                         newDiv.style.opacity = '0';
                     }
                     const headerSpan = document.createElement('span');
-                    headerSpan.className = "inline-flex items-center text-[14.5px] md:text-[17px]";
-                    headerSpan.innerHTML = `Directory<svg class="w-4 h-4 ml-0.5 inline select-none" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>`;
+                    headerSpan.className = "inline-flex items-center";
+                    headerSpan.innerHTML = `Directory<svg class="w-3.5 h-3.5 ml-0.5 inline select-none" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>`;
                     newDiv.appendChild(headerSpan);
                 } else {
                     newDiv.className = `flex flex-col w-full text-right items-end mb-2 cursor-pointer select-none ${currentTheme === 'light' ? 'text-zinc-600 hover:text-zinc-900' : 'text-zinc-400 hover:text-white'} transition-all duration-300 hover:-translate-y-0.5 pr-0`;
@@ -533,7 +533,6 @@
                     newDiv.setAttribute('onclick', currentItem.action);
                     
                     const span = document.createElement('span');
-                    span.className = "text-[14.5px] md:text-[17px]";
                     span.innerHTML = currentItem.content;
                     newDiv.appendChild(span);
                 }
@@ -607,21 +606,21 @@
                 const slvPct = ((slvVal / totalVal) * 100).toFixed(1);
 
                 const aumHtml = `
-                    <div class="space-y-6 text-[13px] sm:text-sm tracking-widest select-none w-full pl-0 sm:pl-0 mt-3 text-left">
-                        <div class="flex flex-col space-y-3 items-start w-full">
-                            <div class="grid grid-cols-2 gap-y-1.5 gap-x-4 items-center w-full">
-                                <div class="text-[11px] sm:text-xs ${textSub} uppercase tracking-widest truncate text-left font-medium">METAEPISTEMI FUND</div>
-                                <div class="text-[11px] sm:text-xs ${textSub} uppercase tracking-widest truncate text-right pr-0">TOTAL VALUE</div>
+                    <div class="space-y-0.5 text-xs tracking-widest select-none w-full pl-0 sm:pl-0 mt-0 text-left">
+                        <div class="flex flex-col space-y-0.5 items-start">
+                            <div class="grid grid-cols-2 gap-y-0.5 gap-x-2 items-center w-full">
+                                <div class="text-[10px] sm:text-[11px] ${textSub} uppercase tracking-widest truncate text-left font-medium">METAEPISTEMI FUND</div>
+                                <div class="text-[10px] sm:text-[11px] ${textSub} uppercase tracking-widest truncate text-right pr-0">TOTAL VALUE</div>
                                 
-                                <div class="text-[11px] sm:text-xs ${textSub} text-left">$${Math.round(totalCost).toLocaleString()} (CB)</div>
-                                <div id="live-total-val" class="text-2xl sm:text-3xl font-bold ${textMain} text-right pr-0">$${Math.round(totalVal).toLocaleString()}</div>
+                                <div class="text-[10px] sm:text-[11px] ${textSub} text-left">$${Math.round(totalCost).toLocaleString()} (CB)</div>
+                                <div id="live-total-val" class="text-base sm:text-lg font-bold ${textMain} text-right pr-0">$${Math.round(totalVal).toLocaleString()}</div>
                             </div>
-                            <div class="pt-3 flex flex-col space-y-2 w-full items-start">
-                                <div class="flex justify-between items-center text-[11px] sm:text-xs ${textSub} w-full pr-0">
-                                    <div class="flex items-center justify-start text-[10px] sm:text-[11px] ${textSub}"><span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse mr-2"></span>LIVE <span class="opacity-75 ml-1">(APEX)</span></div>
-                                    <span id="live-total-return" class="${isPositiveReturn ? 'text-emerald-500' : 'text-red-500'} font-semibold">${isPositiveReturn ? '+' : ''}${totalReturnPct}%</span>
+                            <div class="pt-0 flex flex-col space-y-0.5 w-full items-start">
+                                <div class="flex justify-between items-center text-[10px] sm:text-[11px] ${textSub} w-full pr-0">
+                                    <div class="flex items-center justify-start text-[9px] sm:text-[10px] ${textSub}"><span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse mr-1.5"></span>LIVE <span class="opacity-75 ml-1">(APEX)</span></div>
+                                    <span id="live-total-return" class="${isPositiveReturn ? 'text-emerald-500' : 'text-red-500'} font-medium">${isPositiveReturn ? '+' : ''}${totalReturnPct}%</span>
                                 </div>
-                                <div class="w-full h-14 sm:h-16 relative my-2 pr-0">
+                                <div class="w-full h-4 sm:h-6 relative my-0 pr-0">
                                     <svg class="w-full h-full overflow-visible" viewBox="0 0 300 50" preserveAspectRatio="none">
                                         <defs>
                                             <linearGradient id="ytdGradient" x1="0" y1="0" x2="0" y2="1">
@@ -630,51 +629,51 @@
                                             </linearGradient>
                                         </defs>
                                         <path d="M0,42 Q60,38 120,28 T220,15 T300,6 L300,50 L0,50 Z" fill="url(#ytdGradient)" />
-                                        <path d="M0,42 Q60,38 120,28 T220,15 T300,6" fill="none" stroke="${isLight ? '#059669' : '#34d399'}" stroke-width="2" stroke-linecap="round" />
+                                        <path d="M0,42 Q60,38 120,28 T220,15 T300,6" fill="none" stroke="${isLight ? '#059669' : '#34d399'}" stroke-width="1.5" stroke-linecap="round" />
                                     </svg>
                                 </div>
                             </div>
                         </div>
-                        <div class="pt-6 space-y-5 w-full">
-                            <div class="text-[11px] sm:text-xs ${textSub} uppercase tracking-widest font-semibold mb-3 text-left">Asset Allocation & Cost Basis</div>
-                            <div class="space-y-6 w-full pr-0">
+                        <div class="pt-0 space-y-1 w-full">
+                            <div class="text-[10px] sm:text-[11px] ${textSub} uppercase tracking-widest font-medium mb-0 text-left">Asset Allocation & Cost Basis</div>
+                            <div class="space-y-1 w-full pr-0">
                                 <div class="w-full flex flex-col items-start">
-                                    <div class="flex flex-col sm:flex-row sm:justify-between items-start sm:items-center text-xs sm:text-sm mb-1.5 w-full">
-                                        <span class="${textMain} font-medium">110.453 BTC <span class="text-[11px] opacity-75 font-mono">($<span id="live-btc-price">${window.btcLivePrice.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}</span>)</span></span>
-                                        <span class="${textSub}"><span id="live-btc-val">$${Math.round(btcVal).toLocaleString()}</span> <span class="text-[11px] opacity-75">(<span id="live-btc-pct">${btcPct}</span>%)</span></span>
+                                    <div class="flex flex-col sm:flex-row sm:justify-between items-start sm:items-center text-[11px] sm:text-xs mb-0 w-full">
+                                        <span class="${textMain} font-medium">110.453 BTC <span class="text-[10px] opacity-75 font-mono">($<span id="live-btc-price">${window.btcLivePrice.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}</span>)</span></span>
+                                        <span class="${textSub}"><span id="live-btc-val">$${Math.round(btcVal).toLocaleString()}</span> <span class="text-[10px] opacity-75">(<span id="live-btc-pct">${btcPct}</span>%)</span></span>
                                     </div>
-                                    <div class="flex flex-col sm:flex-row sm:justify-between text-[11px] opacity-80 mb-2.5 ${textSub} w-full">
+                                    <div class="flex flex-col sm:flex-row sm:justify-between text-[10px] opacity-75 mb-0 ${textSub} w-full">
                                         <span><span>$23,493.39</span></span>
-                                        <span id="live-btc-return" class="${isBtcPos ? 'text-emerald-500' : 'text-red-500'} font-semibold">${isBtcPos ? '+' : ''}${btcReturnPct}%</span>
+                                        <span id="live-btc-return" class="${isBtcPos ? 'text-emerald-500' : 'text-red-500'} font-medium">${isBtcPos ? '+' : ''}${btcReturnPct}%</span>
                                     </div>
-                                    <div class="w-full ${trackBg} h-1.5 rounded-full overflow-hidden">
-                                        <div id="live-btc-bar" class="${barBtc} h-full rounded-full transition-all duration-500 mr-auto" style="width: ${btcPct}%"></div>
+                                    <div class="w-full ${trackBg} h-1 rounded overflow-hidden">
+                                        <div id="live-btc-bar" class="${barBtc} h-full rounded transition-all duration-500 mr-auto" style="width: ${btcPct}%"></div>
                                     </div>
                                 </div>
                                 <div class="w-full flex flex-col items-start">
-                                    <div class="flex flex-col sm:flex-row sm:justify-between items-start sm:items-center text-xs sm:text-sm mb-1.5 w-full">
-                                        <span class="${textMain} font-medium">10,394.245 AGQ <span class="text-[11px] opacity-75 font-mono">($<span id="live-agq-price">${window.agqLivePrice.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}</span>)</span></span>
-                                        <span class="${textSub}"><span id="live-agq-val">$${Math.round(agqVal).toLocaleString()}</span> <span class="text-[11px] opacity-75">(<span id="live-agq-pct">${agqPct}</span>%)</span></span>
+                                    <div class="flex flex-col sm:flex-row sm:justify-between items-start sm:items-center text-[11px] sm:text-xs mb-0 w-full">
+                                        <span class="${textMain} font-medium">10,394.245 AGQ <span class="text-[10px] opacity-75 font-mono">($<span id="live-agq-price">${window.agqLivePrice.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}</span>)</span></span>
+                                        <span class="${textSub}"><span id="live-agq-val">$${Math.round(agqVal).toLocaleString()}</span> <span class="text-[10px] opacity-75">(<span id="live-agq-pct">${agqPct}</span>%)</span></span>
                                     </div>
-                                    <div class="flex flex-col sm:flex-row sm:justify-between text-[11px] opacity-80 mb-2.5 ${textSub} w-full">
+                                    <div class="flex flex-col sm:flex-row sm:justify-between text-[10px] opacity-75 mb-0 ${textSub} w-full">
                                         <span><span>$25.38</span></span>
-                                        <span id="live-agq-return" class="${isAgqPos ? 'text-emerald-500' : 'text-red-500'} font-semibold">${isAgqPos ? '+' : ''}${agqReturnPct}%</span>
+                                        <span id="live-agq-return" class="${isAgqPos ? 'text-emerald-500' : 'text-red-500'} font-medium">${isAgqPos ? '+' : ''}${agqReturnPct}%</span>
                                     </div>
-                                    <div class="w-full ${trackBg} h-1.5 rounded-full overflow-hidden">
-                                        <div id="live-agq-bar" class="${barAgq} h-full rounded-full transition-all duration-500 mr-auto" style="width: ${agqPct}%"></div>
+                                    <div class="w-full ${trackBg} h-1 rounded overflow-hidden">
+                                        <div id="live-agq-bar" class="${barAgq} h-full rounded transition-all duration-500 mr-auto" style="width: ${agqPct}%"></div>
                                     </div>
                                 </div>
                                 <div class="w-full flex flex-col items-start">
-                                    <div class="flex flex-col sm:flex-row sm:justify-between items-start sm:items-center text-xs sm:text-sm mb-1.5 w-full">
-                                        <span class="${textMain} font-medium">1,193.428 SLV <span class="text-[11px] opacity-75 font-mono">($<span id="live-slv-price">${window.slvLivePrice.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}</span>)</span></span>
-                                        <span class="${textSub}"><span id="live-slv-val">$${Math.round(slvVal).toLocaleString()}</span> <span class="text-[11px] opacity-75">(<span id="live-slv-pct">${slvPct}</span>%)</span></span>
+                                    <div class="flex flex-col sm:flex-row sm:justify-between items-start sm:items-center text-[11px] sm:text-xs mb-0 w-full">
+                                        <span class="${textMain} font-medium">1,193.428 SLV <span class="text-[10px] opacity-75 font-mono">($<span id="live-slv-price">${window.slvLivePrice.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}</span>)</span></span>
+                                        <span class="${textSub}"><span id="live-slv-val">$${Math.round(slvVal).toLocaleString()}</span> <span class="text-[10px] opacity-75">(<span id="live-slv-pct">${slvPct}</span>%)</span></span>
                                     </div>
-                                    <div class="flex flex-col sm:flex-row sm:justify-between text-[11px] opacity-80 mb-2.5 ${textSub} w-full">
+                                    <div class="flex flex-col sm:flex-row sm:justify-between text-[10px] opacity-75 mb-0 ${textSub} w-full">
                                         <span><span>$16.48</span></span>
-                                        <span id="live-slv-return" class="${isSlvPos ? 'text-emerald-500' : 'text-red-500'} font-semibold">${isSlvPos ? '+' : ''}${slvReturnPct}%</span>
+                                        <span id="live-slv-return" class="${isSlvPos ? 'text-emerald-500' : 'text-red-500'} font-medium">${isSlvPos ? '+' : ''}${slvReturnPct}%</span>
                                     </div>
-                                    <div class="w-full ${trackBg} h-1.5 rounded-full overflow-hidden">
-                                        <div id="live-slv-bar" class="${barSlv} h-full rounded-full transition-all duration-500 mr-auto" style="width: ${slvPct}%"></div>
+                                    <div class="w-full ${trackBg} h-1 rounded overflow-hidden">
+                                        <div id="live-slv-bar" class="${barSlv} h-full rounded transition-all duration-500 mr-auto" style="width: ${slvPct}%"></div>
                                     </div>
                                 </div>
                             </div>
@@ -881,7 +880,7 @@
                 }
 
                 if (item.type === 'text') {
-                    div.className += ` ${currentTheme === 'light' ? 'text-zinc-900' : 'text-white'} font-semibold text-[15.5px] md:text-[18.5px] select-none pr-0 mb-0.5`;
+                    div.className += ` ${currentTheme === 'light' ? 'text-zinc-900' : 'text-white'} font-semibold text-sm md:text-base select-none pr-0 mb-0.5`;
                     div.innerHTML = item.content;
                 } else if (item.type === 'back') {
                     div.className += ` select-none ${currentTheme === 'light' ? 'text-zinc-500 hover:text-zinc-800' : 'text-zinc-500 hover:text-zinc-300'} mb-1 transition-all duration-200 pr-0`;
@@ -890,7 +889,7 @@
                     backContainer.className = "inline-flex items-center space-x-2.5 justify-end w-full select-none";
                     
                     const returnSpan = document.createElement('span');
-                    returnSpan.className = "cursor-pointer select-none transition-all duration-200 hover:-translate-y-0.5 text-[15.5px] md:text-[18.5px]";
+                    returnSpan.className = "cursor-pointer select-none transition-all duration-200 hover:-translate-y-0.5";
                     returnSpan.textContent = item.content;
                     returnSpan.onclick = (e) => { e.stopPropagation(); navigateBack(); };
                     
@@ -905,10 +904,7 @@
                     div.appendChild(backContainer);
                 } else if (item.type === 'link') {
                     div.className += ` cursor-pointer select-none ${currentTheme === 'light' ? 'text-zinc-600 hover:text-zinc-900' : 'text-zinc-400 hover:text-white'} transition-all duration-200 hover:-translate-y-0.5 pr-0 mb-0.5`;
-                    const span = document.createElement('span');
-                    span.className = "text-[15.5px] md:text-[18.5px]";
-                    span.innerHTML = item.content;
-                    div.appendChild(span);
+                    div.innerHTML = item.content;
                     if (item.url) {
                         div.setAttribute('onclick', `window.open('${item.url}', '_blank')`);
                     } else {
@@ -922,7 +918,7 @@
                         div.setAttribute('onclick', item.action || "navigateTo('metatrons-cube')");
                     }
                     const span = document.createElement('span');
-                    span.className = "rainbow-text font-medium select-none inline-block text-[15.5px] md:text-[18.5px]";
+                    span.className = "rainbow-text font-medium select-none inline-block";
                     span.textContent = item.content;
                     div.appendChild(span);
                 } else if (item.type === 'research-link') {
@@ -930,17 +926,17 @@
                     div.setAttribute('onclick', item.action);
                     
                     const titleDiv = document.createElement('div');
-                    titleDiv.className = `${currentTheme === 'light' ? 'text-zinc-600 hover:text-zinc-900' : 'text-zinc-400 hover:text-white'} transition-colors duration-200 flex items-center justify-end w-full select-none truncate text-[15.5px] md:text-[18.5px] leading-relaxed whitespace-nowrap overflow-hidden text-ellipsis text-right`;
+                    titleDiv.className = `${currentTheme === 'light' ? 'text-zinc-600 hover:text-zinc-900' : 'text-zinc-400 hover:text-white'} transition-colors duration-200 flex items-center justify-end w-full select-none truncate text-xs sm:text-sm leading-relaxed whitespace-nowrap overflow-hidden text-ellipsis text-right`;
                     titleDiv.textContent = item.title;
                     titleDiv.title = item.title;
                     
                     div.appendChild(titleDiv);
                 } else if (item.type === 'paragraph') {
                     if (!alignRight) {
-                        div.className += ` ${currentTheme === 'light' ? 'text-zinc-600' : 'text-zinc-400'} text-[12px] md:text-[13px] leading-relaxed pl-0 pr-0 mt-0.5 font-normal not-italic select-none w-full text-left`;
+                        div.className += ` ${currentTheme === 'light' ? 'text-zinc-600' : 'text-zinc-400'} text-[11px] leading-relaxed pl-0 pr-0 mt-0.5 font-normal not-italic select-none w-full text-left`;
                         div.innerHTML = item.content;
                     } else {
-                        div.className += ` ${currentTheme === 'light' ? 'text-zinc-600' : 'text-zinc-400'} text-[12px] md:text-[13px] leading-relaxed pr-0 mt-0.5 font-normal not-italic select-none w-full`;
+                        div.className += ` ${currentTheme === 'light' ? 'text-zinc-600' : 'text-zinc-400'} text-[11px] leading-relaxed pr-0 mt-0.5 font-normal not-italic select-none w-full`;
                         div.style.textAlign = 'justify';
                         div.style.textAlignLast = 'right';
                         div.innerHTML = item.content;
@@ -1035,7 +1031,7 @@
                     renderView();
                     if (mainContainer) mainContainer.style.opacity = '1';
                 }, 500);
-            }, 4500);
+            }, 4200);
         }
 
         function renderView() {
@@ -1075,12 +1071,7 @@
         function MapsTo(state, idx) {
             playTone(480, 'sine', 0.04, 0.015);
             navigationStack.push(state);
-            const appView = document.getElementById('app-view');
-            if (appView) {
-                appView.innerHTML = '';
-                appView.classList.remove('hidden');
-                renderSubView(state, idx, appView);
-            }
+            renderSubView(state, idx, document.getElementById('app-view'));
         }
 
         function copyEmailToClipboard(email, e) {
