@@ -132,6 +132,7 @@
         let distantStars = [];
         let fastDriftStars = [];
         let shootingStars = [];
+        let starships = [];
 
         function initDistantStars() {
             distantStars = [];
@@ -194,6 +195,22 @@
             }
         }
 
+        function spawnStarship() {
+            if (Math.random() < 0.0015 && starships.length < 1) {
+                let startY = Math.random() * (canvas.height * 0.65) + (canvas.height * 0.15);
+                let speed = Math.random() * 0.25 + 0.12;
+                let goingRight = Math.random() < 0.5;
+                starships.push({
+                    x: goingRight ? -120 : canvas.width + 120,
+                    y: startY,
+                    vx: goingRight ? speed : -speed,
+                    vy: (Math.random() - 0.5) * 0.03,
+                    length: Math.random() * 35 + 25,
+                    opacity: 0.65
+                });
+            }
+        }
+
         function renderStars() {
             mouseX += (targetMouseX - mouseX) * 0.05;
             mouseY += (targetMouseY - mouseY) * 0.05;
@@ -237,8 +254,50 @@
             }
 
             spawnShootingStar();
+            spawnStarship();
+
             ctx.lineWidth = 1.5;
             ctx.lineCap = 'round';
+
+            for (let i = starships.length - 1; i >= 0; i--) {
+                let ship = starships[i];
+                ship.x += ship.vx;
+                ship.y += ship.vy;
+
+                ctx.save();
+                ctx.globalAlpha = ship.opacity;
+                ctx.strokeStyle = 'rgba(255, 255, 255, 0.45)';
+                ctx.fillStyle = 'rgba(255, 255, 255, 0.15)';
+                ctx.lineWidth = 0.75;
+
+                ctx.beginPath();
+                if (ship.vx > 0) {
+                    ctx.moveTo(ship.x + ship.length, ship.y);
+                    ctx.lineTo(ship.x - ship.length * 0.5, ship.y - 2.5);
+                    ctx.lineTo(ship.x - ship.length * 0.3, ship.y);
+                    ctx.lineTo(ship.x - ship.length * 0.5, ship.y + 2.5);
+                    ctx.closePath();
+                } else {
+                    ctx.moveTo(ship.x - ship.length, ship.y);
+                    ctx.lineTo(ship.x + ship.length * 0.5, ship.y - 2.5);
+                    ctx.lineTo(ship.x + ship.length * 0.3, ship.y);
+                    ctx.lineTo(ship.x + ship.length * 0.5, ship.y + 2.5);
+                    ctx.closePath();
+                }
+                ctx.fill();
+                ctx.stroke();
+
+                ctx.fillStyle = 'rgba(147, 197, 253, 0.7)';
+                ctx.beginPath();
+                let thrusterX = ship.vx > 0 ? ship.x - ship.length * 0.5 : ship.x + ship.length * 0.5;
+                ctx.arc(thrusterX, ship.y, 1.1, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.restore();
+
+                if (ship.x < -200 || ship.x > canvas.width + 200) {
+                    starships.splice(i, 1);
+                }
+            }
 
             for (let i = clickParticles.length - 1; i >= 0; i--) {
                 let p = clickParticles[i];
@@ -428,7 +487,7 @@
             container.innerHTML = '';
 
             const frame = document.createElement('div');
-            frame.className = `w-[192px] sm:w-[232px] md:w-[272px] h-[296px] sm:h-[360px] md:h-[400px] border border-zinc-800 bg-zinc-900/20 rounded-sm overflow-hidden flex flex-col items-center justify-center relative pointer-events-auto select-none transition-colors duration-800 shadow-xl cursor-pointer`;
+            frame.className = `w-[240px] sm:w-[320px] md:w-[420px] h-[350px] sm:h-[460px] md:h-[580px] border border-zinc-800 bg-zinc-900/20 rounded-sm overflow-hidden flex flex-col items-center justify-center relative pointer-events-auto select-none transition-colors duration-800 shadow-xl cursor-pointer`;
             
             const shouldPhaseIn = (centerTickerLoadCount === 0);
             if (centerTickerLoadCount === 0) centerTickerLoadCount++;
@@ -486,7 +545,7 @@
 
         function renderRoot(appView) {
             let rootItems = [
-                { content: '<svg class="w-4 h-4 inline select-none opacity-60" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>', action: null },
+                { content: '<svg class="w-4 h-4 inline select-none" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>', action: "navigateTo('artwork')" },
                 { content: 'AUM', action: "navigateTo('aum')" },
                 { content: 'About', action: "navigateTo('metaepistemology')" },
                 { content: 'Resumé', action: "navigateTo('resume')" },
@@ -556,13 +615,17 @@
                 centerTickerEl.className = 'fixed inset-0 pointer-events-none flex items-center justify-center z-15 px-6 select-none';
                 centerTickerEl.style.transform = 'translateY(-40px)';
                 document.body.appendChild(centerTickerEl);
-                setupCenterTicker(centerTickerEl);
             }
 
             if (currentState === 'root') {
-                centerTickerEl.style.display = 'flex';
+                centerTickerEl.style.display = 'none';
                 if (aumInterval) { clearInterval(aumInterval); aumInterval = null; }
                 renderRoot(appView);
+            } else if (currentState === 'artwork') {
+                centerTickerEl.style.display = 'flex';
+                setupCenterTicker(centerTickerEl);
+                if (aumInterval) { clearInterval(aumInterval); aumInterval = null; }
+                renderSubView(currentState, meta, appView);
             } else {
                 centerTickerEl.style.display = 'none';
                 if (aumInterval && currentState !== 'aum') { clearInterval(aumInterval); aumInterval = null; }
@@ -576,7 +639,13 @@
             let menuItems = [];
             let returnItem = { type: 'back', content: '< Return', action: "navigateBack()", align: 'right' };
 
-            if (currentState === 'metaepistemology') {
+            if (currentState === 'artwork') {
+                headerItem = { type: 'text', content: 'Artwork', align: 'right' };
+                lines = [
+                    headerItem,
+                    returnItem
+                ];
+            } else if (currentState === 'metaepistemology') {
                 headerItem = { type: 'text', content: 'About', align: 'right' };
                 lines = [
                     { type: 'paragraph', content: profileData.metaepistemologyDetail, align: 'right', rightJustify: true },
@@ -713,11 +782,11 @@
                                     <div class="flex justify-between items-center text-[11px] sm:text-xs mb-0 w-full">
                                         <span class="${textMain} font-medium inline-flex flex-col sm:inline">
                                             <span>1,193.428 SLV</span>
-                                            <span class="text-[10px] opacity-75 font-mono">($<span id="live-slv-price">${window.slvLivePrice.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}</span>)</span>
+                                            <span class="text-[10px] opacity-75 font-mono block sm:inline mt-0.5 sm:mt-0">($<span id="live-slv-price">${window.slvLivePrice.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}</span>)</span>
                                         </span>
-                                        <span class="${textSub} text-right flex flex-col items-end sm:flex-row sm:items-center">
+                                        <span class="${textSub} text-right flex flex-col items-end">
                                             <span id="live-slv-val">$${Math.round(slvVal).toLocaleString()}</span>
-                                            <span class="text-[10px] opacity-75 sm:ml-1">(<span id="live-slv-pct">${slvPct}</span>%)</span>
+                                            <span class="text-[10px] opacity-75">(<span id="live-slv-pct">${slvPct}</span>%)</span>
                                         </span>
                                     </div>
                                     <div class="flex justify-between items-center text-[10px] opacity-75 mb-0 ${textSub} w-full">
