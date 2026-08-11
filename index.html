@@ -79,6 +79,18 @@
             0%, 100% { opacity: 1; }
             50% { opacity: 0; }
         }
+        @keyframes glitchFlash {
+            0% { filter: contrast(100%) blur(0px); transform: translate(0,0); }
+            20% { filter: contrast(350%) blur(3px) hue-rotate(90deg); transform: translate(-4px, 2px); }
+            40% { filter: contrast(450%) blur(5px) invert(15%); transform: translate(4px, -3px); }
+            60% { filter: contrast(350%) blur(3px) hue-rotate(-90deg); transform: translate(-3px, -2px); }
+            80% { filter: contrast(200%) blur(1px); transform: translate(1px, 1px); }
+            100% { filter: contrast(100%) blur(0px); transform: translate(0,0); }
+        }
+        .glitch-transition {
+            animation: glitchFlash 1.4s steps(6, end) forwards;
+            image-rendering: pixelated;
+        }
         .typing-cursor::after {
             content: '_';
             display: inline-block;
@@ -485,8 +497,8 @@
 
             const isLight = currentTheme === 'light';
             const frame = document.createElement('div');
-            // Artwork 20% smaller width, taller height across platforms
-            frame.className = `w-[172px] sm:w-[220px] md:w-[244px] h-[325px] sm:h-[400px] md:h-[440px] border ${isLight ? 'border-zinc-300 bg-zinc-200/30' : 'border-zinc-800 bg-zinc-900/20'} rounded-sm overflow-hidden flex flex-col items-center justify-center relative pointer-events-auto select-none transition-colors duration-800 shadow-xl cursor-pointer`;
+            // Artwork wider rectangle, taller height across platforms
+            frame.className = `w-[210px] sm:w-[260px] md:w-[295px] h-[325px] sm:h-[400px] md:h-[440px] border ${isLight ? 'border-zinc-300 bg-zinc-200/30' : 'border-zinc-800 bg-zinc-900/20'} rounded-sm overflow-hidden flex flex-col items-center justify-center relative pointer-events-auto select-none transition-colors duration-800 shadow-xl cursor-pointer`;
             
             const shouldPhaseIn = (centerTickerLoadCount === 0);
             if (centerTickerLoadCount === 0) centerTickerLoadCount++;
@@ -511,16 +523,23 @@
                 'https://i2c.seadn.io/ethereum/0x495f947276749ce646f68ac8c248420045cb7b5e/d5d3f8eec99192a644ea7550ec7309/32d5d3f8eec99192a644ea7550ec7309.jpeg?w=500',
                 'https://i2c.seadn.io/ethereum/0x495f947276749ce646f68ac8c248420045cb7b5e/29875a6d8e4ed4818ee567f79119f5/2529875a6d8e4ed4818ee567f79119f5.jpeg?w=500',
                 'https://i2c.seadn.io/ethereum/0x495f947276749ce646f68ac8c248420045cb7b5e/4e620d0f25adec419ad3fdff4c744a/734e620d0f25adec419ad3fdff4c744a.jpeg?w=500',
-                'https://i2c.seadn.io/ethereum/0x495f947276749ce646f68ac8c248420045cb7b5e/c94f70ea5458d0de0b08c9ea5dc8d9/62c94f70ea5458d0de0b08c9ea5dc8d9.jpeg?w=500'
+                'https://i2c.seadn.io/ethereum/0x495f947276749ce646f68ac8c248420045cb7b5e/c94f70ea5458d0de0b08c9ea5dc8d9/62c94f70ea5458d0de0b08c9ea5dc8d9.jpeg?w=500',
+                'https://i2c.seadn.io/ethereum/0x495f947276749ce646f68ac8c248420045cb7b5e/84c681cce7515d984534cc885dc265/a584c681cce7515d984534cc885dc265.jpeg?w=500',
+                'https://i2c.seadn.io/ethereum/0x495f947276749ce646f68ac8c248420045cb7b5e/5919e0c4e17670a9321eb343228c36/735919e0c4e17670a9321eb343228c36.jpeg?w=500',
+                'https://i2c.seadn.io/ethereum/0x495f947276749ce646f68ac8c248420045cb7b5e/81b3475f6838b57c46b22d83fbb0cf/e881b3475f6838b57c46b22d83fbb0cf.jpeg?w=500',
+                'https://i2c.seadn.io/ethereum/0x495f947276749ce646f68ac8c248420045cb7b5e/93cbaa3441c0fbcea1d37285fb42d9/5c93cbaa3441c0fbcea1d37285fb42d9.jpeg?w=500',
+                'https://i2c.seadn.io/ethereum/0x495f947276749ce646f68ac8c248420045cb7b5e/c8355d4122fbc3bfc30df5cbd1a4c5/aec8355d4122fbc3bfc30df5cbd1a4c5.jpeg?w=500',
+                'https://i2c.seadn.io/ethereum/0x495f947276749ce646f68ac8c248420045cb7b5e/212a86abef7694e55884a5f6241e33/dc212a86abef7694e55884a5f6241e33.jpeg?w=500',
+                'https://i2c.seadn.io/ethereum/0x495f947276749ce646f68ac8c248420045cb7b5e/0eea027970070099cd39af85167810/1e0eea027970070099cd39af85167810.jpeg?w=500',
+                'https://i2c.seadn.io/ethereum/0x495f947276749ce646f68ac8c248420045cb7b5e/0cd625524cc3f6f79dc5ef302c5f39/ec0cd625524cc3f6f79dc5ef302c5f39.jpeg?w=500',
+                'https://i2c.seadn.io/ethereum/0x60f80121c31a0d46b5279700f9df786054aa5ee5/dc1d908291a085cfd25d7a43c79f4419.jpeg?w=500',
+                'https://i2c.seadn.io/ethereum/0x60f80121c31a0d46b5279700f9df786054aa5ee5/e4d4f45ed3f6329ec1cdcb7bb339ae/03e4d4f45ed3f6329ec1cdcb7bb339ae.jpeg?w=500'
             ];
 
             let currentImgIndex = 0;
             const img = document.createElement('img');
             img.src = openseaImages[currentImgIndex];
-            img.className = 'w-full h-full object-cover transition-all duration-1000';
-            img.style.opacity = '1';
-            img.style.filter = 'blur(0px)';
-            img.style.transform = 'scale(1)';
+            img.className = 'w-full h-full object-cover';
             img.alt = 'OpenSea Art';
 
             frame.appendChild(img);
@@ -528,21 +547,17 @@
 
             if (window.artTickerInterval) clearInterval(window.artTickerInterval);
             window.artTickerInterval = setInterval(() => {
-                img.style.opacity = '0';
-                img.style.filter = 'blur(10px)';
-                img.style.transform = 'scale(1.03)';
+                img.classList.add('glitch-transition');
 
                 setTimeout(() => {
                     currentImgIndex = (currentImgIndex + 1) % openseaImages.length;
                     img.src = openseaImages[currentImgIndex];
+                }, 700);
 
-                    setTimeout(() => {
-                        img.style.opacity = '1';
-                        img.style.filter = 'blur(0px)';
-                        img.style.transform = 'scale(1)';
-                    }, 100);
-                }, 1000);
-            }, 6000);
+                setTimeout(() => {
+                    img.classList.remove('glitch-transition');
+                }, 1400);
+            }, 9000);
         }
 
         const typedIntroEl = document.getElementById('typed-intro');
