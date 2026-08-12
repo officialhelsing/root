@@ -689,13 +689,13 @@
 
                 const aumHtml = `
                     <div class="space-y-4 text-xs tracking-widest select-none w-full mt-1 text-left font-mono flex justify-end">
-                        <div class="w-[550px] p-5 bg-zinc-950/60 border border-zinc-800/60 rounded-xl space-y-4 shadow-2xl backdrop-blur-md scale-[0.62] sm:scale-100 origin-top-right">
+                        <div class="w-[280px] sm:w-[450px] md:w-[550px] p-3 sm:p-5 bg-zinc-950/60 border border-zinc-800/60 rounded-xl space-y-2.5 sm:space-y-4 shadow-2xl backdrop-blur-md scale-[0.78] sm:scale-100 origin-top-right">
                             
                             <div class="flex justify-between items-center pb-1.5 border-b border-zinc-800/40">
                                 <div class="flex items-center space-x-2">
-                                    <span class="text-[10px] text-zinc-300 uppercase tracking-widest font-semibold">METAEPISTEMI FUND</span>
+                                    <span class="text-[8px] sm:text-[10px] text-zinc-300 uppercase tracking-widest font-semibold">METAEPISTEMI FUND</span>
                                 </div>
-                                <div class="flex items-center space-x-1.5 text-[10px] text-zinc-500 uppercase tracking-widest font-medium">
+                                <div class="flex items-center space-x-1.5 text-[8px] sm:text-[10px] text-zinc-500 uppercase tracking-widest font-medium">
                                     <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
                                     <span>APEX</span>
                                 </div>
@@ -703,81 +703,89 @@
 
                             <div class="grid grid-cols-2 gap-2 items-end">
                                 <div class="space-y-0.5">
-                                    <div class="text-[9px] text-zinc-500 uppercase tracking-wider">TOTAL COST BASIS</div>
-                                    <div class="text-sm text-zinc-300 font-medium">$${Math.round(totalCost).toLocaleString()}</div>
+                                    <div class="text-[7px] sm:text-[9px] text-zinc-500 uppercase tracking-wider">TOTAL COST BASIS</div>
+                                    <div class="text-[11px] sm:text-sm text-zinc-300 font-medium">$${Math.round(totalCost).toLocaleString()}</div>
                                 </div>
                                 <div class="space-y-0.5 text-right">
-                                    <div class="text-[9px] text-zinc-500 uppercase tracking-wider">MARKET VALUE</div>
-                                    <div id="live-total-val" class="text-xl font-bold text-white tracking-tight">$${Math.round(totalVal).toLocaleString()}</div>
+                                    <div class="text-[7px] sm:text-[9px] text-zinc-500 uppercase tracking-wider">MARKET VALUE</div>
+                                    <div id="live-total-val" class="text-sm sm:text-xl font-bold text-white tracking-tight">$${Math.round(totalVal).toLocaleString()}</div>
                                 </div>
                             </div>
 
                             <div class="flex justify-between items-center text-[10px] text-zinc-400 pt-0.5">
-                                <div>
-                                    <span class="text-[9px] uppercase text-zinc-500 tracking-wider">AGGREGATE RETURN</span>
-                                </div>
+                                <span class="text-[7px] sm:text-[9px] uppercase text-zinc-500 tracking-wider">AGGREGATE RETURN</span>
                                 <div class="flex items-center space-x-1.5">
-                                    <span id="live-total-return-val" class="${isPositiveReturn ? 'text-emerald-400' : 'text-red-400'} font-semibold text-xs">${isPositiveReturn ? '+' : ''}$${Math.round(totalReturnVal).toLocaleString()}</span>
-                                    <span id="live-total-return" class="${isPositiveReturn ? 'text-emerald-400' : 'text-red-400'} font-semibold text-xs">(${isPositiveReturn ? '+' : ''}${totalReturnPct}%)</span>
+                                    <span id="live-total-return-val" class="${isPositiveReturn ? 'text-emerald-400' : 'text-red-400'} font-semibold text-[10px] sm:text-xs">${isPositiveReturn ? '+' : ''}$${Math.round(totalReturnVal).toLocaleString()}</span>
+                                    <span id="live-total-return" class="${isPositiveReturn ? 'text-emerald-400' : 'text-red-400'} font-semibold text-[10px] sm:text-xs">(${isPositiveReturn ? '+' : ''}${totalReturnPct}%)</span>
                                 </div>
                             </div>
 
-                            <div class="pt-2 border-t border-zinc-800/40 space-y-4">
-                                <div class="text-[9px] text-zinc-500 uppercase tracking-widest font-semibold">HOLDINGS ALLOCATION</div>
+                            <!-- Mobile-only inline Return under aggregate -->
+                            <div class="block sm:hidden pt-1.5 border-t border-zinc-900/80 text-right">
+                                <div class="inline-flex items-center space-x-2 text-[10px] text-zinc-500">
+                                    <span class="cursor-pointer hover:text-zinc-300 transition-colors" onclick="navigateBack()">&#60; Return</span>
+                                    <span class="opacity-70 hover:opacity-100 cursor-pointer" title="Return to root page" onclick="navigateToRoot()">
+                                        <svg class="w-3 h-3 inline" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path></svg>
+                                    </span>
+                                </div>
+                            </div>
+
+                            <div class="pt-2 border-t border-zinc-800/40 space-y-2 sm:space-y-4">
+                                <div class="text-[7px] sm:text-[9px] text-zinc-500 uppercase tracking-widest font-semibold">HOLDINGS ALLOCATION</div>
                                 
                                 <div class="space-y-1 pb-1.5 border-b border-zinc-900/60">
                                     <div class="flex justify-between items-baseline">
-                                        <div class="text-white font-medium text-xs">
-                                            110.453 BTC <span class="text-[9px] text-zinc-500 font-mono ml-1">($<span id="live-btc-price">${window.btcLivePrice.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}</span>)</span>
+                                        <div class="text-white font-medium text-[9px] sm:text-xs">
+                                            110.453 BTC <span class="text-[7px] sm:text-[9px] text-zinc-500 font-mono ml-1">($<span id="live-btc-price">${window.btcLivePrice.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}</span>)</span>
                                         </div>
                                         <div class="text-right">
-                                            <span id="live-btc-val" class="text-zinc-200 font-medium text-xs">$${Math.round(btcVal).toLocaleString()}</span>
-                                            <span class="text-[9px] text-zinc-500 ml-1">(<span id="live-btc-pct">${btcPct}</span>%)</span>
+                                            <span id="live-btc-val" class="text-zinc-200 font-medium text-[9px] sm:text-xs">$${Math.round(btcVal).toLocaleString()}</span>
+                                            <span class="text-[7px] sm:text-[9px] text-zinc-500 ml-1">(<span id="live-btc-pct">${btcPct}</span>%)</span>
                                         </div>
                                     </div>
-                                    <div class="flex justify-between items-center text-[9px] text-zinc-500">
+                                    <div class="flex justify-between items-center text-[7px] sm:text-[9px] text-zinc-500">
                                         <span>BASIS: $23,493.39</span>
                                         <span id="live-btc-return" class="${isBtcPos ? 'text-emerald-400' : 'text-red-400'} font-medium">${isBtcPos ? '+' : ''}${btcReturnPct}%</span>
                                     </div>
-                                    <div class="w-full ${trackBg} h-1 rounded-full overflow-hidden">
+                                    <div class="w-full ${trackBg} h-0.5 sm:h-1 rounded-full overflow-hidden">
                                         <div id="live-btc-bar" class="${barBtc} h-full rounded-full transition-all duration-500" style="width: ${btcPct}%"></div>
                                     </div>
                                 </div>
 
                                 <div class="space-y-1 pb-1.5 border-b border-zinc-900/60">
                                     <div class="flex justify-between items-baseline">
-                                        <div class="text-white font-medium text-xs">
-                                            10,394.245 AGQ <span class="text-[9px] text-zinc-500 font-mono ml-1">($<span id="live-agq-price">${window.agqLivePrice.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}</span>)</span>
+                                        <div class="text-white font-medium text-[9px] sm:text-xs">
+                                            10,394.245 AGQ <span class="text-[7px] sm:text-[9px] text-zinc-500 font-mono ml-1">($<span id="live-agq-price">${window.agqLivePrice.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}</span>)</span>
                                         </div>
                                         <div class="text-right">
-                                            <span id="live-agq-val" class="text-zinc-200 font-medium text-xs">$${Math.round(agqVal).toLocaleString()}</span>
-                                            <span class="text-[9px] text-zinc-500 ml-1">(<span id="live-agq-pct">${agqPct}</span>%)</span>
+                                            <span id="live-agq-val" class="text-zinc-200 font-medium text-[9px] sm:text-xs">$${Math.round(agqVal).toLocaleString()}</span>
+                                            <span class="text-[7px] sm:text-[9px] text-zinc-500 ml-1">(<span id="live-agq-pct">${agqPct}</span>%)</span>
                                         </div>
                                     </div>
-                                    <div class="flex justify-between items-center text-[9px] text-zinc-500">
+                                    <div class="flex justify-between items-center text-[7px] sm:text-[9px] text-zinc-500">
                                         <span>BASIS: $25.38</span>
                                         <span id="live-agq-return" class="${isAgqPos ? 'text-emerald-400' : 'text-red-400'} font-medium">${isAgqPos ? '+' : ''}${agqReturnPct}%</span>
                                     </div>
-                                    <div class="w-full ${trackBg} h-1 rounded-full overflow-hidden">
+                                    <div class="w-full ${trackBg} h-0.5 sm:h-1 rounded-full overflow-hidden">
                                         <div id="live-agq-bar" class="${barAgq} h-full rounded-full transition-all duration-500" style="width: ${agqPct}%"></div>
                                     </div>
                                 </div>
 
                                 <div class="space-y-1">
                                     <div class="flex justify-between items-baseline">
-                                        <div class="text-white font-medium text-xs">
-                                            1,193.428 SLV <span class="text-[9px] text-zinc-500 font-mono ml-1">($<span id="live-slv-price">${window.slvLivePrice.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}</span>)</span>
+                                        <div class="text-white font-medium text-[9px] sm:text-xs">
+                                            1,193.428 SLV <span class="text-[7px] sm:text-[9px] text-zinc-500 font-mono ml-1">($<span id="live-slv-price">${window.slvLivePrice.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}</span>)</span>
                                         </div>
                                         <div class="text-right">
-                                            <span id="live-slv-val" class="text-zinc-200 font-medium text-xs">$${Math.round(slvVal).toLocaleString()}</span>
-                                            <span class="text-[9px] text-zinc-500 ml-1">(<span id="live-slv-pct">${slvPct}</span>%)</span>
+                                            <span id="live-slv-val" class="text-zinc-200 font-medium text-[9px] sm:text-xs">$${Math.round(slvVal).toLocaleString()}</span>
+                                            <span class="text-[7px] sm:text-[9px] text-zinc-500 ml-1">(<span id="live-slv-pct">${slvPct}</span>%)</span>
                                         </div>
                                     </div>
-                                    <div class="flex justify-between items-center text-[9px] text-zinc-500">
+                                    <div class="flex justify-between items-center text-[7px] sm:text-[9px] text-zinc-500">
                                         <span>BASIS: $16.48</span>
                                         <span id="live-slv-return" class="${isSlvPos ? 'text-emerald-400' : 'text-red-400'} font-medium">${isSlvPos ? '+' : ''}${slvReturnPct}%</span>
                                     </div>
-                                    <div class="w-full ${trackBg} h-1 rounded-full overflow-hidden">
+                                    <div class="w-full ${trackBg} h-0.5 sm:h-1 rounded-full overflow-hidden">
                                         <div id="live-slv-bar" class="${barSlv} h-full rounded-full transition-all duration-500" style="width: ${slvPct}%"></div>
                                     </div>
                                 </div>
