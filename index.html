@@ -359,7 +359,6 @@
         let navigationStack = ['root'];
         let rootLoadCount = 0;
         let centerTickerLoadCount = 0;
-        let aumInterval = null;
 
         function startTypingSequence(text, onComplete) {
             currentActiveText = text;
@@ -520,13 +519,23 @@
         let currentActiveText = "Welcome, friend.";
 
         function renderRoot(appView) {
-            let rootItems = [
-                { content: '<svg class="w-4 h-4 inline select-none align-middle mr-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>', action: "navigateTo('artwork')" },
-                { content: 'AUM', action: "navigateTo('aum')" },
+            let items = [
+                { content: '<svg class="w-3.5 h-3.5 inline select-none align-middle mr-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>', action: "navigateTo('artwork')" },
                 { content: 'About', action: "navigateTo('metaepistemology')" },
                 { content: 'Resumé', action: "navigateTo('resume')" },
+                { content: 'Blog', action: "navigateTo('blog')" },
                 { content: 'Portals', action: "navigateTo('portal')" },
-                { content: 'Research', action: "navigateTo('research')" },
+                { content: 'Research', action: "navigateTo('research')" }
+            ];
+
+            items.sort((a, b) => {
+                let lenA = a.content.includes('<svg') ? 0 : a.content.length;
+                let lenB = b.content.includes('<svg') ? 0 : b.content.length;
+                return lenA - lenB;
+            });
+
+            let rootItems = [
+                ...items,
                 { content: 'Directory', action: null, isHeader: true }
             ];
 
@@ -595,16 +604,13 @@
 
             if (currentState === 'root') {
                 centerTickerEl.style.display = 'none';
-                if (aumInterval) { clearInterval(aumInterval); aumInterval = null; }
                 renderRoot(appView);
             } else if (currentState === 'artwork') {
                 centerTickerEl.style.display = 'flex';
                 setupCenterTicker(centerTickerEl);
-                if (aumInterval) { clearInterval(aumInterval); aumInterval = null; }
                 renderSubView(currentState, meta, appView);
             } else {
                 centerTickerEl.style.display = 'none';
-                if (aumInterval && currentState !== 'aum') { clearInterval(aumInterval); aumInterval = null; }
                 renderSubView(currentState, meta, appView);
             }
         }
@@ -643,254 +649,21 @@
                     headerItem,
                     returnItem
                 ];
-            } else if (currentState === 'aum') {
-                const textMain = 'text-white';
-                const textSub = 'text-zinc-400';
-                const trackBg = 'bg-zinc-900';
-                const barBtc = 'bg-zinc-200';
-                const barAgq = 'bg-zinc-400';
-                const barSlv = 'bg-zinc-500';
-
-                if (typeof window.btcLivePrice === 'undefined') {
-                    window.btcLivePrice = 64735.08;
-                    window.agqLivePrice = 76.86;
-                    window.slvLivePrice = 57.50;
-                }
-
-                const btcVal = window.btcLivePrice * 110.453;
-                const agqVal = window.agqLivePrice * 10394.245;
-                const slvVal = window.slvLivePrice * 1193.428;
-                const totalVal = btcVal + agqVal + slvVal;
-
-                const btcCost = 23493.39 * 110.453;
-                const agqCost = 25.38 * 10394.245;
-                const slvCost = 16.48 * 1193.428;
-                const totalCost = btcCost + agqCost + slvCost;
-
-                const btcReturnVal = btcVal - btcCost;
-                const btcReturnPct = ((btcReturnVal / btcCost) * 100).toFixed(1);
-                const isBtcPos = btcReturnVal >= 0;
-
-                const agqReturnVal = agqVal - agqCost;
-                const agqReturnPct = ((agqReturnVal / agqCost) * 100).toFixed(1);
-                const isAgqPos = agqReturnVal >= 0;
-
-                const slvReturnVal = slvVal - slvCost;
-                const slvReturnPct = ((slvReturnVal / slvCost) * 100).toFixed(1);
-                const isSlvPos = slvReturnVal >= 0;
-
-                const totalReturnVal = totalVal - totalCost;
-                const totalReturnPct = ((totalReturnVal / totalCost) * 100).toFixed(1);
-                const isPositiveReturn = totalReturnVal >= 0;
-
-                const btcPct = ((btcVal / totalVal) * 100).toFixed(1);
-                const agqPct = ((agqVal / totalVal) * 100).toFixed(1);
-                const slvPct = ((slvVal / totalVal) * 100).toFixed(1);
-
-                const aumHtml = `
-                    <div class="space-y-4 text-xs tracking-widest select-none w-full mt-1 text-left font-mono flex justify-end">
-                        <div class="w-[320px] sm:w-[450px] md:w-[550px] p-4 sm:p-5 bg-zinc-950/60 border border-zinc-800/60 rounded-xl space-y-3 sm:space-y-4 shadow-2xl backdrop-blur-md">
-                            
-                            <div class="flex justify-between items-center pb-1.5 border-b border-zinc-800/40">
-                                <div class="flex items-center space-x-2">
-                                    <span class="text-[9px] sm:text-[10px] text-zinc-300 uppercase tracking-widest font-semibold">METAEPISTEMI FUND</span>
-                                </div>
-                                <div class="flex items-center space-x-1.5 text-[9px] sm:text-[10px] text-zinc-500 uppercase tracking-widest font-medium">
-                                    <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
-                                    <span>APEX</span>
-                                </div>
-                            </div>
-
-                            <div class="grid grid-cols-2 gap-2 items-end">
-                                <div class="space-y-0.5">
-                                    <div class="text-[8px] sm:text-[9px] text-zinc-500 uppercase tracking-wider">TOTAL COST BASIS</div>
-                                    <div class="text-xs sm:text-sm text-zinc-300 font-medium">$${Math.round(totalCost).toLocaleString()}</div>
-                                </div>
-                                <div class="space-y-0.5 text-right">
-                                    <div class="text-[8px] sm:text-[9px] text-zinc-500 uppercase tracking-wider">MARKET VALUE</div>
-                                    <div id="live-total-val" class="text-base sm:text-xl font-bold text-white tracking-tight">$${Math.round(totalVal).toLocaleString()}</div>
-                                </div>
-                            </div>
-
-                            <div class="flex justify-between items-center text-[10px] text-zinc-400 pt-0.5">
-                                <span class="text-[8px] sm:text-[9px] uppercase text-zinc-500 tracking-wider">AGGREGATE RETURN</span>
-                                <div class="flex items-center space-x-1.5">
-                                    <span id="live-total-return-val" class="${isPositiveReturn ? 'text-emerald-400' : 'text-red-400'} font-semibold text-xs">${isPositiveReturn ? '+' : ''}$${Math.round(totalReturnVal).toLocaleString()}</span>
-                                    <span id="live-total-return" class="${isPositiveReturn ? 'text-emerald-400' : 'text-red-400'} font-semibold text-xs">(${isPositiveReturn ? '+' : ''}${totalReturnPct}%)</span>
-                                </div>
-                            </div>
-
-                            <div class="pt-2 border-t border-zinc-800/40 space-y-3 sm:space-y-4">
-                                <div class="text-[8px] sm:text-[9px] text-zinc-500 uppercase tracking-widest font-semibold">HOLDINGS ALLOCATION</div>
-                                
-                                <div class="space-y-1 pb-1.5 border-b border-zinc-900/60">
-                                    <div class="flex justify-between items-baseline">
-                                        <div class="text-white font-medium text-[10px] sm:text-xs">
-                                            110.453 BTC <span class="text-[8px] sm:text-[9px] text-zinc-500 font-mono ml-1">($<span id="live-btc-price">${window.btcLivePrice.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}</span>)</span>
-                                        </div>
-                                        <div class="text-right">
-                                            <span id="live-btc-val" class="text-zinc-200 font-medium text-[10px] sm:text-xs">$${Math.round(btcVal).toLocaleString()}</span>
-                                            <span class="text-[8px] sm:text-[9px] text-zinc-500 ml-1">(<span id="live-btc-pct">${btcPct}</span>%)</span>
-                                        </div>
-                                    </div>
-                                    <div class="flex justify-between items-center text-[8px] sm:text-[9px] text-zinc-500">
-                                        <span>BASIS: $23,493.39</span>
-                                        <span id="live-btc-return" class="${isBtcPos ? 'text-emerald-400' : 'text-red-400'} font-medium">${isBtcPos ? '+' : ''}${btcReturnPct}%</span>
-                                    </div>
-                                    <div class="w-full ${trackBg} h-1 rounded-full overflow-hidden">
-                                        <div id="live-btc-bar" class="${barBtc} h-full rounded-full transition-all duration-500" style="width: ${btcPct}%"></div>
-                                    </div>
-                                </div>
-
-                                <div class="space-y-1 pb-1.5 border-b border-zinc-900/60">
-                                    <div class="flex justify-between items-baseline">
-                                        <div class="text-white font-medium text-[10px] sm:text-xs">
-                                            10,394.245 AGQ <span class="text-[8px] sm:text-[9px] text-zinc-500 font-mono ml-1">($<span id="live-agq-price">${window.agqLivePrice.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}</span>)</span>
-                                        </div>
-                                        <div class="text-right">
-                                            <span id="live-agq-val" class="text-zinc-200 font-medium text-[10px] sm:text-xs">$${Math.round(agqVal).toLocaleString()}</span>
-                                            <span class="text-[8px] sm:text-[9px] text-zinc-500 ml-1">(<span id="live-agq-pct">${agqPct}</span>%)</span>
-                                        </div>
-                                    </div>
-                                    <div class="flex justify-between items-center text-[8px] sm:text-[9px] text-zinc-500">
-                                        <span>BASIS: $25.38</span>
-                                        <span id="live-agq-return" class="${isAgqPos ? 'text-emerald-400' : 'text-red-400'} font-medium">${isAgqPos ? '+' : ''}${agqReturnPct}%</span>
-                                    </div>
-                                    <div class="w-full ${trackBg} h-1 rounded-full overflow-hidden">
-                                        <div id="live-agq-bar" class="${barAgq} h-full rounded-full transition-all duration-500" style="width: ${agqPct}%"></div>
-                                    </div>
-                                </div>
-
-                                <div class="space-y-1">
-                                    <div class="flex justify-between items-baseline">
-                                        <div class="text-white font-medium text-[10px] sm:text-xs">
-                                            1,193.428 SLV <span class="text-[8px] sm:text-[9px] text-zinc-500 font-mono ml-1">($<span id="live-slv-price">${window.slvLivePrice.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}</span>)</span>
-                                        </div>
-                                        <div class="text-right">
-                                            <span id="live-slv-val" class="text-zinc-200 font-medium text-[10px] sm:text-xs">$${Math.round(slvVal).toLocaleString()}</span>
-                                            <span class="text-[8px] sm:text-[9px] text-zinc-500 ml-1">(<span id="live-slv-pct">${slvPct}</span>%)</span>
-                                        </div>
-                                    </div>
-                                    <div class="flex justify-between items-center text-[8px] sm:text-[9px] text-zinc-500">
-                                        <span>BASIS: $16.48</span>
-                                        <span id="live-slv-return" class="${isSlvPos ? 'text-emerald-400' : 'text-red-400'} font-medium">${isSlvPos ? '+' : ''}${slvReturnPct}%</span>
-                                    </div>
-                                    <div class="w-full ${trackBg} h-1 rounded-full overflow-hidden">
-                                        <div id="live-slv-bar" class="${barSlv} h-full rounded-full transition-all duration-500" style="width: ${slvPct}%"></div>
-                                    </div>
-                                </div>
-
-                            </div>
-                        </div>
-                    </div>
-                `;
-                headerItem = { type: 'text', content: 'Assets Under Management', align: 'right' };
+            } else if (currentState === 'blog') {
+                headerItem = { type: 'text', content: 'Blog', align: 'right' };
+                menuItems = [
+                    { type: 'link', content: 'BIP-110', url: 'https://officialhelsing.github.io/BIP-110/', indent: true, align: 'right' }
+                ];
                 lines = [
-                    { type: 'paragraph', content: aumHtml, align: 'left' },
+                    ...menuItems,
                     headerItem,
                     returnItem
                 ];
-
-                if (aumInterval) clearInterval(aumInterval);
-                aumInterval = setInterval(() => {
-                    const btcDelta = (Math.random() - 0.49) * 45;
-                    const agqDelta = (Math.random() - 0.49) * 0.12;
-                    const slvDelta = (Math.random() - 0.49) * 0.08;
-
-                    window.btcLivePrice = Math.max(10000, window.btcLivePrice + btcDelta);
-                    window.agqLivePrice = Math.max(5, window.agqLivePrice + agqDelta);
-                    window.slvLivePrice = Math.max(5, window.slvLivePrice + slvDelta);
-
-                    const newBtcVal = window.btcLivePrice * 110.453;
-                    const newAgqVal = window.agqLivePrice * 10394.245;
-                    const newSlvVal = window.slvLivePrice * 1193.428;
-                    const newTotalVal = newBtcVal + newAgqVal + newSlvVal;
-
-                    const newBtcReturnVal = newBtcVal - btcCost;
-                    const newBtcReturnPct = ((newBtcReturnVal / btcCost) * 100).toFixed(1);
-                    const isNewBtcPos = newBtcReturnVal >= 0;
-
-                    const newAgqReturnVal = newAgqVal - agqCost;
-                    const newAgqReturnPct = ((newAgqReturnVal / agqCost) * 100).toFixed(1);
-                    const isNewAgqPos = newAgqReturnVal >= 0;
-
-                    const newSlvReturnVal = newSlvVal - slvCost;
-                    const newSlvReturnPct = ((newSlvReturnVal / slvCost) * 100).toFixed(1);
-                    const isNewSlvPos = newSlvReturnVal >= 0;
-
-                    const newTotalReturnVal = newTotalVal - totalCost;
-                    const newTotalReturnPct = ((newTotalReturnVal / totalCost) * 100).toFixed(1);
-                    const isNewPositive = newTotalReturnVal >= 0;
-
-                    const newBtcPct = ((newBtcVal / newTotalVal) * 100).toFixed(1);
-                    const newAgqPct = ((newAgqVal / newTotalVal) * 100).toFixed(1);
-                    const newSlvPct = ((newSlvVal / newTotalVal) * 100).toFixed(1);
-
-                    const elTotal = document.getElementById('live-total-val');
-                    const elTotalReturn = document.getElementById('live-total-return');
-                    const elTotalReturnVal = document.getElementById('live-total-return-val');
-                    
-                    const elBtcPrice = document.getElementById('live-btc-price');
-                    const elBtcVal = document.getElementById('live-btc-val');
-                    const elBtcPct = document.getElementById('live-btc-pct');
-                    const elBtcBar = document.getElementById('live-btc-bar');
-                    const elBtcReturn = document.getElementById('live-btc-return');
-
-                    const elAgqPrice = document.getElementById('live-agq-price');
-                    const elAgqVal = document.getElementById('live-agq-val');
-                    const elAgqPct = document.getElementById('live-agq-pct');
-                    const elAgqBar = document.getElementById('live-agq-bar');
-                    const elAgqReturn = document.getElementById('live-agq-return');
-
-                    const elSlvPrice = document.getElementById('live-slv-price');
-                    const elSlvVal = document.getElementById('live-slv-val');
-                    const elSlvPct = document.getElementById('live-slv-pct');
-                    const elSlvBar = document.getElementById('live-slv-bar');
-                    const elSlvReturn = document.getElementById('live-slv-return');
-
-                    if (elTotal) elTotal.textContent = `$${Math.round(newTotalVal).toLocaleString()}`;
-                    if (elTotalReturn) {
-                        elTotalReturn.textContent = `(${isNewPositive ? '+' : ''}${newTotalReturnPct}%)`;
-                        elTotalReturn.className = `${isNewPositive ? 'text-emerald-400' : 'text-red-400'} font-semibold text-xs`;
-                    }
-                    if (elTotalReturnVal) {
-                        elTotalReturnVal.textContent = `${isNewPositive ? '+' : ''}$${Math.round(newTotalReturnVal).toLocaleString()}`;
-                        elTotalReturnVal.className = `${isNewPositive ? 'text-emerald-400' : 'text-red-400'} font-semibold text-xs`;
-                    }
-
-                    if (elBtcPrice) elBtcPrice.textContent = window.btcLivePrice.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2});
-                    if (elBtcVal) elBtcVal.textContent = `$${Math.round(newBtcVal).toLocaleString()}`;
-                    if (elBtcPct) elBtcPct.textContent = newBtcPct;
-                    if (elBtcBar) elBtcBar.style.width = `${newBtcPct}%`;
-                    if (elBtcReturn) {
-                        elBtcReturn.textContent = `${isNewBtcPos ? '+' : ''}${newBtcReturnPct}%`;
-                        elBtcReturn.className = `${isNewBtcPos ? 'text-emerald-400' : 'text-red-400'} font-medium`;
-                    }
-
-                    if (elAgqPrice) elAgqPrice.textContent = window.agqLivePrice.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2});
-                    if (elAgqVal) elAgqVal.textContent = `$${Math.round(newAgqVal).toLocaleString()}`;
-                    if (elAgqPct) elAgqPct.textContent = newAgqPct;
-                    if (elAgqBar) elAgqBar.style.width = `${newAgqPct}%`;
-                    if (elAgqReturn) {
-                        elAgqReturn.textContent = `${isNewAgqPos ? '+' : ''}${newAgqReturnPct}%`;
-                        elAgqReturn.className = `${isNewAgqPos ? 'text-emerald-400' : 'text-red-400'} font-medium`;
-                    }
-
-                    if (elSlvPrice) elSlvPrice.textContent = window.slvLivePrice.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2});
-                    if (elSlvVal) elSlvVal.textContent = `$${Math.round(newSlvVal).toLocaleString()}`;
-                    if (elSlvPct) elSlvPct.textContent = newSlvPct;
-                    if (elSlvBar) elSlvBar.style.width = `${newSlvPct}%`;
-                    if (elSlvReturn) {
-                        elSlvReturn.textContent = `${isNewSlvPos ? '+' : ''}${newSlvReturnPct}%`;
-                        elSlvReturn.className = `${isNewSlvPos ? 'text-emerald-400' : 'text-red-400'} font-medium`;
-                    }
-                }, 1000);
             } else if (currentState === 'portal') {
                 headerItem = { type: 'text', content: 'Portals', align: 'right' };
                 menuItems = [
                     { type: 'link', content: 'FoTCM', url: 'https://officialhelsing.github.io/Foundations-of-Topological-Continuum-Mathematics/', indent: true, align: 'right' },
                     { type: 'link', content: 'GitHub', url: 'https://github.com/officialhelsing', indent: true, align: 'right' },
-                    { type: 'link', content: 'BIP-110', url: 'https://officialhelsing.github.io/BIP-110/', indent: true, align: 'right' },
                     { type: 'link', content: 'TerminAI', url: 'https://officialhelsing.github.io/TerminAI/', indent: true, align: 'right' }
                 ];
                 lines = [
