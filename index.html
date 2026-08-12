@@ -897,13 +897,14 @@
                 }, 1000);
             } else if (currentState === 'portal') {
                 headerItem = { type: 'text', content: 'Portals', align: 'right' };
-                menuItems = [
+                const portalItems = [
+                    { type: 'link', content: 'TerminAI', url: 'https://officialhelsing.github.io/TerminAI/', indent: true, align: 'right' },
                     { type: 'link', content: 'GitHub', url: 'https://github.com/officialhelsing', indent: true, align: 'right' },
-                    { type: 'link', content: 'Termin', url: 'https://officialhelsing.github.io/TerminAI/', indent: true, align: 'right' },
-                    { type: 'link', content: 'TFOTCM', url: 'https://officialhelsing.github.io/Foundations-of-Topological-Continuum-Mathematics/', indent: true, align: 'right' }
-                ];
+                    { type: 'link', content: 'BIP-110', url: 'https://officialhelsing.github.io/BIP-110/', indent: true, align: 'right' },
+                    { type: 'link', content: 'FoTCM', url: 'https://officialhelsing.github.io/Foundations-of-Topological-Continuum-Mathematics/', indent: true, align: 'right' }
+                ].sort((a, b) => a.content.length - b.content.length);
                 lines = [
-                    ...menuItems,
+                    ...portalItems,
                     headerItem,
                     returnItem
                 ];
