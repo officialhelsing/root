@@ -651,21 +651,23 @@
                     returnItem
                 ];
             } else if (currentState === 'blog') {
-                headerItem = { type: 'text', content: 'Blog', align: 'right' };
-                menuItems = [
-                    { type: 'link', content: 'PoA', url: 'https://officialhelsing.github.io/Proof-of-Audit/', indent: true, align: 'right' },
-                    { type: 'link', content: 'FoTCM', url: 'https://officialhelsing.github.io/Foundations-of-Topological-Continuum-Mathematics/', indent: true, align: 'right' },
-                    { type: 'link', content: 'BIP-110', url: 'https://officialhelsing.github.io/BIP-110/', indent: true, align: 'right' },
-                    { type: 'link', content: 'Positivity', url: 'https://officialhelsing.github.io/The-Anatomy-of-Positivity', indent: true, align: 'right' },
-                    { type: 'link', content: 'Genderology', url: 'https://officialhelsing.github.io/The-Ontological-Primacy-of-Material-Biology', indent: true, align: 'right' }
-                ];
-                menuItems.sort((a, b) => a.content.length - b.content.length);
-                lines = [
-                    ...menuItems,
-                    headerItem,
-                    returnItem
-                ];
-            } else if (currentState === 'fotcm-detail') {
+            headerItem = { type: 'text', content: 'Blog', align: 'right' };
+            menuItems = [
+                { type: 'link', content: 'PoA', url: 'https://officialhelsing.github.io/Proof-of-Audit/', indent: true, align: 'right' },
+                { type: 'link', content: 'FoTCM', url: 'https://officialhelsing.github.io/Foundations-of-Topological-Continuum-Mathematics/', indent: true, align: 'right' },
+                { type: 'link', content: 'BIP-110', url: 'https://officialhelsing.github.io/BIP-110/', indent: true, align: 'right' },
+                { type: 'link', content: 'Positive', url: 'https://officialhelsing.github.io/The-Anatomy-of-Positivity', indent: true, align: 'right' },
+                { type: 'link', content: 'Genderology', url: 'https://officialhelsing.github.io/The-Ontological-Primacy-of-Material-Biology', indent: true, align: 'right' },
+                { type: 'link', content: 'Plenum Coagula', url: 'https://xantheosis.substack.com/p/manifesto-plenum-coagula', indent: true, align: 'right' },
+                { type: 'link', content: 'Horizon Science', url: 'https://officialhelsing.github.io/Ryans-Map-Territory-Conjecture/', indent: true, align: 'right' }
+            ];
+            menuItems.sort((a, b) => a.content.length - b.content.length);
+            lines = [
+                ...menuItems,
+                headerItem,
+                returnItem
+            ];
+        } else if (currentState === 'fotcm-detail') {
                 headerItem = { type: 'text', content: 'FoTCM', align: 'right' };
                 lines = [
                     { type: 'paragraph', content: profileData.fotcmDetail, align: 'right', rightJustify: true },
