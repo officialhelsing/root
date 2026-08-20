@@ -60,16 +60,16 @@
             animation: blinkCursor 0.8s infinite;
             font-weight: normal;
         }
-        @keyframes imageGlitch {
-            0% { transform: translate(0) scale(1); filter: none; }
-            20% { transform: translate(-4px, 2px) scale(1.02); filter: hue-rotate(90deg) contrast(250%) saturate(300%); }
-            40% { transform: translate(4px, -2px) scale(0.98); filter: hue-rotate(-90deg) invert(25%) contrast(220%); }
-            60% { transform: translate(-3px, -2px) scale(1.01); filter: contrast(300%) brightness(140%) saturate(350%); }
-            80% { transform: translate(2px, 2px) scale(0.99); filter: hue-rotate(45deg) saturate(400%) invert(10%); }
-            100% { transform: translate(0) scale(1); filter: none; }
+        @keyframes imageColorGlitch {
+            0% { filter: none; transform: scale(1); }
+            20% { filter: hue-rotate(90deg) contrast(220%) saturate(300%); transform: scale(1.01) skewX(1deg); }
+            40% { filter: hue-rotate(-90deg) invert(20%) contrast(250%) saturate(400%); transform: scale(0.99) skewX(-1deg); }
+            60% { filter: contrast(300%) brightness(140%) saturate(350%); transform: scale(1.01); }
+            80% { filter: hue-rotate(45deg) saturate(350%) invert(10%); transform: scale(1); }
+            100% { filter: none; transform: scale(1); }
         }
         .glitch-effect {
-            animation: imageGlitch 0.35s cubic-bezier(0.11, 0, 0.5, 0) forwards;
+            animation: imageColorGlitch 0.4s cubic-bezier(0.11, 0, 0.5, 0) forwards;
         }
     </style>
 </head>
@@ -79,7 +79,7 @@
 
     <div id="intro-container" class="fixed bottom-24 right-6 sm:right-24 md:right-32 z-20 text-right font-mono text-xs md:text-sm tracking-widest select-none opacity-0 transition-opacity duration-1000 max-w-[280px] sm:max-w-xl px-4 leading-relaxed">
         <div><span id="typed-intro" class="inline-block max-w-full align-bottom pl-6 text-right whitespace-normal overflow-visible"></span></div>
-        <div id="typed-author" class="text-[10px] text-zinc-500 mt-1 italic tracking-wider opacity-0 transition-opacity duration-1000 whitespace-normal"></div>
+        <div id="typed-author" class="text-[10px] text-zinc-500 mt-1 italic tracking-wider opacity-0 transition-opacity duration-1000 whitespace-normal hidden"></div>
     </div>
 
     <div id="main-container" class="relative z-10 flex flex-col items-end w-[320px] sm:w-[450px] md:w-[550px] px-4 select-none opacity-0 transition-opacity duration-1000">
@@ -356,14 +356,46 @@
         };
 
         const philosophicalQuotes = [
-            { text: "The limits of my language mean the limits of my world.", author: "Wittgenstein" },
-            { text: "In the architecture of truth, structure precedes existence.", author: "Unknown" },
-            { text: "To measure the infinite, one must first master the infinitesimal.", author: "Unknown" },
-            { text: "Reality is merely an emergent property of rigorous epistemic constraints.", author: "Unknown" },
-            { text: "What we cannot speak about we must pass over in silence.", author: "Wittgenstein" },
-            { text: "Whereof one cannot speak, thereof one must be silent.", author: "Wittgenstein" },
-            { text: "Logic takes care of itself; all we have to do is look at how it operates.", author: "Wittgenstein" },
-            { text: "A proposition is a picture of reality.", author: "Wittgenstein" }
+            { text: "Neutron stars are so dense that a single teaspoon of their matter weighs about 6 billion tons on Earth." },
+            { text: "There are more trees on Earth than stars in the Milky Way galaxy." },
+            { text: "Quantum entanglement allows pairs of particles to interact instantaneously across vast distances regardless of space." },
+            { text: "If you folded a standard piece of paper in half 42 times, its thickness would reach all the way to the Moon." },
+            { text: "Water can simultaneously exist as a solid, liquid, and gas at its unique triple point under specific pressure." },
+            { text: "Sharks have existed on Earth for over 400 million years, predating both trees and Saturn's planetary rings." },
+            { text: "The human brain contains approximately 86 billion neurons, forming over 100 trillion synaptic connections." },
+            { text: "Time passes fractionally faster for your head than for your feet due to Earth's gravitational gradient." },
+            { text: "A single day on Venus is longer than its entire year; it rotates so slowly that the sun rises every 117 Earth days." },
+            { text: "There are more possible unique shuffles of a 52-card deck than there are atoms in the entire observable universe." },
+            { text: "Light takes about 8 minutes and 20 seconds to travel from the Sun's core photosphere to the Earth's surface." },
+            { text: "If you uncoiled all the DNA molecules inside your body, they would stretch to Pluto and back multiple times." },
+            { text: "The speed of light in a vacuum is exactly 299,792,458 meters per second, forming the ultimate cosmic speed limit." },
+            { text: "Absolute zero is the theoretical lower limit of thermodynamic temperature where molecular motion ceases at −273.15 °C." },
+            { text: "Honey never spoils; archaeologists have discovered pots of edible honey in ancient Egyptian tombs over 3,000 years old." },
+            { text: "Saturn has an average density lower than water, meaning if you had a vast enough ocean, the planet would float." },
+            { text: "The total combined biomass of all ants on Earth is roughly equal to the total biomass of all human beings." },
+            { text: "Every heavy element in the universe, including gold and platinum, was forged in neutron star collisions and supernovae." },
+            { text: "The observable universe spans approximately 93 billion light-years across, containing over two trillion galaxies." },
+            { text: "In 1977, astronomers detected a mysterious 72-second narrow-band radio signal known as the Wow! Signal from Sagittarius." },
+            { text: "Octopuses possess three separate hearts, blue copper-based blood, and nine decentralized brains across their arms." },
+            { text: "Lightning bolts are five times hotter than the surface of the Sun, reaching temperatures of roughly 30,000 Kelvin." },
+            { text: "Tardigrades can survive the absolute vacuum of space, severe cosmic radiation, and near-absolute zero temperatures." },
+            { text: "The Great Pyramid of Giza held the record as the tallest man-made structure on Earth for over 3,800 years." },
+            { text: "The human heart pumps roughly 2,000 gallons of blood through 60,000 miles of intricate blood vessels every single day." },
+            { text: "Deep inside Jupiter and Saturn, immense atmospheric pressure compresses carbon into vast showers of solid diamonds." },
+            { text: "The smell of freshly cut grass is actually a chemical distress call emitted by plants to signal nearby beneficial insects." },
+            { text: "The universe is expanding at an accelerating rate, driven by a mysterious repulsive force known as dark energy." },
+            { text: "Glass is an amorphous solid that flows extremely slowly over immense geological timescales due to its molecular structure." },
+            { text: "Neutrinos are nearly massless subatomic particles that pass through your body by the trillions every second without interacting." },
+            { text: "The Earth's inner core is as hot as the surface of the Sun, yet remains solid iron due to extreme gravitational pressure." },
+            { text: "Bioluminescent fungi produce light through a chemical reaction involving luciferin and luciferase enzymes in dark forests." },
+            { text: "The Voyager 1 spacecraft is currently over 15 billion miles away from Earth, representing humanity's most distant emissary." },
+            { text: "Supermassive black holes reside at the galactic center of virtually every large galaxy in the observable universe." },
+            { text: "The human eye can distinguish approximately 10 million different distinct color hues under optimal lighting conditions." },
+            { text: "Helium is the only element on the periodic table that cannot be frozen into a solid at standard atmospheric pressure." },
+            { text: "The largest known star in the universe, UY Scuti or Stephenson 2-18, could swallow billions of suns within its volume." },
+            { text: "Magnetars possess magnetic fields quadrillion times stronger than Earth, capable of distorting atomic electron clouds." },
+            { text: "The tongue of a blue whale weighs as much as an adult elephant, and its heart is roughly the size of a small automobile." },
+            { text: "Quantum tunneling allows microscopic particles to pass directly through impenetrable physical potential energy barriers." }
         ];
 
         let quoteQueue = [];
@@ -418,14 +450,9 @@
             isTypingActive = true;
 
             const fullText = `"${quoteObj.text}"`;
-            const authorText = `— ${quoteObj.author}`;
             charIndex = 0;
             typedIntroEl.textContent = '';
             typedIntroEl.classList.add('typing-cursor');
-            if (typedAuthorEl) {
-                typedAuthorEl.textContent = authorText;
-                typedAuthorEl.style.opacity = '0';
-            }
             introContainer.style.display = 'block';
             introContainer.style.opacity = '1';
             const appView = document.getElementById('app-view');
@@ -435,24 +462,20 @@
                 if (charIndex < fullText.length) {
                     typedIntroEl.textContent += fullText.charAt(charIndex);
                     charIndex++;
-                    setTimeout(typeStep, 45);
+                    setTimeout(typeStep, 35);
                 } else {
                     typedIntroEl.classList.remove('typing-cursor');
-                    if (typedAuthorEl) typedAuthorEl.style.opacity = '1';
-                    // Extended stay duration of 3500ms before fading out
-                    setTimeout(() => backspaceStep(onComplete), 3500);
+                    setTimeout(() => backspaceStep(onComplete), 8500);
                 }
             }
             typeStep();
         }
 
         function backspaceStep(onComplete) {
-            if (typedAuthorEl) typedAuthorEl.style.opacity = '0';
-            
             const currentString = typedIntroEl.textContent;
             if (currentString.length > 0) {
                 typedIntroEl.textContent = currentString.substring(0, currentString.length - 1);
-                setTimeout(() => backspaceStep(onComplete), 25);
+                setTimeout(() => backspaceStep(onComplete), 20);
             } else {
                 introContainer.style.opacity = '0';
                 setTimeout(() => {
@@ -513,7 +536,6 @@
             for (let i = 0; i < 6; i++) {
                 const cell = document.createElement('div');
                 cell.className = 'relative w-full h-full overflow-hidden cursor-pointer transition-colors';
-                cell.style.perspective = '600px';
                 cell.title = "View on OpenSea";
                 cell.onclick = () => {
                     window.open('https://opensea.io/justdieryan', '_blank');
@@ -524,7 +546,6 @@
                 indices[i] = initialChoice;
                 img.src = openseaImages[initialChoice];
                 img.className = 'w-full h-full object-cover transition-transform duration-500 ease-in-out';
-                img.style.transformStyle = 'preserve-3d';
                 
                 cell.appendChild(img);
                 frame.appendChild(cell);
@@ -564,11 +585,11 @@
                 setTimeout(() => {
                     indices[slotToChange] = randomChoice;
                     targetImg.src = openseaImages[randomChoice];
-                }, 175);
+                }, 200);
 
                 setTimeout(() => {
                     targetImg.classList.remove('glitch-effect');
-                }, 350);
+                }, 400);
             }, 1000);
         }
 
@@ -912,7 +933,7 @@
 
         window.onload = function() {
             renderStars();
-            startTypingSequence({ text: "Welcome, friend.", author: "" }, () => {
+            startTypingSequence({ text: "Welcome, friend." }, () => {
                 renderView();
                 if (mainContainer) mainContainer.style.opacity = '1';
             });
