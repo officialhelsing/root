@@ -60,6 +60,17 @@
             animation: blinkCursor 0.8s infinite;
             font-weight: normal;
         }
+        @keyframes imageGlitch {
+            0% { transform: translate(0) scale(1); filter: none; }
+            20% { transform: translate(-4px, 2px) scale(1.02); filter: hue-rotate(90deg) contrast(250%) saturate(300%); }
+            40% { transform: translate(4px, -2px) scale(0.98); filter: hue-rotate(-90deg) invert(25%) contrast(220%); }
+            60% { transform: translate(-3px, -2px) scale(1.01); filter: contrast(300%) brightness(140%) saturate(350%); }
+            80% { transform: translate(2px, 2px) scale(0.99); filter: hue-rotate(45deg) saturate(400%) invert(10%); }
+            100% { transform: translate(0) scale(1); filter: none; }
+        }
+        .glitch-effect {
+            animation: imageGlitch 0.35s cubic-bezier(0.11, 0, 0.5, 0) forwards;
+        }
     </style>
 </head>
 <body class="bg-black h-screen w-screen overflow-hidden relative m-0 p-0 select-none flex flex-col justify-end items-end pb-24 pr-12 sm:pr-24 md:pr-32">
@@ -344,6 +355,29 @@
             ]
         };
 
+        const philosophicalQuotes = [
+            { text: "The limits of my language mean the limits of my world.", author: "Wittgenstein" },
+            { text: "In the architecture of truth, structure precedes existence.", author: "Unknown" },
+            { text: "To measure the infinite, one must first master the infinitesimal.", author: "Unknown" },
+            { text: "Reality is merely an emergent property of rigorous epistemic constraints.", author: "Unknown" },
+            { text: "What we cannot speak about we must pass over in silence.", author: "Wittgenstein" },
+            { text: "Whereof one cannot speak, thereof one must be silent.", author: "Wittgenstein" },
+            { text: "Logic takes care of itself; all we have to do is look at how it operates.", author: "Wittgenstein" },
+            { text: "A proposition is a picture of reality.", author: "Wittgenstein" }
+        ];
+
+        let quoteQueue = [];
+        function getRandomNonRepeatingQuote() {
+            if (quoteQueue.length === 0) {
+                quoteQueue = [...philosophicalQuotes];
+                for (let i = quoteQueue.length - 1; i > 0; i--) {
+                    const j = Math.floor(Math.random() * (i + 1));
+                    [quoteQueue[i], quoteQueue[j]] = [quoteQueue[j], quoteQueue[i]];
+                }
+            }
+            return quoteQueue.pop();
+        }
+
         const firstArtImage = 'https://i2c.seadn.io/ethereum/0x495f947276749ce646f68ac8c248420045cb7b5e/1126738749bec27cb38e1688c15aaf/881126738749bec27cb38e1688c15aaf.jpeg?w=1000';
         
         const baseArtCollection = [
@@ -377,39 +411,53 @@
         let rootLoadCount = 0;
         let centerTickerLoadCount = 0;
 
-        function startTypingSequence(text, onComplete) {
-            currentActiveText = text;
+        let isTypingActive = false;
+
+        function startTypingSequence(quoteObj, onComplete) {
+            if (isTypingActive) return;
+            isTypingActive = true;
+
+            const fullText = `"${quoteObj.text}"`;
+            const authorText = `— ${quoteObj.author}`;
             charIndex = 0;
             typedIntroEl.textContent = '';
             typedIntroEl.classList.add('typing-cursor');
-            if (typedAuthorEl) typedAuthorEl.style.opacity = '0';
+            if (typedAuthorEl) {
+                typedAuthorEl.textContent = authorText;
+                typedAuthorEl.style.opacity = '0';
+            }
             introContainer.style.display = 'block';
             introContainer.style.opacity = '1';
             const appView = document.getElementById('app-view');
             if (appView) appView.classList.add('hidden');
 
             function typeStep() {
-                if (charIndex < currentActiveText.length) {
-                    typedIntroEl.textContent += currentActiveText.charAt(charIndex);
+                if (charIndex < fullText.length) {
+                    typedIntroEl.textContent += fullText.charAt(charIndex);
                     charIndex++;
                     setTimeout(typeStep, 45);
                 } else {
-                    setTimeout(() => backspaceStep(onComplete), 1400);
+                    typedIntroEl.classList.remove('typing-cursor');
+                    if (typedAuthorEl) typedAuthorEl.style.opacity = '1';
+                    // Extended stay duration of 3500ms before fading out
+                    setTimeout(() => backspaceStep(onComplete), 3500);
                 }
             }
             typeStep();
         }
 
         function backspaceStep(onComplete) {
-            if (charIndex > 0) {
-                typedIntroEl.textContent = currentActiveText.substring(0, charIndex - 1);
-                charIndex--;
+            if (typedAuthorEl) typedAuthorEl.style.opacity = '0';
+            
+            const currentString = typedIntroEl.textContent;
+            if (currentString.length > 0) {
+                typedIntroEl.textContent = currentString.substring(0, currentString.length - 1);
                 setTimeout(() => backspaceStep(onComplete), 25);
             } else {
-                typedIntroEl.classList.remove('typing-cursor');
                 introContainer.style.opacity = '0';
                 setTimeout(() => {
                     introContainer.style.display = 'none';
+                    isTypingActive = false;
                     if (onComplete) onComplete();
                 }, 500);
             }
@@ -511,13 +559,16 @@
 
                 const randomChoice = availableIndices[Math.floor(Math.random() * availableIndices.length)];
 
-                targetImg.style.transform = 'rotateY(90deg)';
+                targetImg.classList.add('glitch-effect');
 
                 setTimeout(() => {
                     indices[slotToChange] = randomChoice;
                     targetImg.src = openseaImages[randomChoice];
-                    targetImg.style.transform = 'rotateY(0deg)';
-                }, 250);
+                }, 175);
+
+                setTimeout(() => {
+                    targetImg.classList.remove('glitch-effect');
+                }, 350);
             }, 1000);
         }
 
@@ -527,7 +578,6 @@
         const mainContainer = document.getElementById('main-container');
 
         let charIndex = 0;
-        let currentActiveText = "Welcome, friend.";
 
         function renderRoot(appView) {
             let items = [
@@ -567,8 +617,16 @@
                         newDiv.style.opacity = '0';
                     }
                     const headerSpan = document.createElement('span');
-                    headerSpan.className = "inline-flex items-center";
+                    headerSpan.className = "inline-flex items-center cursor-pointer hover:text-zinc-300 transition-colors";
                     headerSpan.textContent = "Directory";
+                    headerSpan.onclick = () => {
+                        if (isTypingActive) return;
+                        const randomQuote = getRandomNonRepeatingQuote();
+                        startTypingSequence(randomQuote, () => {
+                            renderView();
+                            if (mainContainer) mainContainer.style.opacity = '1';
+                        });
+                    };
                     newDiv.appendChild(headerSpan);
                 } else if (!currentItem.action) {
                     newDiv.className = `flex flex-col w-full text-right items-end mb-2 select-none text-zinc-600 pr-0`;
@@ -854,7 +912,7 @@
 
         window.onload = function() {
             renderStars();
-            startTypingSequence("Welcome, friend.", () => {
+            startTypingSequence({ text: "Welcome, friend.", author: "" }, () => {
                 renderView();
                 if (mainContainer) mainContainer.style.opacity = '1';
             });
