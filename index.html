@@ -79,7 +79,6 @@
 
     <div id="intro-container" class="fixed bottom-24 right-6 sm:right-24 md:right-32 z-20 text-right font-mono text-xs md:text-sm tracking-widest select-none opacity-0 transition-opacity duration-1000 max-w-[280px] sm:max-w-xl px-4 leading-relaxed">
         <div><span id="typed-intro" class="inline-block max-w-full align-bottom pl-6 text-right whitespace-normal overflow-visible"></span></div>
-        <div id="typed-author" class="text-[10px] text-zinc-500 mt-1 italic tracking-wider opacity-0 transition-opacity duration-1000 whitespace-normal hidden"></div>
     </div>
 
     <div id="main-container" class="relative z-10 flex flex-col items-end w-[320px] sm:w-[450px] md:w-[550px] px-4 select-none opacity-0 transition-opacity duration-1000">
@@ -395,7 +394,17 @@
             { text: "The largest known star in the universe, UY Scuti or Stephenson 2-18, could swallow billions of suns within its volume." },
             { text: "Magnetars possess magnetic fields quadrillion times stronger than Earth, capable of distorting atomic electron clouds." },
             { text: "The tongue of a blue whale weighs as much as an adult elephant, and its heart is roughly the size of a small automobile." },
-            { text: "Quantum tunneling allows microscopic particles to pass directly through impenetrable physical potential energy barriers." }
+            { text: "Quantum tunneling allows microscopic particles to pass directly through impenetrable physical potential energy barriers." },
+            { text: "The human brain generates enough electricity to power a small LED light bulb while awake." },
+            { text: "Diamond rain occurs naturally on the gas giant planets Jupiter and Saturn." },
+            { text: "The total weight of all bacteria inside the human body is about four pounds." },
+            { text: "Venus is the hottest planet in our solar system, with surface temperatures hot enough to melt lead." },
+            { text: "Sound travels about 4.3 times faster in water than it does in air." },
+            { text: "A single bolt of lightning contains enough energy to toast 100,000 slices of bread." },
+            { text: "Earth is the only planet in our solar system not named after a Greek or Roman god or goddess." },
+            { text: "The first computer mouse was invented by Douglas Engelbart in 1964 and was made of wood." },
+            { text: "Bananas are naturally radioactive because they contain high amounts of potassium." },
+            { text: "The shortest war in history lasted only 38 to 45 minutes between Britain and Zanzibar in 1896." }
         ];
 
         let quoteQueue = [];
@@ -445,11 +454,11 @@
 
         let isTypingActive = false;
 
-        function startTypingSequence(quoteObj, onComplete) {
+        function startTypingSequence(quoteObj, onComplete, displayDuration = 8500) {
             if (isTypingActive) return;
             isTypingActive = true;
 
-            const fullText = `"${quoteObj.text}"`;
+            const fullText = quoteObj.text;
             charIndex = 0;
             typedIntroEl.textContent = '';
             typedIntroEl.classList.add('typing-cursor');
@@ -465,7 +474,7 @@
                     setTimeout(typeStep, 35);
                 } else {
                     typedIntroEl.classList.remove('typing-cursor');
-                    setTimeout(() => backspaceStep(onComplete), 8500);
+                    setTimeout(() => backspaceStep(onComplete), displayDuration);
                 }
             }
             typeStep();
@@ -594,7 +603,6 @@
         }
 
         const typedIntroEl = document.getElementById('typed-intro');
-        const typedAuthorEl = document.getElementById('typed-author');
         const introContainer = document.getElementById('intro-container');
         const mainContainer = document.getElementById('main-container');
 
@@ -936,7 +944,7 @@
             startTypingSequence({ text: "Welcome, friend." }, () => {
                 renderView();
                 if (mainContainer) mainContainer.style.opacity = '1';
-            });
+            }, 2500);
         };
     </script>
 </body>
