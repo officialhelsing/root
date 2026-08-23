@@ -454,7 +454,7 @@
 
         let isTypingActive = false;
 
-        function startTypingSequence(fullText, onComplete, displayDuration = 8500) {
+        function startTypingSequence(fullText, onComplete, displayDuration = 2500) {
             if (isTypingActive) return;
             isTypingActive = true;
 
@@ -520,7 +520,8 @@
             wrapper.className = "relative flex items-center justify-center pointer-events-auto select-none";
 
             const frame = document.createElement('div');
-            frame.className = `w-[200px] sm:w-[260px] md:w-[320px] h-[300px] sm:h-[390px] md:h-[480px] overflow-hidden grid grid-cols-2 grid-rows-3 gap-0 relative pointer-events-auto select-none transition-colors duration-800`;
+            // Slightly bigger artwork dimensions
+            frame.className = `w-[220px] sm:w-[280px] md:w-[350px] h-[330px] sm:h-[420px] md:h-[525px] overflow-hidden grid grid-cols-2 grid-rows-3 gap-0 relative pointer-events-auto select-none transition-colors duration-800`;
             
             const shouldPhaseIn = (centerTickerLoadCount === 0);
             if (centerTickerLoadCount === 0) centerTickerLoadCount++;
@@ -793,7 +794,7 @@
                 headerItem = { type: 'text', content: 'Portals', align: 'right' };
                 menuItems = [
                     { type: 'link', content: 'GitHub', url: 'https://github.com/officialhelsing', indent: true, align: 'right' },
-                    { type: 'link', content: 'TerminAI', url: 'https://officialhelsing.github.io/TerminAI/', indent: true, align: 'right' }
+                    { type: 'link', content: 'TerminAl', url: 'https://officialhelsing.github.io/TerminAI/', indent: true, align: 'right' }
                 ];
                 lines = [
                     ...menuItems,
