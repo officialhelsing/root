@@ -792,9 +792,11 @@
             } else if (currentState === 'portal') {
                 headerItem = { type: 'text', content: 'Portals', align: 'right' };
                 menuItems = [
+                    { type: 'link', content: 'PRFCT', url: 'https://officialhelsing.github.io/PRFCT/', indent: true, align: 'right' },
                     { type: 'link', content: 'GitHub', url: 'https://github.com/officialhelsing', indent: true, align: 'right' },
                     { type: 'link', content: 'TerminAl', url: 'https://officialhelsing.github.io/TerminAI/', indent: true, align: 'right' }
                 ];
+                menuItems.sort((a, b) => a.content.length - b.content.length);
                 lines = [
                     ...menuItems,
                     headerItem,
